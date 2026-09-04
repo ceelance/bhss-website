@@ -1,0 +1,17 @@
+# The build output. Generated on every deploy; never committed, or a stale copy
+# would sit in the repo pretending to be the site.
+dist/
+
+# The WordPress export and the downloaded uploads folder, while migrating. The
+# export XML IS committed (under migration/) as the record of what we migrated
+# from; the uploads folder is hundreds of megabytes of originals that only the
+# migration script reads, and only their shrunk WebP versions belong in git.
+migration/uploads/
+
+# Never. The deploy key lives in GitHub Actions secrets and nowhere else.
+*.pem
+id_ed25519*
+bhss-deploy-key*
+
+.DS_Store
+Thumbs.db

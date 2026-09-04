@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="{{lang}}">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{fullTitle}}</title>
+<meta name="description" content="{{description}}">
+<link rel="canonical" href="{{canonical}}">
+
+<!-- These four decide what a shared link looks like in WhatsApp, and they are the
+     reason this site is generated rather than fetching its own content: a link
+     preview is built by a server that reads the HTML and never runs any script.
+     og:image MUST be an absolute URL for the same reason. -->
+<meta property="og:type" content="{{ogType}}">
+<meta property="og:title" content="{{title}}">
+<meta property="og:description" content="{{description}}">
+<meta property="og:image" content="{{ogImage}}">
+<meta property="og:url" content="{{canonical}}">
+<meta property="og:site_name" content="{{school}}">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="icon" href="{{base}}/assets/favicon.png">
+<link rel="apple-touch-icon" href="{{base}}/assets/favicon.png">
+
+<!-- Two families only. The portal loads six because the Transfer Certificate
+     needs metric-compatible stand-ins; a public page has no such need and every
+     extra family is a render-blocking request on a parent's mobile connection. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{base}}/styles.css">
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" href="{{base}}/">
+      <img src="{{base}}/assets/logo.png" alt="" width="44" height="44">
+      <span>
+        <strong>Baptist Higher Secondary School</strong>
+        <small>Serkawn, Lunglei, Mizoram</small>
+      </span>
+    </a>
+
+    <!-- A checkbox drives the mobile menu so the site needs no JavaScript at all.
+         Fewer moving parts, and it works before anything has finished loading. -->
+    <input type="checkbox" id="nav-toggle" class="nav-toggle" hidden>
+    <label for="nav-toggle" class="nav-button" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </label>
+
+    <nav class="site-nav" aria-label="Main">
+        {{nav}}
+    </nav>
+  </div>
+</header>
+
+<main id="main" class="wrap">
+{{content}}
+</main>
+
+<footer class="site-footer">
+  <div class="wrap footer-inner">
+    <div>
+      <strong>Baptist Higher Secondary School</strong>
+      <p>Serkawn, Lunglei &minus; 796691, Mizoram</p>
+      <p><a href="tel:03722323160">0372 232 3160</a> &middot;
+         <a href="mailto:principalbhss@baptisthss.in">principalbhss@baptisthss.in</a></p>
+    </div>
+    <div>
+      <strong>For students &amp; staff</strong>
+      <p><a href="https://portal.baptisthss.in/">Results portal</a></p>
+      <p><a href="https://play.google.com/store/apps/details?id=in.baptisthss.app">Android app</a></p>
+    </div>
+    <div>
+      <strong>More</strong>
+      <p><a href="{{base}}/news/">News</a></p>
+      <p><a href="https://portal.baptisthss.in/privacy.html">Privacy policy</a></p>
+    </div>
+  </div>
+  <p class="copyright">&copy; {{year}} {{school}}</p>
+</footer>
+
+</body>
+</html>

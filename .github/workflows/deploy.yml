@@ -1,0 +1,116 @@
+name: Build and deploy
+
+# Every push to main rebuilds and uploads. The portal's admin panel publishes by
+# committing content/posts.json to this repo, so a post going live IS a push —
+# there is no separate trigger to keep in step.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# Publishing a post with pictures is several commits in quick succession, and only
+# the last build matters. Without this they queue and the site briefly shows an
+# intermediate state.
+concurrency:
+  group: deploy
+  cancel-in-progress: true
+
+env:
+  # ---------------------------------------------------------------------------
+  # WHERE THIS DEPLOYS. It goes to a PREVIEW FOLDER until cutover, because
+  # WordPress is still serving from public_html and must not be touched until the
+  # backup has been proven restorable.
+  #
+  # AT CUTOVER, change both lines together:
+  #     DEPLOY_PATH:   public_html
+  #     SITE_BASE_URL: https://baptisthss.in
+  #     IS_PREVIEW:    'false'
+  # ---------------------------------------------------------------------------
+  DEPLOY_PATH: public_html/preview
+  SITE_BASE_URL: https://baptisthss.in/preview
+  IS_PREVIEW: 'true'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # No `npm install`. The build has NO dependencies on purpose: this job holds
+      # an SSH key with full access to the hosting account, and every package
+      # pulled in here would be a path to that key.
+      - name: Build
+        run: node tools/build.mjs
+
+      - name: Check the build produced something
+        run: |
+          set -euo pipefail
+          test -f dist/index.html || { echo "::error::dist/index.html missing — the build did not produce a site"; exit 1; }
+          echo "Built $(find dist -type f | wc -l) files"
+
+      - name: Set up SSH
+        run: |
+          set -euo pipefail
+          mkdir -p ~/.ssh
+          printf '%s\n' "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          # Pinning the host key is what makes this better than the FTPS we
+          # abandoned: without it the deploy would accept any server claiming to
+          # be Hostinger, which is the exact weakness that sent us here.
+          printf '%s\n' "${{ secrets.SSH_KNOWN_HOSTS }}" > ~/.ssh/known_hosts
+          chmod 644 ~/.ssh/known_hosts
+
+      - name: Deploy over SSH
+        env:
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_PORT: ${{ secrets.SSH_PORT }}
+        run: |
+          set -euo pipefail
+          DEST="$DEPLOY_PATH"
+
+          # THE GUARD. The rsync below runs with --delete, so a wrong DEST would
+          # not merely deploy to the wrong place — it would empty it. Refuse
+          # anything that is blank, the account root, or contains a traversal.
+          case "$DEST" in
+            ""|"/"|"."|".."|"~"|"~/") echo "::error::Unsafe DEPLOY_PATH '$DEST'"; exit 1 ;;
+            /*|*..*)                  echo "::error::DEPLOY_PATH must be a relative path inside the account, got '$DEST'"; exit 1 ;;
+          esac
+
+          SSH="ssh -p $SSH_PORT -o StrictHostKeyChecking=yes -o BatchMode=yes"
+
+          # rsync must exist on BOTH ends. Shared hosting usually has it; when it
+          # does not, the failure is otherwise a cryptic broken pipe, so say so.
+          if ! $SSH "$SSH_USER@$SSH_HOST" 'command -v rsync' >/dev/null 2>&1; then
+            echo "::error::rsync is not available on the server. Tell the developer — the deploy needs a different upload method."
+            exit 1
+          fi
+
+          $SSH "$SSH_USER@$SSH_HOST" "mkdir -p '$DEST'"
+
+          # --delete is what makes a WITHDRAWN post actually disappear: its page is
+          # simply absent from the new build, and without this it would linger on
+          # the server forever. Scoped to DEST, so it can only remove things inside
+          # the folder we deploy to.
+          #
+          # .htaccess is excluded while previewing: it canonicalises every request
+          # to https://baptisthss.in/, which from inside /preview/ would bounce
+          # visitors straight out of the preview and onto the live WordPress site.
+          EXCLUDES=""
+          if [ "$IS_PREVIEW" = "true" ]; then EXCLUDES="--exclude=.htaccess"; fi
+
+          rsync -az --delete $EXCLUDES \
+            -e "$SSH" \
+            dist/ "$SSH_USER@$SSH_HOST:$DEST/"
+
+          echo "Deployed to $DEST"
+          echo "### Deployed to \`$DEST\`" >> $GITHUB_STEP_SUMMARY
+          echo "Visit $SITE_BASE_URL/" >> $GITHUB_STEP_SUMMARY
+
+      - name: Remove the key
+        if: always()
+        run: rm -f ~/.ssh/id_ed25519

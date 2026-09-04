@@ -1,0 +1,19 @@
+{
+  "_comment": "WRITTEN BY THE PORTAL, NOT BY HAND. The Create Website Post card in the admin panel (WebsitePosts.gs) rebuilds this file from the Website_Posts sheet on every publish, and that commit is what triggers the deploy. The sheet is the source of truth; this is a copy. Editing it here works until the next publish overwrites it. The sample below is here so the design can be seen before the first real post — delete it once there is one.",
+  "generated_at": "",
+  "count": 1,
+  "posts": [
+    {
+      "slug": "welcome-to-the-new-website",
+      "title": "A new website for the school",
+      "summary": "The school website has been rebuilt. News and announcements will now be posted here directly by the office.",
+      "body_md": "The school website has been rebuilt from scratch.\n\n## What is new\n\nThe site is now faster, works properly on a phone, and can be updated by the office directly — announcements no longer need anyone technical to publish them.\n\n- News and notices are posted from the school's own admin panel\n- Every post gets its own page, so a link shared on WhatsApp shows the headline and picture\n- Results stay where they are, on the [school portal](https://portal.baptisthss.in/)\n\n## What is coming\n\nThe About, Academics and Admissions pages still need the school's own words, and the prospectus and forms will be added to the Downloads page.\n\n> This is a sample post. It can be deleted once there is real news to publish.",
+      "category": "News",
+      "published_at": "2026-09-05",
+      "author": "",
+      "thumb": "",
+      "thumb_fit": "cover",
+      "images": []
+    }
+  ]
+}
