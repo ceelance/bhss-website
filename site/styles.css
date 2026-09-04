@@ -78,21 +78,31 @@ img { max-width: 100%; height: auto; }
   display: flex; align-items: center; justify-content: space-between;
   gap: 1rem; padding: .7rem 0;
 }
-.brand { display: flex; align-items: center; gap: .65rem; color: #fff; text-decoration: none; }
-/* The crest sits in a white disc with a gold ring — a round mark reads as a seal,
-   which is what a school crest is, and the ring separates it from the indigo bar
-   behind it. object-fit keeps a non-square source from being stretched. */
+.brand { display: flex; align-items: center; gap: .8rem; color: #fff; text-decoration: none; }
+/* The crest sits in a white DISC with a gold ring — a round mark reads as a seal,
+   which is what a school crest is, and the white ground lifts it off the indigo
+   bar. The crest is portrait, so `contain` letterboxes it inside the circle
+   rather than stretching it; the padding is what stops it touching the ring. */
 .brand img {
+  width: 52px; height: 52px;
   border-radius: 50%;
   background: #fff;
-  padding: 3px;
+  padding: 5px;
   border: 2px solid var(--gold-400);
   object-fit: contain;
   flex: none;
+  box-shadow: 0 1px 4px rgba(0,0,0,.2);
 }
+/* Set in the display serif at the weight of a masthead. It is the only wordmark
+   on the page, so it can afford the size — and at four letters it costs almost
+   no width, which is what leaves room for seven nav items. */
 .brand strong {
   font-family: 'DM Serif Display', Georgia, serif;
-  font-size: 1.45rem; font-weight: 400; letter-spacing: .04em; line-height: 1;
+  font-size: 1.9rem; font-weight: 400; letter-spacing: .06em; line-height: 1;
+}
+@media (max-width: 420px) {
+  .brand img { width: 44px; height: 44px; padding: 4px; }
+  .brand strong { font-size: 1.6rem; }
 }
 
 .site-nav { display: flex; gap: .3rem; }

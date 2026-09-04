@@ -19,8 +19,10 @@
 <meta property="og:site_name" content="{{school}}">
 <meta name="twitter:card" content="summary_large_image">
 
-<link rel="icon" href="{{base}}/assets/favicon.png">
-<link rel="apple-touch-icon" href="{{base}}/assets/favicon.png">
+<link rel="icon" href="{{base}}/assets/favicon.png" sizes="64x64">
+<!-- iOS composites a transparent touch icon onto black, so this one carries its
+     own white ground rather than reusing the favicon. -->
+<link rel="apple-touch-icon" href="{{base}}/assets/apple-touch-icon.png">
 
 <!-- Two families only. The portal loads six because the Transfer Certificate
      needs metric-compatible stand-ins; a public page has no such need and every
@@ -41,7 +43,7 @@
          takes over. The full name is still in the <title>, og:site_name and the
          home page's h1, which is what search engines and link previews read. -->
     <a class="brand" href="{{base}}/">
-      <img src="{{base}}/assets/logo.png" alt="Baptist Higher Secondary School" width="44" height="44">
+      <img src="{{base}}/assets/logo.png" alt="Baptist Higher Secondary School" width="52" height="52">
       <strong>BHSS</strong>
     </a>
 

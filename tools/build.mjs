@@ -165,7 +165,8 @@ function navHtml(prefix, currentUrl) {
 rmSync(DIST, { recursive: true, force: true });
 mkdirSync(DIST, { recursive: true });
 
-const DEFAULT_OG = '/assets/og-default.png';
+// JPEG, not PNG: it is a photograph, and as a 256-colour PNG it weighed 418 KB.
+const DEFAULT_OG = '/assets/og-default.jpg';
 
 function renderShell({ out, url, title, description, content, ogImage, ogType }) {
   const prefix = depthPrefix(out);
@@ -282,7 +283,9 @@ renderShell({
 
 // ---------------------------------------------------------------- static files
 
-for (const dir of ['assets', 'img']) {
+// files/ holds documents linked from posts (the admission lists, the fee
+// structure) — migrated off the old server so those links survive cutover.
+for (const dir of ['assets', 'img', 'files']) {
   const from = join(ROOT, dir);
   if (existsSync(from)) cpSync(from, join(DIST, dir), { recursive: true });
 }
