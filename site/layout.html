@@ -36,12 +36,13 @@
 
 <header class="site-header">
   <div class="wrap header-inner">
+    <!-- "BHSS" rather than the full name: the crest carries the identity, and a
+         four-letter mark leaves room for seven nav items before the mobile menu
+         takes over. The full name is still in the <title>, og:site_name and the
+         home page's h1, which is what search engines and link previews read. -->
     <a class="brand" href="{{base}}/">
-      <img src="{{base}}/assets/logo.png" alt="" width="44" height="44">
-      <span>
-        <strong>Baptist Higher Secondary School</strong>
-        <small>Serkawn, Lunglei, Mizoram</small>
-      </span>
+      <img src="{{base}}/assets/logo.png" alt="Baptist Higher Secondary School" width="44" height="44">
+      <strong>BHSS</strong>
     </a>
 
     <!-- A checkbox drives the mobile menu so the site needs no JavaScript at all.
@@ -65,19 +66,23 @@
   <div class="wrap footer-inner">
     <div>
       <strong>Baptist Higher Secondary School</strong>
-      <p>Serkawn, Lunglei &minus; 796691, Mizoram</p>
-      <p><a href="tel:03722323160">0372 232 3160</a> &middot;
+      <p>Near BCM Headquarters, Serkawn<br>
+         P.O. Zotlang &middot; PIN 796691<br>
+         Lunglei, Mizoram</p>
+      <p><a href="tel:03722323160">0372-2323160</a><br>
          <a href="mailto:principalbhss@baptisthss.in">principalbhss@baptisthss.in</a></p>
     </div>
     <div>
       <strong>For students &amp; staff</strong>
       <p><a href="https://portal.baptisthss.in/">Results portal</a></p>
       <p><a href="https://play.google.com/store/apps/details?id=in.baptisthss.app">Android app</a></p>
+      <p><a href="{{base}}/news/">News &amp; notices</a></p>
     </div>
     <div>
-      <strong>More</strong>
-      <p><a href="{{base}}/news/">News</a></p>
-      <p><a href="https://portal.baptisthss.in/privacy.html">Privacy policy</a></p>
+      <strong>Follow the school</strong>
+      <p><a href="https://www.instagram.com/bhss_serkawn" rel="noopener">Instagram</a></p>
+      <p><a href="https://youtube.com/@bhssserkawn130" rel="noopener">YouTube</a></p>
+      <p><a href="https://portal.baptisthss.in/privacy.html" rel="noopener">Privacy policy</a></p>
     </div>
   </div>
   <p class="copyright">&copy; {{year}} {{school}}</p>

@@ -78,10 +78,22 @@ img { max-width: 100%; height: auto; }
   display: flex; align-items: center; justify-content: space-between;
   gap: 1rem; padding: .7rem 0;
 }
-.brand { display: flex; align-items: center; gap: .7rem; color: #fff; text-decoration: none; }
-.brand img { border-radius: 8px; background: #fff; padding: 2px; }
-.brand strong { display: block; font-size: 1rem; line-height: 1.2; }
-.brand small { display: block; font-size: .74rem; color: var(--brand-200); }
+.brand { display: flex; align-items: center; gap: .65rem; color: #fff; text-decoration: none; }
+/* The crest sits in a white disc with a gold ring — a round mark reads as a seal,
+   which is what a school crest is, and the ring separates it from the indigo bar
+   behind it. object-fit keeps a non-square source from being stretched. */
+.brand img {
+  border-radius: 50%;
+  background: #fff;
+  padding: 3px;
+  border: 2px solid var(--gold-400);
+  object-fit: contain;
+  flex: none;
+}
+.brand strong {
+  font-family: 'DM Serif Display', Georgia, serif;
+  font-size: 1.45rem; font-weight: 400; letter-spacing: .04em; line-height: 1;
+}
 
 .site-nav { display: flex; gap: .3rem; }
 .site-nav a {
