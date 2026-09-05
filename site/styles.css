@@ -261,7 +261,31 @@ th { background: var(--brand-50); font-weight: 700; }
 .site-footer p { margin: 0 0 .35rem; }
 .site-footer a { color: var(--brand-200); }
 .site-footer a:hover { color: #fff; }
-.copyright { text-align: center; margin: 2rem 0 0; color: #a5b4fc; font-size: .85rem; }
+/* The bottom bar: the school's line one side, the builder credit the other, ruled
+   off from the columns above. The pair measures about 200px against 280px of room
+   at a 320px viewport, so they hold the one row on every phone; `wrap` is there
+   only for the case where a large text setting pushes them apart. */
+.footer-bottom {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+  gap: .6rem 1.2rem; margin-top: 2rem; padding-top: 1.2rem;
+  border-top: 1px solid rgba(255, 255, 255, .13);
+}
+/* Copyright and the two policy links travel together, so they wrap as a group and
+   the builder credit is never stranded on a line of its own. */
+.footer-legal { display: flex; flex-wrap: wrap; align-items: center; gap: .3rem 1rem; }
+.footer-legal a { font-size: .85rem; }
+.copyright { margin: 0; color: #a5b4fc; font-size: .85rem; }
+/* Scoped to .site-footer so it outweighs `.site-footer a` above, which would
+   otherwise colour this link differently from the copyright line beside it. */
+.site-footer .built-by {
+  display: inline-flex; align-items: center; gap: .55rem;
+  color: #a5b4fc; font-size: .85rem; text-decoration: none;
+}
+.site-footer .built-by:hover { color: #fff; }
+/* Sized in CSS as well as on the tag: the width/height attributes reserve the
+   space before the file arrives, and these keep it right if the file is ever
+   replaced with one of different dimensions. */
+.built-by img { width: 40px; height: 40px; display: block; }
 
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; }

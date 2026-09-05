@@ -84,10 +84,26 @@
       <strong>Follow the school</strong>
       <p><a href="https://www.instagram.com/bhss_serkawn" rel="noopener">Instagram</a></p>
       <p><a href="https://youtube.com/@bhssserkawn130" rel="noopener">YouTube</a></p>
-      <p><a href="https://portal.baptisthss.in/privacy.html" rel="noopener">Privacy policy</a></p>
     </div>
   </div>
-  <p class="copyright">&copy; {{year}} {{school}}</p>
+  <!-- The same bottom bar the portal carries, so the two halves of the school's
+       web presence sign off identically. The year is generated rather than typed;
+       the portal's is hardcoded and will read 2026 forever. -->
+  <div class="wrap footer-bottom">
+    <div class="footer-legal">
+      <p class="copyright">&copy; BHSS {{year}}</p>
+      <a href="https://portal.baptisthss.in/privacy.html" target="_blank" rel="noopener">Privacy policy</a>
+      <!-- Google Play requires the account-deletion page to be reachable from the
+           open web and not only from inside the app, which is why it is linked
+           here as well as in the portal that actually performs the deletion. -->
+      <a href="https://portal.baptisthss.in/delete-account.html" target="_blank" rel="noopener">Delete my account</a>
+    </div>
+    <a class="built-by" href="https://ceelance.github.io/profile/"
+       target="_blank" rel="noopener noreferrer">
+      <span>Built by</span>
+      <img src="{{base}}/assets/cee-logo.png" alt="Cee Tech Solution" width="40" height="40">
+    </a>
+  </div>
 </footer>
 
 </body>
