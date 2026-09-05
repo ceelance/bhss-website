@@ -263,7 +263,20 @@ if (existsSync(facultyPath)) {
     process.exit(1);
   }
 }
-staff = staff.filter((s) => s && String(s.name || '').trim());
+/**
+ * What to print for a person.
+ *
+ * `full_name` when the office has entered one, otherwise the `name` the portal
+ * already holds — which is the staffroom name, "Sir Siamtea" and the like. Not a
+ * placeholder and not a blank: a real teacher under the name the school actually
+ * calls them, until an admin fills the formal one in. That way the page can be
+ * published before every full name has been typed.
+ */
+function staffName(person) {
+  return String(person.full_name || person.name || '').trim();
+}
+
+staff = staff.filter((s) => s && staffName(s));
 
 /**
  * The order the sections are shown in.
@@ -298,9 +311,17 @@ function staffGroups() {
  * case, not a fault — so the gap gets a tile of its own rather than a broken
  * image or, worse, a stock face belonging to nobody.
  */
+const HONORIFICS = ['sir', 'madam', 'mdm', 'mr', 'mrs', 'ms', 'dr', 'rev',
+                    'upa', 'pu', 'pi'];
 function initialsOf(name) {
-  const words = String(name).replace(/\([^)]*\)/g, ' ').trim().split(/\s+/)
+  let words = String(name).replace(/\([^)]*\)/g, ' ').trim().split(/\s+/)
     .filter((w) => /[a-z]/i.test(w));
+  // "Sir Siamtea" is S, not SS, and "Upa C. Lalhmingmuana" is CL, not UL: an
+  // honorific is how a person is addressed, not part of their name. Dropped only
+  // when something is left to drop it from.
+  if (words.length > 1 && HONORIFICS.includes(words[0].toLowerCase().replace(/\./g, ''))) {
+    words = words.slice(1);
+  }
   if (!words.length) return '?';
   const first = words[0][0];
   const last = words.length > 1 ? words[words.length - 1][0] : '';
@@ -308,7 +329,7 @@ function initialsOf(name) {
 }
 
 function staffCard(person, prefix) {
-  const name = String(person.name).trim();
+  const name = staffName(person);
   const photo = String(person.photo || '').trim();
   const face = photo
     ? `<img src="${escapeHtml(prefix + '/' + photo)}" alt="" loading="lazy" width="400" height="400">`

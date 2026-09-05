@@ -122,7 +122,7 @@ title, subject, photograph. Never an email address, never a phone number.
 }
 ```
 
-`name` is the only required field. `photo` may be omitted — the card shows the
+`name` is the only required field. **`full_name` is printed when it is there and `name` when it is not** — `name` being the staffroom name the portal already holds, "Sir Siamtea" and the like. That is deliberate: the page can go live before every formal name has been typed, showing a real teacher under the name the school actually calls them rather than a blank or a placeholder. An honorific is dropped when working out the initials for a card with no photograph — "Sir Siamtea" is S, not SS. `photo` may be omitted — the card shows the
 person's initials, so a half-photographed list looks deliberate rather than
 broken. **`group` is decided by the portal, not inferred here**, because
 `super_admin` describes what someone may do in the software, not what they do at
