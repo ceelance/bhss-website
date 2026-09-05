@@ -1,11 +1,16 @@
 {
-  "generated_at": "2026-09-05T12:29:55.335Z",
-  "count": 65,
+  "generated_at": "2026-09-05T12:32:29.311Z",
+  "count": 66,
   "staff": [
     {
-      "name": "Cee Siama",
-      "group": "Science",
-      "title": "Teacher"
+      "name": "Sir Zomuana",
+      "group": "Office",
+      "title": "Office Staff"
+    },
+    {
+      "name": "Sir Sensena",
+      "group": "Office",
+      "title": "Office Staff"
     },
     {
       "name": "Madam Puii",
