@@ -330,6 +330,13 @@ main { padding-top: clamp(1.75rem, 3.5vw, 2.75rem); padding-bottom: clamp(3rem, 
   /* Brief here: the board is a glance on the way past, not the page. */
   .notice-list a { padding: .6rem 0; }
   .notice-list span { font-size: .92rem; }
+  /* Three notices on a phone, not five. The board sits ABOVE the news here, so
+     every extra line is news pushed further down; three is enough to answer "is
+     there anything new" and "All notices" is right underneath for the rest.
+     Hidden rather than not built: one home page is served to every screen, and
+     the two extra lines cost about 200 bytes. Scoped to the board, so the search
+     results — which share .notice-list — keep showing every hit. */
+  .notice-board .notice-list li:nth-child(n+4) { display: none; }
 }
 
 /* ---------------------------------------------------------------- faculty */
