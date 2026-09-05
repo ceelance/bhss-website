@@ -140,6 +140,11 @@ img { max-width: 100%; height: auto; }
 }
 .nav-group[open] > summary::after { transform: rotate(-135deg); margin-top: .15em; }
 .nav-group > summary:hover { background: rgba(255,255,255,.14); }
+/* You are on a page this menu holds. The same wash the top-level links get from
+   aria-current, moved up to the summary — the link that actually carries
+   aria-current is inside a closed panel, so on its own it marks nothing anybody
+   can see. This is what lets the menu stay SHUT on the page it contains. */
+.nav-group.is-current > summary { background: rgba(255,255,255,.2); }
 .nav-menu { display: flex; flex-direction: column; }
 .nav-menu a { white-space: nowrap; }
 

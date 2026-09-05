@@ -431,8 +431,15 @@ function navHtml(prefix, currentUrl) {
     // click, a tap and the keyboard alike, and the browser keeps aria-expanded
     // right — none of which a div can claim without the JavaScript this site
     // does not load. Pointer users also get it on hover, from CSS.
-    const open = p.items.some((i) => i.url === currentUrl) ? ' open' : '';
-    return `<details class="nav-group"${open}>
+    // MARKED, NOT OPENED. This used to render `open` on the page the menu holds,
+    // which meant every visit to School or Faculty — and every refresh of one —
+    // arrived with a panel already hanging over the page, and closing it did not
+    // stick. The job that attribute was doing is "show them where they are", and
+    // a highlighted label does that without the panel: the same cue the top-level
+    // links get from aria-current, moved up to the summary because the link
+    // carrying it is inside a menu nobody has opened yet.
+    const here = p.items.some((i) => i.url === currentUrl) ? ' is-current' : '';
+    return `<details class="nav-group${here}">
           <summary>${escapeHtml(p.meta.nav)}</summary>
           <div class="nav-menu">
             ${p.items.map((i) => navLink(i, prefix, currentUrl)).join('\n            ')}
