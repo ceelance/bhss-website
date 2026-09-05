@@ -393,6 +393,15 @@ main { padding-top: clamp(1.75rem, 3.5vw, 2.75rem); padding-bottom: clamp(3rem, 
   margin: 0; font-size: .72rem; font-weight: 700;
   text-transform: uppercase; letter-spacing: .05em; color: var(--brand-600);
 }
+/* The staffroom name, under the formal one. Quieter than the title below it,
+   because it is how the person is ADDRESSED rather than what they do — and while
+   the office is still filling in full names it is the same words twice, which
+   should read as an echo rather than as two competing headings. */
+.staff-nick {
+  margin: .1rem 0 0; font-size: .84rem; color: var(--ink-soft);
+  line-height: 1.35;
+}
+.staff-title { margin-top: .35rem; }
 .staff-subject { margin: .3rem 0 0; font-size: .87rem; color: var(--ink-soft); line-height: 1.4; }
 
 /* One or two people — the Principal, the Vice Principal — turned on their side so

@@ -333,8 +333,24 @@ function initialsOf(name) {
   return (first + last).toUpperCase();
 }
 
+/**
+ * The staffroom name — "Sir Siamtea", "Miss Kimkimi" — printed under the formal
+ * one.
+ *
+ * BOTH LINES, and the same text on both while `full_name` is empty. A parent
+ * reads the formal name; a student looking for their own teacher reads the name
+ * the school actually says out loud, and the two are often nothing like each
+ * other. Repeating it until the office fills in the formal name is deliberate and
+ * temporary: the layout does not move when they do, and a card that is briefly
+ * doubled is better than one whose shape changes under the reader.
+ */
+function staffNick(person) {
+  return String(person.name || '').trim();
+}
+
 function staffCard(person, prefix) {
   const name = staffName(person);
+  const nick = staffNick(person);
   const photo = String(person.photo || '').trim();
   const face = photo
     ? `<img src="${escapeHtml(prefix + '/' + photo)}" alt="" loading="lazy" width="400" height="400">`
@@ -346,6 +362,7 @@ function staffCard(person, prefix) {
           <div class="staff-face">${face}</div>
           <div class="staff-body">
             <h3>${escapeHtml(name)}</h3>
+            ${nick ? `<p class="staff-nick">${escapeHtml(nick)}</p>` : ''}
             ${title ? `<p class="staff-title">${escapeHtml(title)}</p>` : ''}
             ${subject ? `<p class="staff-subject">${escapeHtml(subject)}</p>` : ''}
           </div>
