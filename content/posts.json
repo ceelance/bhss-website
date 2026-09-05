@@ -1,13 +1,32 @@
 {
-  "generated_at": "2026-09-05T21:15:59.044Z",
-  "count": 36,
+  "generated_at": "2026-09-05T22:07:17.850Z",
+  "count": 37,
   "posts": [
+    {
+      "slug": "test4",
+      "title": "Test4",
+      "summary": "Test4",
+      "body_md": "Tested",
+      "category": "News, Notices",
+      "categories": [
+        "News",
+        "Notices"
+      ],
+      "published_at": "2026-09-05",
+      "author": "",
+      "thumb": "",
+      "thumb_fit": "cover",
+      "images": []
+    },
     {
       "slug": "test-post",
       "title": "Test post",
       "summary": "Test post",
       "body_md": "This is a test post with \n\n![**Sarlamkai**](img/posts/test-post-20260906-024440.webp) in it. Let me see how it looks.",
       "category": "News",
+      "categories": [
+        "News"
+      ],
       "published_at": "2026-09-05",
       "author": "",
       "thumb": "",
@@ -20,6 +39,9 @@
       "summary": "",
       "body_md": "![](img/posts/screenshot-2026-08-24-22-07-07-62-e2d5b3f32b79de1d45acd1fad9.webp)",
       "category": "Notices",
+      "categories": [
+        "Notices"
+      ],
       "published_at": "2026-08-24",
       "author": "",
       "thumb": "",
@@ -34,6 +56,9 @@
       "summary": "",
       "body_md": "![](img/posts/screenshot-2026-08-24-22-07-32-61-e2d5b3f32b79de1d45acd1fad9.webp)",
       "category": "Notices",
+      "categories": [
+        "Notices"
+      ],
       "published_at": "2026-08-24",
       "author": "",
       "thumb": "",
@@ -48,6 +73,9 @@
       "summary": "",
       "body_md": "Kan Principal ni lai mek, Upa C. Lalhmingmuana chuan Dt. 15th August 2026 (Independence Day) hian Mizoram State Award for Meritorious and Outstanding Teachers 2026 chu a dawng a. BHSS Family chuan kan lawmpuiin kan chhuang tak zet zet a ni.\n\n![](img/posts/sir-muantea-1.webp)\n\n![](img/posts/sir-muantea-2.webp)\n\n![](img/posts/sir-muantea-3.webp)\n\nThe Utmost for the Highest.",
       "category": "News",
+      "categories": [
+        "News"
+      ],
       "published_at": "2026-08-15",
       "author": "",
       "thumb": "",
@@ -64,6 +92,9 @@
       "summary": "",
       "body_md": "Kum tina kan hman ṭhin, hun pawimawh em em mai Gospel Meeting chu Dt. 5th - 7th August 2026 chhûng khan tluang takin kan hmang zo veleh ta a.\n\nSpeaker atân Pu Muansangpuia hman niin hun hlawkthlak tak kan hmang ho thei a, kan lawm hle a ni.\n\nPathian ropui ber rawh se.\n\n![](img/posts/img-20260810-wa00178028504354097931330.webp)\n\n![](img/posts/img-20260810-wa00278446830288012642159.webp)\n\n![](img/posts/img-20260806-wa00148414756158738889488.webp)\n\n![](img/posts/img-20260810-wa00244996659095477950965.webp)\n\nThe Utmost for the Highest.",
       "category": "News",
+      "categories": [
+        "News"
+      ],
       "published_at": "2026-08-07",
       "author": "",
       "thumb": "img/posts/img-20260810-wa0017-scaled-thumb.webp",
@@ -82,6 +113,9 @@
       "summary": "",
       "body_md": "**1. Results can be viewed by installing the *'Baptist HSS application'* from Google Playstore on android phones.**\n\nPlaystore Installation Link : [*https://play.google.com/store/apps/details?id=in.baptisthss.app&pcampaignid=web_share*](https://play.google.com/store/apps/details?id=in.baptisthss.app&pcampaignid=web_share)\n\n**2. Results can also be viewed by visiting result website direct link below: **\n\nResult view webpage direct link - [BHSS Results Link](https://portal.baptisthss.in)\n\nThe Utmost for the Highest.",
       "category": "Notices",
+      "categories": [
+        "Notices"
+      ],
       "published_at": "2026-07-03",
       "author": "",
       "thumb": "",
@@ -94,6 +128,9 @@
       "summary": "",
       "body_md": "![](img/posts/img-20260506-wa00294419072072183027030.webp)\n\n[Commencement of Class XI_102728](#)",
       "category": "Notices",
+      "categories": [
+        "Notices"
+      ],
       "published_at": "2026-05-06",
       "author": "",
       "thumb": "",
@@ -108,6 +145,9 @@
       "summary": "",
       "body_md": "![](img/posts/arts-a-01.webp)\n\n![](img/posts/arts-a-02.webp)\n\n![](img/posts/arts-a-03.webp)\n\n![](img/posts/arts-b-01.webp)\n\n![](img/posts/arts-b-02.webp)\n\n![](img/posts/arts-b-03.webp)\n\n![](img/posts/science-a-01.webp)\n\n![](img/posts/science-a-02.webp)\n\n![](img/posts/science-a-03.webp)\n\n![](img/posts/science-b-01.webp)\n\n![](img/posts/science-b-02.webp)\n\n![](img/posts/com-01.webp)\n\n![](img/posts/com-02.webp)\n\nPDF File Selected List\n\n[XI Admission 2026-27 Selected List](files/XI-Admission-2026-27-Selected-List-1.pdf)\n\nThe Utmost for the Highest",
       "category": "Admissions",
+      "categories": [
+        "Admissions"
+      ],
       "published_at": "2026-05-05",
       "author": "",
       "thumb": "",
@@ -134,6 +174,9 @@
       "summary": "",
       "body_md": "Result for the Academic Year 2025-26 has been published.\n\nWe congratulate all the students who have passed the examination. And we wish you all the best for you future.\n\nAnd we would also like to encourage the students who have not yet succeed this year to not give up and make this a stepping stone for your future success.\n\nBelow are the toppers from our school:\n\n![](img/posts/img-20260502-wa00025055308927530541552.webp)\n\n![](img/posts/img-20260502-wa0000828919567756361406.webp)\n\n![](img/posts/img-20260502-wa00018174988044856945994.webp)\n\nThe Utmost for the Highest",
       "category": "News",
+      "categories": [
+        "News"
+      ],
       "published_at": "2026-05-02",
       "author": "",
       "thumb": "",
@@ -150,6 +193,9 @@
       "summary": "",
       "body_md": "Class XI Admission notice for the Academic session 2026-27 is as follows:-\n\n![](img/posts/screenshot-2026-04-20-22-47-12-48-e2d5b3f32b79de1d45acd1fad9.webp)\n\n(in Mizo)\n\n![](img/posts/screenshot-2026-04-20-22-46-50-54-e2d5b3f32b79de1d45acd1fad9.webp)\n\n(in English)\n\n![](img/posts/img-20260420-wa00154664206602284739922.webp)\n\n---\n\nBHSS : The Utmost for the Highest",
       "category": "Admissions",
+      "categories": [
+        "Admissions"
+      ],
       "published_at": "2026-04-20",
       "author": "",
       "thumb": "img/posts/admission-notice-banner-label-clipart-686319-919-thumb.webp",
@@ -167,6 +213,9 @@
       "summary": "",
       "body_md": "![](img/posts/01.webp)\n\n![](img/posts/02-rotated.webp)\n\n![](img/posts/03-rotated.webp)\n\n![](img/posts/04-rotated.webp)\n\n![](img/posts/05.webp)\n\n![](img/posts/06.webp)\n\n![](img/posts/ix-selected-qr-code-2026.webp)\n\nThe Utmost for the Highest",
       "category": "Admissions",
+      "categories": [
+        "Admissions"
+      ],
       "published_at": "2026-03-09",
       "author": "",
       "thumb": "",
@@ -187,6 +236,9 @@
       "summary": "",
       "body_md": "![](img/posts/screenshot-2026-02-10-15-04-00-65-c37d74246d9c81aa0bb824b57e.webp)\n\nThe Utmost for the Highest",
       "category": "Admissions",
+      "categories": [
+        "Admissions"
+      ],
       "published_at": "2026-02-10",
       "author": "",
       "thumb": "",
@@ -201,6 +253,9 @@
       "summary": "",
       "body_md": "Kum 2025-26 Academic Session Annual School Sports chu Dt 22nd - 26th September 2025 chhûngin tluang takin kan nei thei a. Opening Day leh 2nd Day hi Ṭhuamluaia Mualah neih niin, Pu Micky Lalenkawla, DEO Lunglei chu Khuallianah hman a ni a, 3rd leh 4th Day hi School leh a chhehvelah neih a ni. Closing Function hi Tucker Hall-ah Dt 26th September 2025 khan hman a ni a, kumin annual sports ah hian Abraham House chu House Champion an ni.\n\nThe Utmost for the Highest.",
       "category": "Events",
+      "categories": [
+        "Events"
+      ],
       "published_at": "2025-09-26",
       "author": "",
       "thumb": "img/posts/xmk-8933-scaled-thumb.webp",
@@ -215,6 +270,9 @@
       "summary": "",
       "body_md": "Academic Session 2025-26 chhûng atân Tribal Scholarship dil theih a ni a. A hnuaia link-ah hian instructions a awm a; dil thei leh dil tum chuan kan lo ngaihven dawn nia. Students dil thei chuan mahni remchan dan anga lo bawhzui mai tur a ni.\n\nDil fel hnuah documents submit ngai te school-ah submit tur a ni a; documents submit lo chu application verify sak a rem dawn lo a ni.\n\n**LINK**\n[https://msb.mizoram.gov.in/post/tribal-scholarship-pre-post-matric-2025-2026](https://msb.mizoram.gov.in/post/tribal-scholarship-pre-post-matric-2025-2026)\n\nDil fel tawh hnua documents **submit **tûr leh submit-na tûr te:\n\n**Renewal **tân chuan dilna **Application Printout **leh **School ID (Xerox copy) **submit tur a ni a.\n\n**Fresh Applicants** tân chuan **Application Printout, Income Certificate (Original copy), ST Certificate (Xerox copy) leh School ID (Xerox copy) **te submit tur a ni e.\n\nHigher (XI & XII) - Sir Zuala (Computer Science Teacher)\nHigh School (IX & X) - Sir Siamtea (Computer Science Teacher)",
       "category": "Notices",
+      "categories": [
+        "Notices"
+      ],
       "published_at": "2025-09-01",
       "author": "",
       "thumb": "",
@@ -227,6 +285,9 @@
       "summary": "",
       "body_md": "Dt 6th-8th September 2025 chhûng hian kumtina kan neih ṭhin Gospel Meeting chu Pathian hruainain tluang takin kan nei veleh thei ta a. Rbt. Stephen Lalruatfela (Krista Thawhpuitu Team) chu Speaker atan hman niin, Pathian hnathawh kan hmu nasa hle a ni.\n\nTo God be the Glory.",
       "category": "News",
+      "categories": [
+        "News"
+      ],
       "published_at": "2025-08-08",
       "author": "",
       "thumb": "img/posts/img-20250808-wa0015-scaled-thumb.webp",
@@ -241,6 +302,9 @@
       "summary": "",
       "body_md": "Vawiin Dt.20th June 2025 (Friday) chawhnu Dar 1:00PM khan Class XI lo lût thar te pualin Parents-Teachers Meeting hun hman a ni a. Parents/Guardians ten kan ngaipawimawh a, hun hlawkthlak tak kan hmang thei a. A lawmawm hle a ni.\n\nThe Utmost for the Highest!",
       "category": "News",
+      "categories": [
+        "News"
+      ],
       "published_at": "2025-06-22",
       "author": "",
       "thumb": "img/posts/screenshot-2025-06-22-11-53-10-88-99c04817c0de5652397fc8b56c-thumb.webp",
@@ -255,6 +319,9 @@
       "summary": "",
       "body_md": "![](IMG::https://baptisthss.in/wp-content/uploads/2025/05/wp-image8714063680813724049-682x1024.jpg)\n\n[Click to enlarge](https://drive.google.com/file/d/1YQ7rL6AssS7EQXKjyQgMHEatxgqnbEt4/view?usp=drivesdk)",
       "category": "News",
+      "categories": [
+        "News"
+      ],
       "published_at": "2025-05-19",
       "author": "",
       "thumb": "",
@@ -267,6 +334,9 @@
       "summary": "",
       "body_md": "Selected List of Class XI Students for the Academic Year 2025-2026 is available from the LINK provided below:\n\nhttps://baptisthss.in/2025/05/09/download-class-xi-selected-list-pdf-file/\n\n**The Utmost for The Highest**",
       "category": "Admissions",
+      "categories": [
+        "Admissions"
+      ],
       "published_at": "2025-05-09",
       "author": "",
       "thumb": "",
@@ -279,6 +349,9 @@
       "summary": "",
       "body_md": "[BHSS XI SELECTED LIST 2025-26](files/BHSS-XI-SELECTED-LIST-2025-26.pdf)\n\n**The Utmost for the Highest**",
       "category": "Admissions",
+      "categories": [
+        "Admissions"
+      ],
       "published_at": "2025-05-09",
       "author": "",
       "thumb": "",
@@ -291,6 +364,9 @@
       "summary": "",
       "body_md": "![](img/posts/admission-1-rotated.webp)\n\n![](img/posts/1000415098.webp)\n\n**The Utmost for the Highest.**",
       "category": "Admissions",
+      "categories": [
+        "Admissions"
+      ],
       "published_at": "2025-04-28",
       "author": "",
       "thumb": "",
@@ -306,6 +382,9 @@
       "summary": "",
       "body_md": "Download School logo - [Click Here](https://drive.google.com/file/d/1-nat9AkSmdm3NSafEYknSguDdXym-Ezl/view?usp=drivesdk)\n\nThe Utmost for the Highest",
       "category": "News",
+      "categories": [
+        "News"
+      ],
       "published_at": "2025-04-08",
       "author": "",
       "thumb": "",
@@ -318,6 +397,9 @@
       "summary": "",
       "body_md": "School will be re-opened on 7th April 2025 (Monday) for the Academic Session 2025-2026.\n1) There will be regular classes upto 4th period\n2) There will be staff meeting at 1:00PM\n\n**Devotion shall be conducted at 9:00AM in the morning:Leader**: Sir C.Lalhmingmuana, Principal\n**Sermon**: Rev Samuel Lalremsanga, Chaplain\n**Guitarist**: Sir PC.Lalchhuanmawia\n**Bassist**: Sir Lallianzuala Pautu\n**Keyboardist**: Sir C.Zairemsiama\n**Drummer**: Sir VL.Hluzuala\n\n**The Utmost for the Highest.**",
       "category": "News",
+      "categories": [
+        "News"
+      ],
       "published_at": "2025-04-05",
       "author": "",
       "thumb": "img/posts/session-2024-25-thumb.webp",
@@ -332,6 +414,9 @@
       "summary": "",
       "body_md": "Kum 2025-2026 chhung atana Class IX Admission tih tum te tan notice siam a ni a. A hnuaia thlalak ah hian a kimchangin a awm e.\n\n![](img/posts/class-ix-admission-notice.webp)\n\nThe Utmost for the Highest.",
       "category": "Admissions",
+      "categories": [
+        "Admissions"
+      ],
       "published_at": "2025-02-25",
       "author": "",
       "thumb": "",
@@ -346,6 +431,9 @@
       "summary": "",
       "body_md": "Vawiin Dt.17th January 2025, 3:00PM khan BHSS Academic Block II building hawnna hun hman a ni a. A hnuai ami ang hian programme hman a ni. Lalpa kan lawm e.\n\n![](img/posts/img-20250117-1514037573459914960257429.webp)\n\nTo God be the Glory!\n\nThe Utmost for the Highest.",
       "category": "News",
+      "categories": [
+        "News"
+      ],
       "published_at": "2025-01-17",
       "author": "",
       "thumb": "img/posts/img20250117151037-scaled-thumb.webp",
@@ -361,6 +449,9 @@
       "summary": "",
       "body_md": "Krismas chawlh kan hman hnuin Dt. 10th January 2025, Friday hian school re-open niin regular class 4th period thleng neih niin, chawhnuah Staff Meeting neih a ni.",
       "category": "News",
+      "categories": [
+        "News"
+      ],
       "published_at": "2025-01-10",
       "author": "",
       "thumb": "",
@@ -373,6 +464,9 @@
       "summary": "",
       "body_md": "Dt. 6th December 2024 zing dar 10 ah khan Advance Christmas hun hlimawm tak hman a ni.\n\nA hnuaia link-ah hian thlalak tlemazawng dah a ni e.\n\n[https://photos.app.goo.gl/Ujkm99GRtxksmMYD7](https://photos.app.goo.gl/Ujkm99GRtxksmMYD7)\n\n[https://photos.app.goo.gl/QNXtDeNLPRuZZijQ7](https://photos.app.goo.gl/QNXtDeNLPRuZZijQ7)\n\nThe Utmost for the Highest.",
       "category": "News",
+      "categories": [
+        "News"
+      ],
       "published_at": "2024-12-06",
       "author": "",
       "thumb": "img/posts/img-20241208-084410-thumb.webp",
@@ -387,6 +481,9 @@
       "summary": "",
       "body_md": "Vawiin Dt.29.11.2024 (Friday) Dar 12:00PM  ah khan kan Ex-Principal, hun lo taka ropuina rama min kalsan ta, Dr K.L Biakchungnunga sûlhnûte thlîrlêtna hun chu hlâwkthlâk taka hman a ni a; Sir Maa lehkhabu ziak ***Point of View Vol-III*** tlângzarhna hun hman nghâl a ni.\n\nProgramme kimchang hetiang hi a ni:-\n\n![](img/posts/img-20241129-1405215839748509859789713.webp)\n\n![](img/posts/img-20241129-15121149293936387009132.webp)\n\n---\n\n![](img/posts/img-20241129-1423158117866889518668350.webp)\n\n![](img/posts/img-20241129-1420088768621084300180803.webp)\n\n---\n\nThlalâk hi a hnuai link-ah hian en theih a ni e.\n\n[https://photos.app.goo.gl/WNvw8FL9PMJ771Rs8](https://photos.app.goo.gl/WNvw8FL9PMJ771Rs8)\n\nThe Utmost for the Highest.",
       "category": "News",
+      "categories": [
+        "News"
+      ],
       "published_at": "2024-11-29",
       "author": "",
       "thumb": "img/posts/img-20241129-142315-scaled-thumb.webp",
@@ -405,6 +502,9 @@
       "summary": "",
       "body_md": "Tribal Scholarship Application due date is extended till **14th December 2024**.\n\nDetail information and guide to apply the scholarship can be found [***here***](https://baptisthss.in/2024/09/17/application-open-for-tribal-scholarship-2024-25/)\n\nThe Utmost for the Highest",
       "category": "Notices",
+      "categories": [
+        "Notices"
+      ],
       "published_at": "2024-11-19",
       "author": "",
       "thumb": "img/posts/apply-for-scholarships-thumb.webp",
@@ -419,6 +519,9 @@
       "summary": "",
       "body_md": "BCM hnuaia staff-te puala programme duan, a vawikhatna atân BCM Staff Conference 2024 8th-10th November 2024 chhûngin BCM Hall, BCM Hqtrs, Serkawn ah hman a ni a. BHSS thawktute pawn kan hlawkpui hle a ni.\n\nThe Utmost for the Highest.\n\n![](img/posts/img-20241110-wa00053028965411500133062.webp)\n\n![](img/posts/img-20241110-wa00175515483132216638773.webp)\n\n![](img/posts/img-20241110-wa00218850154969859465479.webp)",
       "category": "News",
+      "categories": [
+        "News"
+      ],
       "published_at": "2024-11-10",
       "author": "",
       "thumb": "img/posts/img-20241118-122026-scaled-thumb.webp",
@@ -436,6 +539,9 @@
       "summary": "",
       "body_md": "2nd Term Examination 2024-25 hun a lo thleng veleh ta reng mai a. Exam hi Dt. 4th-15th November 2024 chhûngin neih a ni dawn a. Students te ṭha taka exam thei turin duhsakna kan hlan e.\n\nThe Utmost for the Highest",
       "category": "News",
+      "categories": [
+        "News"
+      ],
       "published_at": "2024-11-03",
       "author": "",
       "thumb": "img/posts/images-thumb.webp",
@@ -450,6 +556,9 @@
       "summary": "",
       "body_md": "Kumtina kan hman ṭhin, Annual School Sports chu a ṭum 63-na atân ni 23rd - 27th September, 2024 chhûng khân tluang takin hman a ni a. Indoor leh Outdoor ah items chi hrang hrang hmangin inelna neih niin, kuminah hian Daniel's House an champion a ni.\n\nThe Utmost for the Highest",
       "category": "Events",
+      "categories": [
+        "Events"
+      ],
       "published_at": "2024-09-27",
       "author": "",
       "thumb": "img/posts/img-20240923-wa0015-thumb.webp",
@@ -464,6 +573,9 @@
       "summary": "",
       "body_md": "Last date for submission of application form until further notice is **15th November 2024. (Extended upto 14th December, 2024)**\n\n***Application is open for students who are eligible to apply. \nStudents can apply the scholarship by themselves. Or they can approach any Common Service Centre available for assistance. You can find CSC available in Lunglei by clicking and locating from [here](https://locator.csccloud.in/).***\n\n***OTR hmanga dil tur a nih avangin OTR siam phawt a ngai a, a siam dan tur chu a hnuaia Mizoram Scholarship Board website-ah hian chiang takin a inziak a. OTR neih hnuah chumi hmang chuan NSP Website-ah login-a apply mai tur a ni e.*Instructions for CREATING/MAKING NEW OTR(One time registration) for the Scholarship can be found below (Click on the link):**\n\n.stk-f25d9db {margin-bottom:22px !important;}\n\n-\n\n[Mizoram Scholarship Board Website](https://msb.mizoram.gov.in/post/nsp-a-one-time-registration-otr-tihdan-leh-bank-seeding-status-check-dan)\n\n-\n\n[NSP (National Scholarship Portal Website](https://scholarships.gov.in/ViewMoreAnnouncement)\n\n-\n\n[Frequently Asked Questions](https://scholarships.gov.in/public/FAQ/FAQ_mizoram_15032024.pdf)\n\n---\n\nInstitute Nodal Officer (INO) for BHSS are as follows:-\n\n- Post-Matric (Higher) INO: Sir Zuala (+918787391949)\n- Pre-Matric (High School) INO: Sir Siamtea (+919612226290)\n\n---\n\n**AFTER FINISHING THE APPLICATION:Submit the documents to the Institution:**\nWhere do I submit the documents after I've finished applying?\n***Submit to the concerned INO:***\nFor *Pre-Matric(IX & X) - Sir Siamtea*\nFor *Post-Matric(XI & XII) - Sir Zuala.*\n*Then the respective INOs will proceed your application for approval and then verification and the documents will be kept for future reference.)*\n\n- **DOCUMENTS TO BE SUBMITTED:-**\n- **For Fresh Applicants:**\n- Printed Application form\n- Original copy of recent Income Certificate from DC (or competent officers).\n- Xerox copy of Tribal Certificate.\n- **For Renewal Applicants:**\n- Printed Application form.",
       "category": "Notices",
+      "categories": [
+        "Notices"
+      ],
       "published_at": "2024-09-17",
       "author": "",
       "thumb": "img/posts/apply-for-scholarships-thumb.webp",
@@ -478,6 +590,9 @@
       "summary": "",
       "body_md": "Vawiin Dt.5th September 2024 (Thursday) Dar 10:00AM khan Tucker Hall, BHSS Serkawn ah Teachers' Day Programme hlimawm tak hman a ni a. Students ten special items chi hrang hrang an inbuatsaih te an perform a. Teachers te gift hlu tak an pe bawk a ni.\n\n---\n\nThe Utmost for the Highest",
       "category": "News",
+      "categories": [
+        "News"
+      ],
       "published_at": "2024-09-05",
       "author": "",
       "thumb": "img/posts/img-20240905-112236-thumb.webp",
@@ -492,6 +607,9 @@
       "summary": "",
       "body_md": "Kum tin regular feature-a kan neih Gospel Meeting chu hman mek a ni a. A hun chhung hi 7th-9th August 2024 a ni. Speaker hi Rev Dr. H.Lalthlamuana a ni.\n\n---\n\n![](img/posts/img202408071406465437613012373626092.webp)\n\nTo God be the Glory\n\n![](IMG::https://baptisthss.in/wp-content/uploads/2024/08/img-20240809-wa00234274954223191080120-1024x490.jpg)\n\n![](IMG::https://baptisthss.in/wp-content/uploads/2024/08/img-20240809-wa00216872286239213056117-1024x768.jpg)\n\n![](IMG::https://baptisthss.in/wp-content/uploads/2024/08/img-20240809-wa0019450344103393565409-1024x768.jpg)\n\n![](IMG::https://baptisthss.in/wp-content/uploads/2024/08/img-20240809-wa00201050323798645828746-1024x768.jpg)\n\n![](IMG::https://baptisthss.in/wp-content/uploads/2024/08/img-20240809-wa00114956479532651653037-1024x768.jpg)\n\n![](IMG::https://baptisthss.in/wp-content/uploads/2024/08/img-20240809-wa00132110871184137963507-1024x768.jpg)\n\n![](IMG::https://baptisthss.in/wp-content/uploads/2024/08/img-20240809-wa00093742115375404813999-1024x768.jpg)\n\n![](IMG::https://baptisthss.in/wp-content/uploads/2024/08/img-20240809-wa00047256297049565973138-1024x768.jpg)\n\n![](IMG::https://baptisthss.in/wp-content/uploads/2024/08/img-20240808-wa00201493844246833452583-1024x768.jpg)\n\n![](IMG::https://baptisthss.in/wp-content/uploads/2024/08/img-20240808-wa00167491853407203769947-1024x768.jpg)\n\n![](IMG::https://baptisthss.in/wp-content/uploads/2024/08/img-20240807-wa00115762938489861019372-768x1024.jpg)",
       "category": "News",
+      "categories": [
+        "News"
+      ],
       "published_at": "2024-08-08",
       "author": "",
       "thumb": "",
@@ -506,6 +624,9 @@
       "summary": "",
       "body_md": "![](IMG::https://baptisthss.in/wp-content/uploads/2024/08/bhss-20x30-20246463211432704269067-682x1024.jpg)\n\n[Click to enlarge](https://drive.google.com/file/d/1-Hs8YdW14CDuHUdjFw5tZpVfFl-NzmKc/view?usp=drivesdk)",
       "category": "News",
+      "categories": [
+        "News"
+      ],
       "published_at": "2024-08-05",
       "author": "",
       "thumb": "",
@@ -518,6 +639,9 @@
       "summary": "",
       "body_md": "Vawiin lamah second term, 2024-25 ṭan a ni leh ta a. Pathian venna leh hruaina kan chang hi a lawmawm ṭhin hle mai.\n\n---\n\n![](img/posts/img-20240727-wa00192342003910097307019.webp)\n\nScience building construction pawh a kal mêk zêl e.\n\n---\n\nThe Utmost for the Highest.",
       "category": "News",
+      "categories": [
+        "News"
+      ],
       "published_at": "2024-08-01",
       "author": "",
       "thumb": "",
