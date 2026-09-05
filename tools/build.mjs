@@ -18,10 +18,30 @@
 import { readFileSync, writeFileSync, mkdirSync, rmSync, readdirSync, statSync, cpSync, existsSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { createHash } from 'node:crypto';
 import { renderMarkdown, escapeHtml, excerpt } from './markdown.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const DIST = join(ROOT, 'dist');
+
+/**
+ * A stamp of the stylesheet's CONTENT, appended to its URL.
+ *
+ * .htaccess holds CSS for a week, which is only safe if the address changes when
+ * the file does — and it did not. The HTML asked for a bare `styles.css`, so a
+ * returning visitor got today's markup dressed in last week's stylesheet: the
+ * About menu fell back to a bare <details> widget and the notice board dropped
+ * out of its column, because the rules for both were in the copy they did not
+ * have. Nothing looked broken to anyone testing with an empty cache, which is
+ * the worst kind of fault.
+ *
+ * Hashing the content rather than stamping the build means the URL changes when
+ * the CSS changes and NOT on every deploy, so an unchanged stylesheet stays
+ * cached.
+ */
+const CSS_VERSION = createHash('sha256')
+  .update(readFileSync(join(ROOT, 'site', 'styles.css')))
+  .digest('hex').slice(0, 8);
 
 /**
  * The absolute address the finished site will live at. Used ONLY where a URL must
@@ -353,6 +373,7 @@ function renderShell({ out, url, title, description, content, ogImage, ogType })
                      : `${BASE_URL}${DEFAULT_OG}`,
     ogType: ogType || 'website',
     school: SCHOOL,
+    cssVersion: CSS_VERSION,
     nav: navHtml(prefix, url),
     content: body,
     year: new Date().getFullYear()

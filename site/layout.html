@@ -30,7 +30,10 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="{{base}}/styles.css">
+<!-- ?v= is the stylesheet's content hash. It is what makes the week-long CSS
+     cache safe: change the CSS and the address changes with it, so nobody is
+     served new markup dressed in an old stylesheet. -->
+<link rel="stylesheet" href="{{base}}/styles.css?v={{cssVersion}}">
 </head>
 <body>
 

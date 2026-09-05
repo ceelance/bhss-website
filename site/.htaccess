@@ -86,7 +86,13 @@ ErrorDocument 404 /404.html
 
 # ---------------------------------------------------------------- caching
 # The HTML must stay fresh, or a published post would not appear until a
-# visitor's cache expired. Images and CSS are safe to hold for a week.
+# visitor's cache expired.
+#
+# CSS IS ONLY SAFE TO HOLD BECAUSE ITS ADDRESS CARRIES A CONTENT HASH — the build
+# writes styles.css?v=<hash> into every page. Without that stamp this week-long
+# rule serves a returning visitor today's markup dressed in last week's
+# stylesheet, and the fault is invisible to anyone testing with an empty cache.
+# If the stamp is ever removed, this line has to come down with it.
 <IfModule mod_expires.c>
   ExpiresActive On
   ExpiresByType text/html "access plus 0 seconds"
