@@ -585,6 +585,10 @@ th { background: var(--brand-50); font-weight: 700; }
 .post-body ul, .post-body ol { padding-left: 1.3rem; }
 .post-body figure { margin: 1.8rem 0; }
 .post-body figure img { border-radius: 10px; width: 100%; }
+/* A picture typed INTO a sentence rather than left on a line of its own. It gets
+   no figure and no caption — that is the difference between the two forms — but
+   it should still not sit on the text baseline looking dropped. */
+.post-body p img { border-radius: 10px; vertical-align: middle; }
 .post-body figcaption { font-size: .85rem; color: var(--ink-faint); text-align: center;
                         margin-top: .5rem; }
 .post-body blockquote {
