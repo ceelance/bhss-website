@@ -152,7 +152,7 @@ img { max-width: 100%; height: auto; }
 }
 
 /* Above the mobile breakpoint the group's items hang below it as a panel. */
-@media (min-width: 901px) {
+@media (min-width: 851px) {
   .nav-menu {
     position: absolute; top: calc(100% + .35rem); left: 0; z-index: 60;
     min-width: 100%; padding: .35rem;
@@ -168,10 +168,12 @@ img { max-width: 100%; height: auto; }
   }
 }
 
-/* 900px, not 820: the row measures 143px of brand plus the links, and below that
-   the last item was being clipped rather than wrapping, because the nav is a
-   single flex line. */
-@media (max-width: 900px) {
+/* Measured, not guessed, and re-measured whenever the menu changes: 143px of
+   brand + 16px gap + 591px of links + the 40px .wrap takes = 790px before the
+   last item is clipped, and it IS clipped rather than wrapped, because the nav is
+   a single flex line. 850 leaves headroom for the fallback face, which is wider
+   than DM Sans on the occasions the font does not arrive. */
+@media (max-width: 850px) {
   .nav-button { display: block; }
   .site-nav {
     display: none; position: absolute; left: 0; right: 0; top: 100%;
