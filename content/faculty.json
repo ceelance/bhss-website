@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-05T20:21:48.538Z",
+  "generated_at": "2026-09-05T20:30:49.372Z",
   "count": 67,
   "staff": [
     {
@@ -363,7 +363,8 @@
       "name": "Sir Siamtea",
       "group": "Science",
       "title": "Teacher",
-      "subject": "Comp. Sc."
+      "subject": "Comp. Sc.",
+      "photo": "img/staff/sir-siamtea-aa81f7-20260906-020046.webp"
     },
     {
       "name": "Sir Chhantea",
