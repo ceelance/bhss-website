@@ -1,8 +1,17 @@
 # Staff photographs
 
-One picture per member of staff, referenced from `content/faculty.json` as
-`img/staff/<name>.webp`. **Uploaded by the portal, not committed by hand** — the
-same path post pictures already take.
+One picture per member of staff, referenced from `content/faculty.json`.
+**Uploaded by the portal, not committed by hand** — the same path post pictures
+already take. Filenames are `<slug>-<6 hex>.webp`, the hex being a digest of the
+person's address: two staff called "Sir Joseph" would otherwise overwrite one
+another's face.
+
+A teacher puts their own here by answering the card on their portal home, or an
+admin does it for them. **A file here is somebody's consent, not just an asset** —
+if a person's photograph is removed or they leave the school, the file is
+deleted, because a cleared reference leaves the picture in this public repo at a
+guessable address. Don't add one by hand for a member of staff who has not been
+asked; `tools/staff-photos.py` is the route for a batch the office already holds.
 
 A card without a photograph is not a fault. It shows the person's initials on a
 tinted tile, so a half-photographed staff list looks deliberate rather than

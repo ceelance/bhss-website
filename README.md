@@ -136,7 +136,36 @@ any other group still appears, after those, so a new one shows up rather than
 vanishing because that list is out of date. A group of one or two gets a wider
 card, so the Principal is not marooned in an empty row.
 
-Photographs go in `img/staff/` — see the README there.
+### Photographs
+
+Two ways in, and neither is committed by hand.
+
+**A teacher does it themselves.** Signing in to the portal asks once whether their
+Google account picture may go on this page. Yes copies it here; "Not now" asks
+again in 15 days; **"No thanks" is final** and an admin cannot publish over it.
+Whatever they choose, the setting stays reachable from their portal home, so a
+photograph can be changed or taken down at any time. Built in the portal repo —
+`StaffPhotos.gs` and `js/staff-photo.js`; the reasoning is in its `CLAUDE.md`.
+
+**An admin does it for them**, for the staff who never sign in — from the same
+screen the staff list is managed on.
+
+**Removal deletes the file, not just the reference.** A cleared `photo` cell
+unpublishes the card while leaving the picture in this public repo at a guessable
+address; refusing, removing and deleting a staff member all delete it.
+
+For a batch of photographs the office already holds, `tools/staff-photos.py`
+squares and converts a whole folder and prints the sheet values:
+
+```
+python tools/staff-photos.py --in "D:\staff pics"           # dry run
+python tools/staff-photos.py --in "D:\staff pics" --write
+```
+
+Dry run first, always — it matches files to people by name, and a mismatch puts
+one teacher's face on another teacher's card. Tall photographs are cropped from
+**above** centre: a phone portrait has the head in the upper third, and a centred
+square takes the chest. See the README in `img/staff/` for what to shoot.
 
 `portal/publish-faculty.gs` is the script that writes this file. It belongs to
 the portal's Apps Script project and is kept here because the shape it must
