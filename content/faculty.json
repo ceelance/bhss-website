@@ -1,5 +1,386 @@
 {
-  "generated_at": "2026-09-05T08:44:52.488Z",
-  "count": 0,
-  "staff": []
+  "generated_at": "2026-09-05T08:58:18.657Z",
+  "count": 64,
+  "staff": [
+    {
+      "name": "Madam Puii",
+      "group": "High School",
+      "title": "Teacher",
+      "subject": "Mizo1"
+    },
+    {
+      "name": "Sir Manunmawia",
+      "group": "High School",
+      "title": "Teacher",
+      "subject": "Science1"
+    },
+    {
+      "name": "Sir Beia",
+      "group": "High School",
+      "title": "Teacher",
+      "subject": "Maths1"
+    },
+    {
+      "name": "Miss Ramliani",
+      "group": "High School",
+      "title": "Teacher",
+      "subject": "Science2"
+    },
+    {
+      "name": "Sir Davida HS",
+      "group": "High School",
+      "title": "Teacher",
+      "subject": "English1"
+    },
+    {
+      "name": "Miss Ramtei",
+      "group": "High School",
+      "title": "Teacher",
+      "subject": "English2"
+    },
+    {
+      "name": "Sir Israela",
+      "group": "High School",
+      "title": "Teacher",
+      "subject": "Maths2"
+    },
+    {
+      "name": "Miss Omomi",
+      "group": "High School",
+      "title": "Teacher",
+      "subject": "SocialScience1"
+    },
+    {
+      "name": "Sir T-a",
+      "group": "High School",
+      "title": "Teacher",
+      "subject": "Science3"
+    },
+    {
+      "name": "Sir Arema",
+      "group": "High School",
+      "title": "Teacher",
+      "subject": "WE1"
+    },
+    {
+      "name": "Sir Mka",
+      "group": "High School",
+      "title": "Teacher",
+      "subject": "Hindi1"
+    },
+    {
+      "name": "Miss Kimkimi HS",
+      "group": "High School",
+      "title": "Teacher",
+      "subject": "Mizo2"
+    },
+    {
+      "name": "Miss Kimtei",
+      "group": "High School",
+      "title": "Teacher",
+      "subject": "Maths3"
+    },
+    {
+      "name": "Sir Btea",
+      "group": "High School",
+      "title": "Teacher",
+      "subject": "SocialScience2"
+    },
+    {
+      "name": "Miss Partei HS",
+      "group": "High School",
+      "title": "Teacher",
+      "subject": "Hindi2"
+    },
+    {
+      "name": "Miss Matei",
+      "group": "High School",
+      "title": "Teacher",
+      "subject": "Scripture1"
+    },
+    {
+      "name": "Miss Nanovi",
+      "group": "Higher Secondary",
+      "title": "Teacher",
+      "subject": "English2"
+    },
+    {
+      "name": "Sir VL Muana",
+      "group": "Higher Secondary",
+      "title": "Teacher",
+      "subject": "English3"
+    },
+    {
+      "name": "Miss Muanpuii",
+      "group": "Higher Secondary",
+      "title": "Teacher",
+      "subject": "English4"
+    },
+    {
+      "name": "Sir Vohbika",
+      "group": "Higher Secondary",
+      "title": "Teacher",
+      "subject": "English5"
+    },
+    {
+      "name": "Sir Tlantea",
+      "group": "Higher Secondary",
+      "title": "Teacher",
+      "subject": "Mizo1"
+    },
+    {
+      "name": "Miss Zti",
+      "group": "Higher Secondary",
+      "title": "Teacher",
+      "subject": "Mizo2"
+    },
+    {
+      "name": "Sir Zohmaa",
+      "group": "Higher Secondary",
+      "title": "Teacher",
+      "subject": "Mizo3"
+    },
+    {
+      "name": "Sir Hlimpuia",
+      "group": "Higher Secondary",
+      "title": "Teacher",
+      "subject": "Mizo4"
+    },
+    {
+      "name": "Sir Siana",
+      "group": "Higher Secondary",
+      "title": "Teacher",
+      "subject": "History1"
+    },
+    {
+      "name": "Sir Mathlenga",
+      "group": "Higher Secondary",
+      "title": "Teacher",
+      "subject": "History2"
+    },
+    {
+      "name": "Miss Maziki",
+      "group": "Higher Secondary",
+      "title": "Teacher",
+      "subject": "Geography1"
+    },
+    {
+      "name": "Sir Zawntea",
+      "group": "Higher Secondary",
+      "title": "Teacher",
+      "subject": "Geography2"
+    },
+    {
+      "name": "Miss Rinpuii",
+      "group": "Higher Secondary",
+      "title": "Teacher",
+      "subject": "Education1"
+    },
+    {
+      "name": "Miss Rita",
+      "group": "Higher Secondary",
+      "title": "Teacher",
+      "subject": "Education2"
+    },
+    {
+      "name": "Miss Heleni",
+      "group": "Higher Secondary",
+      "title": "Teacher",
+      "subject": "PoliticalScience1"
+    },
+    {
+      "name": "Miss Nunhlimi",
+      "group": "Higher Secondary",
+      "title": "Teacher",
+      "subject": "PoliticalScience2"
+    },
+    {
+      "name": "Sir Marina",
+      "group": "Higher Secondary",
+      "title": "Teacher",
+      "subject": "Economics1"
+    },
+    {
+      "name": "Miss Sangtei Eco",
+      "group": "Higher Secondary",
+      "title": "Teacher",
+      "subject": "Economics2"
+    },
+    {
+      "name": "Sir Sawma",
+      "group": "Higher Secondary",
+      "title": "Teacher",
+      "subject": "Sociology1"
+    },
+    {
+      "name": "Miss Sangtei Socio",
+      "group": "Higher Secondary",
+      "title": "Teacher",
+      "subject": "Sociology2"
+    },
+    {
+      "name": "Miss Tetei",
+      "group": "Higher Secondary",
+      "title": "Teacher",
+      "subject": "Accountancy1"
+    },
+    {
+      "name": "Miss Noreeni",
+      "group": "Higher Secondary",
+      "title": "Teacher",
+      "subject": "BusinessStudies2"
+    },
+    {
+      "name": "Sir VL Hluzuala",
+      "group": "Higher Secondary",
+      "title": "Teacher",
+      "subject": "Accountancy2"
+    },
+    {
+      "name": "Sir Hmachhuana",
+      "group": "Higher Secondary",
+      "title": "Teacher",
+      "subject": "Physics1"
+    },
+    {
+      "name": "Sir Muhindro",
+      "group": "Higher Secondary",
+      "title": "Teacher",
+      "subject": "Physics2"
+    },
+    {
+      "name": "Sir Marka",
+      "group": "Higher Secondary",
+      "title": "Teacher",
+      "subject": "Physics3"
+    },
+    {
+      "name": "Sir Davida HSS",
+      "group": "Higher Secondary",
+      "title": "Teacher",
+      "subject": "Chemistry1"
+    },
+    {
+      "name": "Miss Maheri",
+      "group": "Higher Secondary",
+      "title": "Teacher",
+      "subject": "Chemistry2"
+    },
+    {
+      "name": "Miss Tetei Sc",
+      "group": "Higher Secondary",
+      "title": "Teacher",
+      "subject": "Chemistry3"
+    },
+    {
+      "name": "Sir Jona",
+      "group": "Higher Secondary",
+      "title": "Teacher",
+      "subject": "Biology1"
+    },
+    {
+      "name": "Sir Hmangaiha",
+      "group": "Higher Secondary",
+      "title": "Teacher",
+      "subject": "Biology2"
+    },
+    {
+      "name": "Miss Mathani",
+      "group": "Higher Secondary",
+      "title": "Teacher",
+      "subject": "Biology3"
+    },
+    {
+      "name": "Sir Sammy",
+      "group": "Higher Secondary",
+      "title": "Teacher",
+      "subject": "Biology4"
+    },
+    {
+      "name": "Miss Zuali",
+      "group": "Higher Secondary",
+      "title": "Teacher",
+      "subject": "Mathematics1"
+    },
+    {
+      "name": "Sir Rka",
+      "group": "Higher Secondary",
+      "title": "Teacher",
+      "subject": "Mathematics2"
+    },
+    {
+      "name": "Miss Puipuii",
+      "group": "Higher Secondary",
+      "title": "Teacher",
+      "subject": "Mathematics3"
+    },
+    {
+      "name": "Sir Zuala",
+      "group": "Higher Secondary",
+      "title": "Teacher",
+      "subject": "ComputerScience2"
+    },
+    {
+      "name": "Miss Kimkimi HSS",
+      "group": "Higher Secondary",
+      "title": "Teacher",
+      "subject": "BusinessMaths1"
+    },
+    {
+      "name": "Sir Muantea",
+      "group": "Principal",
+      "title": "Principal"
+    },
+    {
+      "name": "Miss Dinpuii",
+      "group": "Higher Secondary",
+      "title": "Teacher",
+      "subject": "English1"
+    },
+    {
+      "name": "Miss Partei HSS",
+      "group": "Higher Secondary",
+      "title": "Teacher",
+      "subject": "BusinessStudies1"
+    },
+    {
+      "name": "Sir Siamtea",
+      "group": "Higher Secondary",
+      "title": "Teacher",
+      "subject": "ComputerScience1"
+    },
+    {
+      "name": "Sir Chhantea",
+      "group": "Higher Secondary",
+      "title": "Teacher",
+      "subject": "ScienceLab1"
+    },
+    {
+      "name": "Sir Thiana",
+      "group": "Vice Principal",
+      "title": "Vice Principal"
+    },
+    {
+      "name": "Sir Joela",
+      "group": "Office and support",
+      "title": "Staff"
+    },
+    {
+      "name": "Madam Matlani",
+      "group": "Higher Secondary",
+      "title": "Teacher",
+      "subject": "ScienceLab2"
+    },
+    {
+      "name": "Sir Sangzuala",
+      "group": "Higher Secondary",
+      "title": "Teacher",
+      "subject": "ScienceLab3"
+    },
+    {
+      "name": "Sir Muana",
+      "group": "Office and support",
+      "title": "Staff"
+    }
+  ]
 }
