@@ -34,6 +34,15 @@
 
 var PUBLISH_FACULTY_DRY_RUN = true;
 
+/**
+ * Publishing NOBODY empties the faculty page, and is almost never what anyone
+ * meant — it is what a renamed column or an unticked switch looks like. So a run
+ * that would publish nothing while named staff sit in the sheet stops instead.
+ *
+ * Set this true only to genuinely clear the page.
+ */
+var PUBLISH_FACULTY_ALLOW_EMPTY = false;
+
 var FACULTY_CONTENT_PATH = 'content/faculty.json';
 
 /**
@@ -171,6 +180,20 @@ function publishFaculty() {
   }
   log.push('\n' + json);
 
+  // The guard. Nobody to publish, but named people sitting in the sheet, means
+  // something is off — a switch nobody ticked, a column renamed — far more often
+  // than it means the school has no staff. Committing anyway would empty the page
+  // and the log would look like a success.
+  if (!staff.length && skipped.length && !PUBLISH_FACULTY_ALLOW_EMPTY) {
+    log.push('\nSTOPPED: this would publish an empty faculty page while ' +
+             skipped.length + ' named row(s) sit in Users unpublished.');
+    log.push('If the switch is simply not set yet, run facultyTurnOnStaff (below).');
+    log.push('If you really do mean to clear the page, set ' +
+             'PUBLISH_FACULTY_ALLOW_EMPTY = true and run again.');
+    Logger.log(log.join('\n'));
+    return log.join('\n');
+  }
+
   if (PUBLISH_FACULTY_DRY_RUN) {
     log.push('\nSet PUBLISH_FACULTY_DRY_RUN = false and run again to commit.');
     Logger.log(log.join('\n'));
@@ -190,4 +213,75 @@ function publishFaculty() {
     : '\nFAILED: ' + res.error);
   Logger.log(log.join('\n'));
   return log.join('\n');
+}
+
+// ---------------------------------------------------------------------------
+
+/**
+ * ONE-OFF: switch `on_website` on for the staff who belong on the public page.
+ *
+ * Ticking seventy boxes by hand is an invitation to tick the wrong one, and the
+ * blank rows below the data are easy to catch by accident — so this only ever
+ * writes to a row that HAS A NAME AND A TEACHING OR SCHOOL ROLE.
+ *
+ * THE ADMIN ROLES ARE LEFT OFF DELIBERATELY. `admin`, `admin_hs`, `admin_hss`
+ * and `super_admin` say what an account may do in the software, and in this sheet
+ * some of them are shared logins rather than people — "HS Admin", "HSS Admin".
+ * A real teacher who also administers the system should be ticked by hand, which
+ * takes one click and cannot be got wrong by a script that never met them.
+ *
+ * Run with DRY_RUN true, read the list, then set it false.
+ */
+var FACULTY_TURN_ON_DRY_RUN = true;
+
+var FACULTY_PUBLIC_ROLES = ['principal', 'vice_principal', 'hs_teacher',
+                            'hss_teacher', 'non_teaching_staff'];
+
+function facultyTurnOnStaff() {
+  var sheet = getSheet('Users');
+  var data = sheet.getDataRange().getValues();
+  if (data.length < 2) return Logger.log('Users has no rows.');
+
+  var headers = data[0].map(function (h) { return String(h).trim(); });
+  var nameCol = headers.indexOf('name');
+  var fullCol = headers.indexOf('full_name');
+  var roleCol = headers.indexOf('role');
+  var onCol = headers.indexOf('on_website');
+  if (nameCol === -1 || roleCol === -1 || onCol === -1) {
+    return Logger.log('ABORTED: Users needs "name", "role" and "on_website" columns. ' +
+                      'Found: ' + headers.join(', '));
+  }
+
+  var turnOn = [], already = [], leftAlone = [];
+  for (var r = 1; r < data.length; r++) {
+    var name = String(data[r][nameCol] == null ? '' : data[r][nameCol]).trim();
+    var full = fullCol === -1 ? '' : String(data[r][fullCol] == null ? '' : data[r][fullCol]).trim();
+    if (!name && !full) continue;                        // a blank row, not a person
+    var role = String(data[r][roleCol] == null ? '' : data[r][roleCol]).trim().toLowerCase();
+    var shown = full || name;
+
+    if (facultyIsOn_(data[r][onCol])) { already.push(shown); continue; }
+    if (FACULTY_PUBLIC_ROLES.indexOf(role) === -1) {
+      leftAlone.push(shown + '  (role "' + role + '")');
+      continue;
+    }
+    if (!FACULTY_TURN_ON_DRY_RUN) sheet.getRange(r + 1, onCol + 1).setValue(true);
+    turnOn.push(shown);
+  }
+
+  var out = [];
+  out.push(FACULTY_TURN_ON_DRY_RUN ? '=== DRY RUN — nothing written ===' : '=== APPLIED ===');
+  out.push((FACULTY_TURN_ON_DRY_RUN ? 'Would switch on ' : 'Switched on ') + turnOn.length + ':');
+  turnOn.forEach(function (s) { out.push('   ' + s); });
+  if (already.length) out.push('\nAlready on (' + already.length + '), untouched.');
+  if (leftAlone.length) {
+    out.push('\nLEFT OFF (' + leftAlone.length + ') — not a teaching or school role. ' +
+             'Tick by hand anyone here who really does belong on the page:');
+    leftAlone.forEach(function (s) { out.push('   ' + s); });
+  }
+  if (FACULTY_TURN_ON_DRY_RUN && turnOn.length) {
+    out.push('\nSet FACULTY_TURN_ON_DRY_RUN = false and run again to apply.');
+  }
+  Logger.log(out.join('\n'));
+  return out.join('\n');
 }
