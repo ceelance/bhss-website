@@ -54,9 +54,13 @@ site/pages/*.html       one file per page, with a small <!-- title: … --> head
 site/styles.css         all the CSS
 site/.htaccess          canonical redirects, the old-URL map, caching
 content/posts.json      WRITTEN BY THE PORTAL — do not edit by hand
+content/faculty.json    WRITTEN BY THE PORTAL — do not edit by hand
 assets/                 crest, favicon, default share image
 assets/defaults/        stand-in pictures for a post with none of its own
 img/posts/              post pictures, uploaded by the portal
+img/staff/              staff photographs, uploaded by the portal
+portal/                 Apps Script belonging to the PORTAL, kept beside the
+                        content it writes here
 tools/build.mjs         the generator
 tools/markdown.mjs      the post-body renderer
 ```
@@ -133,6 +137,12 @@ vanishing because that list is out of date. A group of one or two gets a wider
 card, so the Principal is not marooned in an empty row.
 
 Photographs go in `img/staff/` — see the README there.
+
+`portal/publish-faculty.gs` is the script that writes this file. It belongs to
+the portal's Apps Script project and is kept here because the shape it must
+produce is defined by the build next door. It reads `Users`, joins each teacher
+to the subjects assigned in `HS_Teachers` / `HSS_Teachers`, and commits through
+the same helper `websitePublish_` already uses for posts.
 
 ## Deploying
 
