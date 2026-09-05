@@ -270,10 +270,6 @@ th { background: var(--brand-50); font-weight: 700; }
   gap: .6rem 1.2rem; margin-top: 2rem; padding-top: 1.2rem;
   border-top: 1px solid rgba(255, 255, 255, .13);
 }
-/* Copyright and the two policy links travel together, so they wrap as a group and
-   the builder credit is never stranded on a line of its own. */
-.footer-legal { display: flex; flex-wrap: wrap; align-items: center; gap: .3rem 1rem; }
-.footer-legal a { font-size: .85rem; }
 .copyright { margin: 0; color: #a5b4fc; font-size: .85rem; }
 /* Scoped to .site-footer so it outweighs `.site-footer a` above, which would
    otherwise colour this link differently from the copyright line beside it. */
