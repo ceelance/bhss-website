@@ -89,15 +89,23 @@ function humanDate(iso) {
 }
 
 /**
- * Post bodies store image paths relative to the site root (`img/posts/x.webp`),
- * because that is what the admin panel uploads them as. A post page lives two
- * levels down, so those must be rewritten or every picture 404s — the kind of
- * break that only shows up on the deployed site, never in a local check of the
- * markdown.
+ * Post bodies store asset paths relative to the site root (`img/posts/x.webp`,
+ * `files/selected-list.pdf`), because that is what the admin panel uploads them
+ * as. A post page lives two levels down, so those must be rewritten or every
+ * picture 404s — the kind of break that only shows up on the deployed site,
+ * never in a local check of the markdown.
+ *
+ * `files/` is here for the same reason `img/` is, and was missing: the two
+ * migrated posts that link a selected-list PDF were pointing at
+ * /news/<slug>/files/… and returning 404 on the deployed site.
  */
 function rebaseAssets(html, prefix) {
-  return html.split('src="img/').join(`src="${prefix}/img/`)
-             .split('href="img/').join(`href="${prefix}/img/`);
+  let out = html;
+  for (const dir of ['img', 'files']) {
+    out = out.split(`src="${dir}/`).join(`src="${prefix}/${dir}/`)
+             .split(`href="${dir}/`).join(`href="${prefix}/${dir}/`);
+  }
+  return out;
 }
 
 // ---------------------------------------------------------------- inputs
@@ -143,6 +151,72 @@ if (existsSync(postsPath)) {
 posts = posts.filter((p) => p && p.slug && p.title);
 posts.sort((a, b) => String(b.published_at || '').localeCompare(String(a.published_at || '')));
 
+/**
+ * A post's tags.
+ *
+ * Must match WPOST_CATEGORIES in the portal's WebsitePosts.gs, or a post could
+ * carry a tag the admin form cannot offer and an edit would silently change it.
+ */
+const CATEGORIES = ['News', 'Events', 'Notices', 'Achievements', 'Admissions'];
+
+/**
+ * THREE, and the FIRST ONE IS PRIMARY.
+ *
+ * A post genuinely can be two things — "Class IX Admission Notice" is an
+ * admission and a notice — which is why one tag is not enough. But tags stop
+ * meaning anything once a post carries most of them: tag something News AND
+ * Notices AND Admissions and it appears everywhere, which is the same as having
+ * no sections at all. Three leaves room for the real case and not for filing a
+ * post under everything.
+ *
+ * The card and the post header print ONE label, so something has to decide which.
+ * The first tag does, which is why order is not incidental.
+ */
+const MAX_TAGS = 3;
+
+/**
+ * Read tags off a post, in whichever shape the portal is writing this week.
+ *
+ * The sheet holds ONE category per post today, so that is what arrives; when the
+ * admin form learns to send several, `tags: [...]` or "Admissions, Notices" in
+ * the same cell both work here already. Accepting both means the website and the
+ * portal do not have to change on the same afternoon.
+ *
+ * Unknown names are dropped rather than invented, and a post left with none is
+ * News — the section a reader expects when nobody has said otherwise.
+ */
+const tagWarnings = [];
+// Cached per post, because this is asked once per index, once per card and again
+// per page — without which a post over the cap is reported five times over.
+const tagCache = new WeakMap();
+function postTags(post) {
+  const cached = tagCache.get(post);
+  if (cached) return cached;
+  const raw = Array.isArray(post.tags) ? post.tags
+            : Array.isArray(post.categories) ? post.categories
+            : String(post.category || '').split(/[,;|\n]/);
+  const out = [];
+  for (const item of raw) {
+    const name = CATEGORIES.find((c) => c.toLowerCase() === String(item).trim().toLowerCase());
+    if (name && !out.includes(name)) out.push(name);
+  }
+  if (out.length > MAX_TAGS) {
+    tagWarnings.push(`${post.slug}: ${out.length} tags, keeping the first ${MAX_TAGS} — ${out.join(', ')}`);
+  }
+  const tags = out.length ? out.slice(0, MAX_TAGS) : ['News'];
+  tagCache.set(post, tags);
+  return tags;
+}
+
+/** The one tag a card has room to print. */
+function primaryTag(post) { return postTags(post)[0]; }
+
+// The Notices page is a VIEW, not a folder: every post keeps its /news/<slug>/
+// address whatever it is tagged. All 36 WordPress redirects in site/.htaccess
+// point there, and so does every link already shared to WhatsApp.
+const noticePosts = posts.filter((p) => postTags(p).includes('Notices'));
+const newsPosts = posts.filter((p) => !postTags(p).includes('Notices'));
+
 // ---------------------------------------------------------------- navigation
 
 // News is generated rather than written as a page file, so it has no entry in
@@ -156,17 +230,59 @@ const NEWS_NAV = { url: 'news/', meta: { nav: 'News', order: 7 } };
 // asked for it: after Faculty, before Admissions.
 const PORTAL_NAV = { url: 'https://portal.baptisthss.in/', meta: { nav: 'Portal', order: 5 } };
 
-const navPages = [...pages.filter((p) => p.meta.nav), NEWS_NAV, PORTAL_NAV]
-  .sort((a, b) => Number(a.meta.order || 99) - Number(b.meta.order || 99));
+// Notices are the other half of the posts — filed by tag, not by folder.
+const NOTICES_NAV = { url: 'notices/', meta: { nav: 'Notices', order: 8 } };
+
+/**
+ * Menus that hold pages rather than being one.
+ *
+ * A page joins one by declaring `group: About` in its header comment; its own
+ * `order:` then places it INSIDE the menu, and the order here places the menu in
+ * the bar. Grouping is what bought the room for Notices: School and Faculty were
+ * two of the eight slots along the top, and are now one.
+ *
+ * A group is not a link. There is no /about/ page to send anyone to, and a menu
+ * whose label goes somewhere makes the visitor guess whether the label or the
+ * items are the destination.
+ */
+const NAV_GROUPS = { About: { order: 2 } };
+
+const navTop = [];
+const grouped = {};
+for (const p of [...pages.filter((p) => p.meta.nav), NEWS_NAV, NOTICES_NAV, PORTAL_NAV]) {
+  const group = p.meta.group;
+  if (group && NAV_GROUPS[group]) (grouped[group] = grouped[group] || []).push(p);
+  else navTop.push(p);
+}
+for (const [name, items] of Object.entries(grouped)) {
+  navTop.push({ group: name, items: items.sort(byOrder), meta: { nav: name, order: NAV_GROUPS[name].order } });
+}
+function byOrder(a, b) { return Number(a.meta.order || 99) - Number(b.meta.order || 99); }
+navTop.sort(byOrder);
+
+function navLink(p, prefix, currentUrl, extra = '') {
+  // An entry may point off the site, in which case it is already a whole URL and
+  // must not be rebased — and no page here can ever be "current" for it.
+  const offsite = /^https?:/i.test(p.url);
+  const here = !offsite && p.url === currentUrl;
+  const href = offsite ? p.url : `${prefix}/${p.url}`;
+  return `<a href="${href}"${here ? ' aria-current="page"' : ''}${extra}>${escapeHtml(p.meta.nav)}</a>`;
+}
 
 function navHtml(prefix, currentUrl) {
-  return navPages.map((p) => {
-    // An entry may point off the site, in which case it is already a whole URL
-    // and must not be rebased — and no page here can ever be "current" for it.
-    const offsite = /^https?:/i.test(p.url);
-    const here = !offsite && p.url === currentUrl;
-    const href = offsite ? p.url : `${prefix}/${p.url}`;
-    return `<a href="${href}"${here ? ' aria-current="page"' : ''}>${escapeHtml(p.meta.nav)}</a>`;
+  return navTop.map((p) => {
+    if (!p.group) return navLink(p, prefix, currentUrl);
+    // <details> rather than a hover menu built out of CSS tricks: it opens to a
+    // click, a tap and the keyboard alike, and the browser keeps aria-expanded
+    // right — none of which a div can claim without the JavaScript this site
+    // does not load. Pointer users also get it on hover, from CSS.
+    const open = p.items.some((i) => i.url === currentUrl) ? ' open' : '';
+    return `<details class="nav-group"${open}>
+          <summary>${escapeHtml(p.meta.nav)}</summary>
+          <div class="nav-menu">
+            ${p.items.map((i) => navLink(i, prefix, currentUrl)).join('\n            ')}
+          </div>
+        </details>`;
   }).join('\n        ');
 }
 
@@ -258,28 +374,56 @@ function postCard(post, prefix) {
       <a class="card" href="${prefix}/news/${encodeURIComponent(post.slug)}/">
         <div class="card-thumb">${thumb}</div>
         <div class="card-body">
-          <p class="card-meta">${escapeHtml(post.category || 'News')} · ${humanDate(post.published_at)}</p>
+          <p class="card-meta">${escapeHtml(primaryTag(post))} · ${humanDate(post.published_at)}</p>
           <h3>${escapeHtml(post.title)}</h3>
           <p class="card-summary">${escapeHtml(summary)}</p>
         </div>
       </a>`;
 }
 
+/**
+ * One notice on the board: the date it was posted and what it says. No picture.
+ *
+ * A notice is read as a line in a list — is there anything new, and does it
+ * concern me — and a stand-in photograph on a scholarship notice answers
+ * neither, while costing the column the room to show a fifth notice.
+ */
+function noticeItem(post, prefix) {
+  return `
+        <li>
+          <a href="${prefix}/news/${encodeURIComponent(post.slug)}/">
+            <time datetime="${escapeHtml(post.published_at || '')}">${humanDate(post.published_at)}</time>
+            <span>${escapeHtml(post.title)}</span>
+          </a>
+        </li>`;
+}
+
 // --- the static pages
 //
-// A page may include the marker <!--LATEST_POSTS--> to have the newest few cards
-// dropped in. A tiny convention rather than a template language, and it keeps the
-// home page's news strip in step with the news index automatically.
-const LATEST_ON_HOME = 3;
+// A page may include <!--LATEST_POSTS--> or <!--LATEST_NOTICES--> to have the
+// newest of each dropped in. A tiny convention rather than a template language,
+// and it keeps the home page in step with both indexes automatically.
+//
+// Two news cards rather than three: the third column of that row is the notice
+// board now. Five notices fit beside two cards because they are lines, not cards.
+const LATEST_ON_HOME = 2;
+const NOTICES_ON_HOME = 5;
 for (const page of pages) {
   let content = page.body;
+  const prefix = depthPrefix(page.out);
   if (content.includes('<!--LATEST_POSTS-->')) {
-    const prefix = depthPrefix(page.out);
-    const latest = posts.slice(0, LATEST_ON_HOME);
+    const latest = newsPosts.slice(0, LATEST_ON_HOME);
     content = content.split('<!--LATEST_POSTS-->').join(
       latest.length
         ? `<div class="cards">${latest.map((p) => postCard(p, prefix)).join('')}\n    </div>`
         : '<p class="empty">There are no posts yet.</p>');
+  }
+  if (content.includes('<!--LATEST_NOTICES-->')) {
+    const latest = noticePosts.slice(0, NOTICES_ON_HOME);
+    content = content.split('<!--LATEST_NOTICES-->').join(
+      latest.length
+        ? `<ul class="notice-list">${latest.map((p) => noticeItem(p, prefix)).join('')}\n      </ul>`
+        : '<p class="empty">There are no notices at the moment.</p>');
   }
   renderShell({
     out: page.out,
@@ -310,29 +454,41 @@ for (const post of posts) {
     ogType: 'article',
     content: `
     <article class="post">
-      <p class="post-meta">${escapeHtml(post.category || 'News')} · ${humanDate(post.published_at)}</p>
+      <p class="post-meta">${postTags(post).map(escapeHtml).join(' &middot; ')} &middot; ${humanDate(post.published_at)}</p>
       <h1>${escapeHtml(post.title)}</h1>
       ${hero}
       <div class="post-body">
 ${body}
       </div>
-      <p class="back"><a href="${prefix}/news/">← All news</a></p>
+      <p class="back">${postTags(post).includes('Notices')
+        ? `<a href="${prefix}/notices/">← All notices</a>`
+        : `<a href="${prefix}/news/">← All news</a>`}</p>
     </article>`
   });
 }
 
-// --- the news index
-renderShell({
-  out: 'news/index.html',
-  url: 'news/',
-  title: 'News',
-  description: `Announcements, events and results from ${SCHOOL}.`,
-  content: `
-    <h1>News</h1>
-    ${posts.length
-      ? `<div class="cards">${posts.map((p) => postCard(p, '..')).join('')}\n    </div>`
-      : '<p class="empty">There are no posts yet.</p>'}`
-});
+// --- the two indexes. Same cards, split by tag: a notice is filed where someone
+// looking for a notice will go, and does not push the school's news down the page.
+for (const index of [
+  { out: 'news/index.html', url: 'news/', title: 'News', list: newsPosts,
+    description: `News, events and results from ${SCHOOL}.`,
+    empty: 'There are no posts yet.' },
+  { out: 'notices/index.html', url: 'notices/', title: 'Notices', list: noticePosts,
+    description: `Notices and announcements from ${SCHOOL} — scholarships, admissions and examinations.`,
+    empty: 'There are no notices at the moment.' }
+]) {
+  renderShell({
+    out: index.out,
+    url: index.url,
+    title: index.title,
+    description: index.description,
+    content: `
+    <h1>${index.title}</h1>
+    ${index.list.length
+      ? `<div class="cards">${index.list.map((p) => postCard(p, '..')).join('')}\n    </div>`
+      : `<p class="empty">${index.empty}</p>`}`
+  });
+}
 
 // ---------------------------------------------------------------- static files
 
@@ -359,6 +515,7 @@ if (existsSync(join(ROOT, 'site', '.htaccess'))) {
 const urls = [
   ...pages.filter((p) => p.listed).map((p) => ({ loc: `${BASE_URL}/${p.url}` })),
   { loc: `${BASE_URL}/news/` },
+  { loc: `${BASE_URL}/notices/` },
   ...posts.map((p) => ({ loc: `${BASE_URL}/news/${p.slug}/`, lastmod: p.published_at }))
 ];
 writePage('sitemap.xml',
@@ -370,5 +527,9 @@ writePage('sitemap.xml',
 
 writePage('robots.txt', `User-agent: *\nAllow: /\nSitemap: ${BASE_URL}/sitemap.xml\n`);
 
-console.log(`Built ${pages.length} pages + ${posts.length} posts -> dist/`);
+console.log(`Built ${pages.length} pages + ${posts.length} posts ` +
+            `(${newsPosts.length} news, ${noticePosts.length} notices) -> dist/`);
 console.log(`Base URL: ${BASE_URL}`);
+// Said out loud rather than swallowed: a post tagged past the cap still builds,
+// but somebody chose tags that the site is quietly ignoring.
+for (const warning of tagWarnings) console.warn(`  tags: ${warning}`);

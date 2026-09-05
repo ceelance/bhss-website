@@ -120,6 +120,29 @@ img { max-width: 100%; height: auto; }
 .site-nav a:hover { background: rgba(255,255,255,.14); color: #fff; }
 .site-nav a[aria-current="page"] { background: rgba(255,255,255,.2); }
 
+/* --- a menu that holds pages (About: School, Faculty) ------------------------
+   Built on <details>, so it answers a click, a tap and the keyboard without any
+   JavaScript, and the browser keeps aria-expanded honest. */
+.nav-group { position: relative; }
+.nav-group > summary {
+  list-style: none; cursor: pointer; user-select: none;
+  color: #fff; font-size: .93rem; font-weight: 500;
+  padding: .45rem .7rem; border-radius: 8px;
+  display: flex; align-items: center; gap: .35rem;
+}
+.nav-group > summary::-webkit-details-marker { display: none; }
+/* The caret is drawn here rather than typed into the markup, so the label stays
+   a plain word for a screen reader to announce. */
+.nav-group > summary::after {
+  content: ''; width: .38em; height: .38em; margin-top: -.2em;
+  border-right: 2px solid currentColor; border-bottom: 2px solid currentColor;
+  transform: rotate(45deg); transition: transform .15s ease;
+}
+.nav-group[open] > summary::after { transform: rotate(-135deg); margin-top: .15em; }
+.nav-group > summary:hover { background: rgba(255,255,255,.14); }
+.nav-menu { display: flex; flex-direction: column; }
+.nav-menu a { white-space: nowrap; }
+
 /* The menu button is a styled <label> for a hidden checkbox — no JavaScript,
    so navigation works even if everything else fails to load. */
 .nav-button { display: none; cursor: pointer; padding: .5rem; }
@@ -128,10 +151,26 @@ img { max-width: 100%; height: auto; }
   margin: 5px 0;
 }
 
-/* 900px, not 820: the menu gained a Portal item and the row now measures 143px of
-   brand + 680px of links, which needs an 879px viewport once .wrap has taken its
-   40px. Below that the last item was being clipped rather than wrapping, because
-   the nav is a single flex line. */
+/* Above the mobile breakpoint the group's items hang below it as a panel. */
+@media (min-width: 901px) {
+  .nav-menu {
+    position: absolute; top: calc(100% + .35rem); left: 0; z-index: 60;
+    min-width: 100%; padding: .35rem;
+    background: var(--brand-700); border-radius: 10px;
+    box-shadow: 0 12px 24px rgba(0,0,0,.22);
+  }
+  /* <details> alone needs a click to open and another to close. A pointer user
+     expects a menu to fall open under the cursor, so it does — guarded by
+     `hover: hover` so a touchscreen, where hover is a lie, keeps the tap. */
+  .nav-group:not([open]) .nav-menu { display: none; }
+  @media (hover: hover) {
+    .nav-group:hover .nav-menu { display: flex; }
+  }
+}
+
+/* 900px, not 820: the row measures 143px of brand plus the links, and below that
+   the last item was being clipped rather than wrapping, because the nav is a
+   single flex line. */
 @media (max-width: 900px) {
   .nav-button { display: block; }
   .site-nav {
@@ -143,6 +182,12 @@ img { max-width: 100%; height: auto; }
   .nav-toggle:checked ~ .site-nav { display: flex; }
   .site-nav a { padding: .7rem .5rem; border-radius: 0; }
   .header-inner { position: relative; }
+
+  /* In the drawer there is nowhere to hang a panel, so the group expands in
+     place — the same <details>, behaving the way one reads on a phone. */
+  .nav-group > summary { padding: .7rem .5rem; border-radius: 0; }
+  .nav-menu { padding-left: .9rem; border-left: 2px solid rgba(255,255,255,.22); margin-left: .5rem; }
+  .nav-menu a { font-size: .9rem; }
 }
 
 /* ---------------------------------------------------------------- hero */
@@ -215,6 +260,45 @@ main { padding-top: clamp(1.75rem, 3.5vw, 2.75rem); padding-bottom: clamp(3rem, 
              color: var(--brand-600); font-weight: 700; margin-bottom: .35rem; }
 .card h3 { margin-bottom: .35rem; font-size: 1.15rem; }
 .card-summary { color: var(--ink-soft); font-size: .93rem; margin: 0; }
+
+/* ------------------------------------------------- home: news + notice board */
+
+/* Two thirds news, one third notices. The board is a column of lines rather than
+   cards, which is what lets five notices sit level with two cards. */
+.home-latest {
+  display: grid; gap: 0 2.5rem;
+  grid-template-columns: 2fr 1fr;
+  align-items: start;
+}
+.home-latest > * { min-width: 0; }
+.home-latest h2 { margin-top: 1.6em; }
+.home-news .cards { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+
+.notice-list { list-style: none; margin: 0 0 1rem; padding: 0; }
+.notice-list li + li { border-top: 1px solid var(--line); }
+.notice-list a {
+  display: block; padding: .7rem 0; text-decoration: none; color: var(--ink);
+}
+.notice-list a:hover { color: var(--brand-700); }
+.notice-list a:hover span { text-decoration: underline; }
+/* The date leads, small and in the brand colour, because a notice is scanned for
+   "is this new" before it is read for what it says. */
+.notice-list time {
+  display: block; font-size: .74rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .04em;
+  color: var(--brand-600); margin-bottom: .15rem;
+}
+.notice-list span { display: block; font-size: .95rem; line-height: 1.45; }
+
+@media (max-width: 820px) {
+  /* One column, and the BOARD COMES FIRST: on a phone the school's news is one
+     scroll away, but a scholarship deadline is the thing being looked for. */
+  .home-latest { grid-template-columns: 1fr; gap: 0; }
+  .notice-board { order: -1; }
+  /* Brief here: the board is a glance on the way past, not the page. */
+  .notice-list a { padding: .55rem 0; }
+  .notice-list span { font-size: .92rem; }
+}
 
 /* ---------------------------------------------------------------- content */
 

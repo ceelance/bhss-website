@@ -67,6 +67,13 @@ Redirect 301 /2026/08/15/principal-in-state-award-a-dawng/ https://baptisthss.in
 Redirect 301 /2026/08/24/pre-matric-hs-scholarship-notice/ https://baptisthss.in/news/pre-matric-hs-scholarship-notice/
 Redirect 301 /2026/08/24/post-matric-hss-scholarship-notice/ https://baptisthss.in/news/post-matric-hss-scholarship-notice/
 
+# ---------------------------------------------------------------- moved pages
+# /about/ became /school/ when About turned into a menu holding School and
+# Faculty. The page was only ever public inside /preview/, so this is insurance
+# rather than a repair — cheap, and the alternative is a 404 for anyone who was
+# sent the preview link.
+Redirect 301 /about/ https://baptisthss.in/school/
+
 # Anything under the old dated paths that has no specific replacement falls back
 # to the news index rather than a 404 — a reader landing on the right section is
 # better than a dead end.

@@ -62,8 +62,26 @@ tools/markdown.mjs      the post-body renderer
 ```
 
 Adding a page: drop an HTML file in `site/pages/`, give it a `nav:` and an
-`order:` in the header comment if it should appear in the menu. `404` and `index`
-are special-cased; everything else becomes `/<name>/`.
+`order:` in the header comment if it should appear in the menu. Add
+`group: About` as well and it goes inside that menu instead of along the top —
+groups are declared in `NAV_GROUPS` in the build. `404` and `index` are
+special-cased; everything else becomes `/<name>/`.
+
+## News and Notices
+
+A post carries up to **three tags**, and **the first one is primary** — it is the
+label the card and the post header print. Tagging a post `Notices` files it under
+`/notices/` and takes it out of `/news/`; everything else is news. A post that is
+genuinely both, like an admission notice, carries both tags.
+
+**Every post keeps its `/news/<slug>/` address whatever it is tagged.** The
+Notices page is a view over the same posts, not a second folder — the WordPress
+redirect map in `site/.htaccess` points there, and so does every link already
+shared to WhatsApp.
+
+The sheet currently holds one category per post, which still works unchanged. The
+build also accepts `"Admissions, Notices"` in that one cell, or a `tags` array, so
+the portal's admin form can start offering several whenever it is ready.
 
 ## Deploying
 

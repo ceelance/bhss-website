@@ -29,6 +29,20 @@ order: 1
   </div>
 </div>
 
-<h2>Latest news</h2>
-<!--LATEST_POSTS-->
-<p><a href="{{base}}/news/">All news &rarr;</a></p>
+<!-- Two news cards and the notice board share one row. On a phone the board comes
+     FIRST: a parent opening the site on their handset is far more often checking
+     whether a scholarship or an admission list has been posted than reading the
+     school's news, and the news is still one scroll away. -->
+<div class="home-latest">
+  <section class="home-news">
+    <h2>Latest news</h2>
+    <!--LATEST_POSTS-->
+    <p><a href="{{base}}/news/">All news &rarr;</a></p>
+  </section>
+
+  <aside class="notice-board" aria-labelledby="notice-board-heading">
+    <h2 id="notice-board-heading">Notices</h2>
+    <!--LATEST_NOTICES-->
+    <p><a href="{{base}}/notices/">All notices &rarr;</a></p>
+  </aside>
+</div>
