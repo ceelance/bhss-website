@@ -998,6 +998,62 @@ writePage('sitemap.xml',
 
 writePage('robots.txt', `User-agent: *\nAllow: /\nSitemap: ${BASE_URL}/sitemap.xml\n`);
 
+/**
+ * app.json — what the Android app reads.
+ *
+ * WHY IT COMES FROM HERE AND NOT FROM APPS SCRIPT. The app needs the same news
+ * and the same faculty this site already publishes, and there are three reasons
+ * to serve it off the same deploy rather than through the portal's backend:
+ * it needs NO SIGN-IN, which matters because most of the people opening the app
+ * are parents and guests; it costs no Apps Script quota, which is a real ceiling
+ * on release day; and it is a static file behind the same CDN, so a thousand
+ * phones opening it at once is free.
+ *
+ * It is DERIVED, never authored — every field here is already on a page this
+ * build wrote, so the app cannot show anything the website is not showing.
+ *
+ * Absolute URLs on purpose: the app has no notion of this site's layout, and a
+ * relative path would have to be resolved by every reader of this file.
+ */
+const APP_FEED_POSTS = 40;
+const appFeed = {
+  generated_at: new Date().toISOString(),
+  // Bumped only if the SHAPE changes incompatibly, so an old build can tell.
+  schema: 1,
+  site: BASE_URL,
+  news: posts.slice(0, APP_FEED_POSTS).map((p) => ({
+    slug: p.slug,
+    title: p.title,
+    summary: p.summary || excerpt(p.body_md, 180),
+    tags: postTags(p),
+    published_at: p.published_at || '',
+    // Already absolute and already the size the cards want.
+    image: p.thumb ? `${BASE_URL}/${p.thumb}` : `${BASE_URL}${defaultImageFor(p.slug)}`,
+    url: `${BASE_URL}/news/${p.slug}/`
+  })),
+  // The faculty page's own list, minus nothing — it carries prospectus facts
+  // only to begin with (name, title, subject, photograph), which is exactly
+  // what may leave the building.
+  staff: staff.map((s) => ({
+    name: s.name || '',
+    full_name: s.full_name || '',
+    title: s.title || '',
+    subject: s.subject || '',
+    group: s.group || '',
+    photo: s.photo ? `${BASE_URL}/${s.photo}` : ''
+  })),
+  links: {
+    website: `${BASE_URL}/`,
+    news: `${BASE_URL}/news/`,
+    notices: `${BASE_URL}/notices/`,
+    faculty: `${BASE_URL}/faculty/`,
+    admissions: `${BASE_URL}/admissions/`,
+    downloads: `${BASE_URL}/downloads/`,
+    contact: `${BASE_URL}/contact/`
+  }
+};
+writePage('app.json', JSON.stringify(appFeed));
+
 console.log(`Built ${pages.length} pages + ${posts.length} posts ` +
             `(${newsPosts.length} news, ${noticePosts.length} notices) -> dist/`);
 console.log(`Base URL: ${BASE_URL}`);
