@@ -1,22 +1,22 @@
 {
-  "generated_at": "2026-09-05T19:26:23.106Z",
+  "generated_at": "2026-09-05T19:52:58.772Z",
   "count": 67,
   "staff": [
     {
       "name": "Cee Siama",
-      "group": "Office",
-      "title": "Office Staff",
+      "group": "Office Staff",
+      "title": "Technician",
       "photo": "img/staff/cee-siama-1ae5d3.jpg"
     },
     {
       "name": "Sir Zomuana",
-      "group": "Office",
-      "title": "Office Staff"
+      "group": "Office Staff",
+      "title": "UDC"
     },
     {
       "name": "Sir Sensena",
-      "group": "Office",
-      "title": "Office Staff"
+      "group": "Office Staff",
+      "title": "Computer Operator"
     },
     {
       "name": "Madam Puii",
@@ -378,8 +378,8 @@
     },
     {
       "name": "Sir Joela",
-      "group": "Office",
-      "title": "Office Staff"
+      "group": "Office Staff",
+      "title": "IV Grade"
     },
     {
       "name": "Madam Matlani",
@@ -395,8 +395,8 @@
     },
     {
       "name": "Sir Muana",
-      "group": "Office",
-      "title": "Office Staff"
+      "group": "Office Staff",
+      "title": "IV Grade"
     }
   ]
 }
