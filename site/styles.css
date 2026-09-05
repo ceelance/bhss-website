@@ -332,6 +332,63 @@ main { padding-top: clamp(1.75rem, 3.5vw, 2.75rem); padding-bottom: clamp(3rem, 
   .notice-list span { font-size: .92rem; }
 }
 
+/* ------------------------------------------------------- search and paging */
+
+/* Shipped with `hidden` on the form and revealed by the script, so the box only
+   exists where it can work. Nothing else on the page depends on it. */
+.search { margin: 0 0 1.6rem; max-width: 30rem; }
+.search label {
+  display: block; font-size: .8rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .04em;
+  color: var(--brand-600); margin-bottom: .35rem;
+}
+.search input {
+  width: 100%; font: inherit; color: var(--ink);
+  padding: .6rem .85rem;
+  border: 1px solid var(--line); border-radius: 10px;
+  background: var(--ground);
+  transition: border-color .15s ease, box-shadow .15s ease, background .15s ease;
+}
+.search input:focus {
+  outline: none; background: var(--paper);
+  border-color: var(--brand-500);
+  box-shadow: 0 0 0 3px var(--brand-100);
+}
+.search-count {
+  font-size: .8rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: .04em; color: var(--ink-faint); margin-bottom: .2rem;
+}
+/* The results reuse the notice board's dated lines. A list answers "is the thing
+   I typed in here" faster than a grid of pictures, which is the only question a
+   search is asking. */
+.result-list { padding: 0; border-top: 1px solid var(--line); margin-bottom: 2rem; }
+
+.pager {
+  display: flex; flex-wrap: wrap; align-items: center; gap: .4rem;
+  margin: 2rem 0 1rem;
+}
+.pager a, .pager span {
+  display: inline-block; padding: .45rem .75rem; border-radius: 8px;
+  font-size: .9rem; text-decoration: none; line-height: 1;
+}
+.pager a { color: var(--brand-700); border: 1px solid var(--line); }
+.pager a:hover { background: var(--brand-50); border-color: var(--brand-200); color: var(--brand-700); }
+.pager .is-here {
+  background: var(--brand-700); color: #fff; font-weight: 700;
+  border: 1px solid var(--brand-700);
+}
+/* Kept in place rather than removed at the ends of the run, so the numbers do
+   not shift sideways as you page through them. */
+.pager .is-off { color: var(--ink-faint); opacity: .45; border: 1px solid transparent; }
+.pager-step { font-weight: 500; }
+.pager-n { min-width: 2.2rem; text-align: center; }
+
+@media (max-width: 420px) {
+  /* The steps are the ones a thumb wants; the numbers wrap under them. */
+  .pager { gap: .3rem; }
+  .pager-n { min-width: 2rem; padding: .45rem .5rem; }
+}
+
 /* ---------------------------------------------------------------- content */
 
 /* Set larger than the body, so it wants TIGHTER leading, not the same: 1.65 at

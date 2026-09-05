@@ -488,27 +488,198 @@ ${body}
   });
 }
 
+/**
+ * How many posts an index page shows before it spills onto the next.
+ *
+ * Paged as REAL FILES — /news/, /news/2/, /news/3/ — not by hiding rows with
+ * script. Every post stays in someone's HTML, which is the whole reason this is
+ * a generator: a crawler that does not run JavaScript can still reach page four.
+ */
+const PER_PAGE = 6;
+
+// Filled as the indexes are written, so the sitemap lists page 2 onwards too —
+// otherwise a crawler's only route to an older post is following Older link by
+// link, and the deeper pages read as orphans.
+const indexPageUrls = [];
+
+/** [1,2,3,4,5,6,7] at 6 -> [[1..6],[7]]. Always at least one page, even if empty. */
+function paginate(list, perPage) {
+  const out = [];
+  for (let i = 0; i < list.length; i += perPage) out.push(list.slice(i, i + perPage));
+  return out.length ? out : [[]];
+}
+
+/**
+ * Newer/older rather than previous/next, and numbers in between.
+ *
+ * "Previous" is ambiguous on a list that runs newest-first — previous in the
+ * list, or earlier in time? Newer and older cannot be read two ways.
+ */
+function pagerHtml(base, pageNo, total, prefix) {
+  if (total < 2) return '';
+  const href = (n) => (n === 1 ? `${prefix}/${base}/` : `${prefix}/${base}/${n}/`);
+  const parts = [];
+  parts.push(pageNo > 1
+    ? `<a class="pager-step" rel="prev" href="${href(pageNo - 1)}">&larr; Newer</a>`
+    : `<span class="pager-step is-off">&larr; Newer</span>`);
+  for (let n = 1; n <= total; n++) {
+    parts.push(n === pageNo
+      ? `<span class="pager-n is-here" aria-current="page">${n}</span>`
+      : `<a class="pager-n" href="${href(n)}">${n}</a>`);
+  }
+  parts.push(pageNo < total
+    ? `<a class="pager-step" rel="next" href="${href(pageNo + 1)}">Older &rarr;</a>`
+    : `<span class="pager-step is-off">Older &rarr;</span>`);
+  return `
+    <nav class="pager" aria-label="Pagination">
+      ${parts.join('\n      ')}
+    </nav>`;
+}
+
+/**
+ * The search box, and the whole section's posts as JSON for it to read.
+ *
+ * SHIPPED HIDDEN AND REVEALED BY THE SCRIPT. Search is the one thing here that
+ * cannot work without JavaScript on static hosting, and a box that swallows what
+ * you type is worse than no box — so a visitor without it never sees one, and
+ * everything else on the page works as it always did.
+ *
+ * The index is this section's posts only, and it searches ALL of them rather than
+ * the six on screen, which is the point of having it. At 36 posts it is a few
+ * kilobytes; if the school ever has thousands, this is the thing to revisit.
+ *
+ * `<` is escaped so a post titled with a `</script>` cannot close the tag it is
+ * sitting inside.
+ */
+function searchHtml(list, label, prefix) {
+  const index = list.map((p) => ({
+    // Built against this page's own depth. A bare `<slug>/` would resolve to
+    // /news/2/<slug>/ from page two, and to /notices/<slug>/ from the notice
+    // index — neither of which exists. Every post lives under /news/.
+    u: `${prefix}/news/${encodeURIComponent(p.slug)}/`,
+    t: p.title,
+    d: humanDate(p.published_at),
+    g: postTags(p).join(' · ')
+  }));
+  const json = JSON.stringify(index).replace(/</g, '\\u003c');
+  return `
+    <form class="search" role="search" hidden>
+      <label for="q">Search ${escapeHtml(label)}</label>
+      <input id="q" type="search" autocomplete="off" spellcheck="false"
+             placeholder="Type a title, a year, a word&hellip;">
+    </form>
+    <script type="application/json" id="search-index">${json}</script>`;
+}
+
+/**
+ * The search itself. Inline, and the only script the site serves.
+ *
+ * Written out rather than pulled in: the deploy workflow holds an SSH key with
+ * full access to the hosting account, and the rule that keeps npm out of the
+ * build is the same rule that keeps a search library out of the page.
+ *
+ * It reveals the form as its first act, so the box exists only where it works.
+ */
+const SEARCH_SCRIPT = `
+    <script>
+    (function () {
+      var tag = document.getElementById('search-index');
+      var form = document.querySelector('.search');
+      var input = document.getElementById('q');
+      var browse = document.getElementById('browse');
+      var results = document.getElementById('results');
+      if (!tag || !form || !input || !browse || !results) return;
+      var items;
+      try { items = JSON.parse(tag.textContent); } catch (e) { return; }
+
+      form.hidden = false;
+      form.addEventListener('submit', function (e) { e.preventDefault(); });
+
+      function esc(s) {
+        return String(s).replace(/[&<>"]/g, function (c) {
+          return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c];
+        });
+      }
+
+      function draw() {
+        var q = input.value.trim().toLowerCase();
+        if (!q) {
+          results.hidden = true; results.innerHTML = ''; browse.hidden = false; return;
+        }
+        browse.hidden = true; results.hidden = false;
+        var hits = items.filter(function (it) {
+          return (it.t + ' ' + it.d + ' ' + it.g).toLowerCase().indexOf(q) !== -1;
+        });
+        if (!hits.length) {
+          results.innerHTML = '<p class="empty">Nothing matches that.</p>';
+          return;
+        }
+        results.innerHTML =
+          '<p class="search-count">' + hits.length +
+            (hits.length === 1 ? ' result' : ' results') + '</p>' +
+          '<ul class="notice-list result-list">' + hits.map(function (it) {
+            return '<li><a href="' + esc(it.u) + '">' +
+                   '<time>' + esc(it.d) + '</time>' +
+                   '<span>' + esc(it.t) + '</span></a></li>';
+          }).join('') + '</ul>';
+      }
+
+      input.addEventListener('input', draw);
+      // A search typed, then reached again with the back button: browsers restore
+      // the typed value but fire no input event, so the page would show the
+      // browse list under a box that still reads as a search.
+      draw();
+    })();
+    </script>`;
+
 // --- the two indexes. Same cards, split by tag: a notice is filed where someone
 // looking for a notice will go, and does not push the school's news down the page.
 for (const index of [
-  { out: 'news/index.html', url: 'news/', title: 'News', list: newsPosts,
+  { base: 'news', title: 'News', list: newsPosts, label: 'news',
     description: `News, events and results from ${SCHOOL}.`,
     empty: 'There are no posts yet.' },
-  { out: 'notices/index.html', url: 'notices/', title: 'Notices', list: noticePosts,
+  { base: 'notices', title: 'Notices', list: noticePosts, label: 'notices',
     description: `Notices and announcements from ${SCHOOL} — scholarships, admissions and examinations.`,
     empty: 'There are no notices at the moment.' }
 ]) {
-  renderShell({
-    out: index.out,
-    url: index.url,
-    title: index.title,
-    description: index.description,
-    content: `
+  const chunks = paginate(index.list, PER_PAGE);
+  // /news/2/ is a page of the index; /news/<slug>/ is a post. They share one
+  // namespace, so a post slugged "2" would be overwritten by page two without a
+  // word said. No post is numbered today; this is here for the day one is.
+  for (const p of index.list) {
+    if (/^\d+$/.test(p.slug)) {
+      console.error(`content: post slug "${p.slug}" collides with an index page ` +
+                    `of the same number — rename it in the sheet.`);
+      process.exit(1);
+    }
+  }
+  chunks.forEach((chunk, i) => {
+    const pageNo = i + 1;
+    const out = pageNo === 1 ? `${index.base}/index.html` : `${index.base}/${pageNo}/index.html`;
+    const url = pageNo === 1 ? `${index.base}/` : `${index.base}/${pageNo}/`;
+    const prefix = depthPrefix(out);
+    renderShell({
+      out,
+      url,
+      title: pageNo === 1 ? index.title : `${index.title} — page ${pageNo}`,
+      // Page two onwards says so, so a search result for it is not a second entry
+      // wearing the same description as the first.
+      description: pageNo === 1 ? index.description
+                                : `${index.description} Page ${pageNo} of ${chunks.length}.`,
+      content: `
     <h1>${index.title}</h1>
-    ${index.list.length
-      ? `<div class="cards">${index.list.map((p) => postCard(p, '..')).join('')}\n    </div>`
-      : `<p class="empty">${index.empty}</p>`}`
+    ${index.list.length ? searchHtml(index.list, index.label, prefix) : ''}
+    <div id="browse">
+    ${chunk.length
+      ? `<div class="cards">${chunk.map((p) => postCard(p, prefix)).join('')}\n    </div>`
+      : `<p class="empty">${index.empty}</p>`}
+    ${pagerHtml(index.base, pageNo, chunks.length, prefix)}
+    </div>
+    <div id="results" hidden></div>${index.list.length ? SEARCH_SCRIPT : ''}`
+    });
   });
+  indexPageUrls.push(...chunks.map((_, i) =>
+    i === 0 ? `${index.base}/` : `${index.base}/${i + 1}/`));
 }
 
 // ---------------------------------------------------------------- static files
@@ -535,8 +706,7 @@ if (existsSync(join(ROOT, 'site', '.htaccess'))) {
 // about what is worth indexing, and post pages are the point of it.
 const urls = [
   ...pages.filter((p) => p.listed).map((p) => ({ loc: `${BASE_URL}/${p.url}` })),
-  { loc: `${BASE_URL}/news/` },
-  { loc: `${BASE_URL}/notices/` },
+  ...indexPageUrls.map((u) => ({ loc: `${BASE_URL}/${u}` })),
   ...posts.map((p) => ({ loc: `${BASE_URL}/news/${p.slug}/`, lastmod: p.published_at }))
 ];
 writePage('sitemap.xml',

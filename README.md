@@ -83,6 +83,21 @@ The sheet currently holds one category per post, which still works unchanged. Th
 build also accepts `"Admissions, Notices"` in that one cell, or a `tags` array, so
 the portal's admin form can start offering several whenever it is ready.
 
+### Paging and search
+
+Both indexes show **six posts a page** and spill onto real files — `/news/2/`,
+`/news/3/` — never onto script. A crawler that runs no JavaScript can still reach
+the oldest post, which is the whole reason this site is generated. Change
+`PER_PAGE` in the build to resize a page; the pages, the pager and the sitemap all
+follow from it.
+
+The **search box is the one script the site serves**. It searches every post in
+that section rather than the six on screen, from a small JSON index built into the
+page (about 3.5 KB for 29 posts). It ships `hidden` and reveals itself, so a
+visitor without JavaScript sees no box rather than one that swallows what they
+type — and the paged list behind it works either way. If the school ever has
+thousands of posts, the embedded index is the thing to revisit.
+
 ## Deploying
 
 Automatic on push to `main`. Five repository secrets are required:
