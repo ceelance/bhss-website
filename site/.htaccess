@@ -74,6 +74,61 @@ Redirect 301 /2026/08/24/post-matric-hss-scholarship-notice/ https://baptisthss.
 # sent the preview link.
 Redirect 301 /about/ https://baptisthss.in/school/
 
+# ------------------------------------------------- the old WordPress PAGES
+# The 35 post URLs above are only half the old site. WordPress also published 45
+# pages and category listings, EVERY ONE OF WHICH ANSWERS 200 TODAY — taken from
+# its own wp-sitemap.xml, so this is what it says it has, not a guess.
+#
+# Mind /admission/ -> /admissions/: the old page was singular and the new one is
+# plural, which is exactly the sort of near-miss that 404s in silence.
+Redirect 301 /admission/      https://baptisthss.in/admissions/
+Redirect 301 /notice/         https://baptisthss.in/notices/
+Redirect 301 /teachers/       https://baptisthss.in/faculty/
+Redirect 301 /staff-profile/  https://baptisthss.in/faculty/
+
+# The category listings. Each goes to the section that now holds those posts —
+# scholarships, results and examinations are notices; the rest is news.
+Redirect 301 /category/administrative/            https://baptisthss.in/notices/
+Redirect 301 /category/administrative/notice/     https://baptisthss.in/notices/
+Redirect 301 /category/administrative/result/     https://baptisthss.in/notices/
+Redirect 301 /category/administrative/examination/ https://baptisthss.in/notices/
+Redirect 301 /category/administrative/admission/  https://baptisthss.in/admissions/
+Redirect 301 /category/administrative/office/     https://baptisthss.in/contact/
+Redirect 301 /category/scholarship/               https://baptisthss.in/notices/
+Redirect 301 /category/downloadable/              https://baptisthss.in/downloads/
+Redirect 301 /category/news/                      https://baptisthss.in/news/
+Redirect 301 /category/general/                   https://baptisthss.in/news/
+Redirect 301 /category/gospel-meeting/            https://baptisthss.in/news/
+Redirect 301 /category/sports/                    https://baptisthss.in/news/
+Redirect 301 /category/cca/                       https://baptisthss.in/news/
+Redirect 301 /category/teachers-day/              https://baptisthss.in/news/
+Redirect 301 /category/adv-x-mas/                 https://baptisthss.in/news/
+Redirect 301 /category/ticker/                    https://baptisthss.in/news/
+
+# The old result system's own pages. That job belongs to the portal now, and the
+# portal is on a different host — so these leave the site rather than land on a
+# page here that cannot do what the visitor came for.
+Redirect 301 /login/            https://portal.baptisthss.in/
+Redirect 301 /logout/           https://portal.baptisthss.in/
+Redirect 301 /register/         https://portal.baptisthss.in/
+Redirect 301 /password-reset/   https://portal.baptisthss.in/
+Redirect 301 /account/          https://portal.baptisthss.in/
+Redirect 301 /user/             https://portal.baptisthss.in/
+Redirect 301 /subscribers/      https://portal.baptisthss.in/
+Redirect 301 /exam-marks-entry/ https://portal.baptisthss.in/
+Redirect 301 /hss-result-preview/ https://portal.baptisthss.in/
+Redirect 301 /posts/            https://baptisthss.in/news/
+Redirect 301 /privacy-policy-2/ https://portal.baptisthss.in/privacy.html
+
+# DELIBERATELY NOT REDIRECTED, and listed so nobody wonders whether they were
+# forgotten: /3029-2/, /columns-block/, /default-width/, /image-gallery-block/,
+# /left-sidebar/, /narrow-width/, /quote-block/, /right-sidebar/, /table-block/
+# and /terms-of-service/. The first nine are the WordPress theme's own demo
+# pages, published by accident and about nothing; the last never had content the
+# school wrote. A 404 is the honest answer where there is no equivalent, and
+# sending them to the home page would only teach Google that the home page is
+# what they were about.
+
 # Anything under the old dated paths that has no specific replacement falls back
 # to the news index rather than a 404 — a reader landing on the right section is
 # better than a dead end.

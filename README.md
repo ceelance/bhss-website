@@ -116,19 +116,43 @@ live in `public_html`. At cutover, change `DEPLOY_PATH`, `SITE_BASE_URL` and
 
 `.htaccess` is deliberately not deployed while previewing: it canonicalises every
 request to the apex, which from inside `/preview/` would bounce visitors straight
-back onto the live WordPress site.
+back onto the live WordPress site. **A consequence worth stating plainly: it has
+therefore never been served, and goes live untested. A bad page is one bad page;
+a bad `.htaccess` is the whole site.** Cut over when someone can watch it.
+
+## Cutting over
+
+**`rsync --delete` is pointed at `public_html`, so everything there that is not in
+`dist/` is erased** — WordPress, and anything else living in that folder. `/preview`
+is inside it and goes too, which is deliberate: otherwise a duplicate of the site
+stays up competing with itself in search.
+
+Before:
+
+1. **Take a fresh backup of `public_html`, download it, and open it.** A backup
+   nobody has opened is a hope, not a backup.
+2. **List `public_html` over SSH** and confirm nothing but WordPress is in it.
+   Probing from outside cannot prove a folder is absent — only that it is not
+   served.
+3. Finish or unlist **Faculty**; it is the last page carrying placeholder text.
+
+The change itself is three lines in `.github/workflows/deploy.yml`, commented
+there: `DEPLOY_PATH: public_html`, `SITE_BASE_URL: https://baptisthss.in`,
+`IS_PREVIEW: 'false'`. Push, and watch the Action.
+
+Immediately after: check the home page, one post, one old dated URL redirecting, a
+404, and `/sitemap.xml`. **Then purge the Hostinger CDN** — it caches for a week,
+and until it is purged the edge keeps serving WordPress, which looks exactly like
+a failed cutover.
+
+Then submit `https://baptisthss.in/sitemap.xml` in Search Console. The old
+`wp-sitemap.xml` will 404, which is correct.
+
+Rolling back is restoring that backup. Nothing about DNS or hosting changes.
 
 ## Still to do
 
-- **The school's own words** for About, Academics, Admissions and Contact. The
-  pages carry marked placeholders; those are for the office to replace, not for a
-  website builder to invent.
-- **Five to ten pictures in `assets/defaults/`** — 1200 × 675 photographs of the
-  school, shown on posts that have no picture of their own. There are 21 such
-  posts, and until the folder is filled they all show the same
-  `assets/og-default.jpg`. See the README in that folder.
+- **Faculty**, generated from the staff records rather than typed by hand. It is
+  the one page still carrying "to be supplied by the office".
 - **A proper favicon** — currently the full crest, which is heavier than it needs
   to be at 32px.
-- **The WordPress migration** — the export, the images, and the 301 map in
-  `site/.htaccess`. Must be done while the old site is still up.
-- **Faculty**, generated from the staff records rather than typed by hand.
