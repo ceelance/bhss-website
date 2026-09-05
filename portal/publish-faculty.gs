@@ -10,9 +10,13 @@
  * the site build; nothing else needs poking.
  *
  * WHY A JOIN RATHER THAN A SUBJECT COLUMN. The assignment already exists:
- * HS_Teachers column A holds a teacher's name and column C the subject they
+ * HS_Teachers column A holds a teacher's name and column B the subject they
  * teach. A teacher on three rows teaches three subjects. Adding a subject column
  * to Users would duplicate that and let the two disagree.
+ *
+ * B, NOT C. Column C is the subject SLOT — "English1", "English2" — that Assign
+ * Subjects uses to tell two English teachers apart. Column B is the clean name a
+ * person reads.
  *
  * THE NAME IN COLUMN A IS `Users.name`, NOT `full_name`. That is the identifier
  * the assignment screens write and validate against, which is exactly why
@@ -85,15 +89,31 @@ function facultyIsOn_(v) {
   return s === 'true' || s === 'yes' || s === 'y' || s === '1';
 }
 
+// Counted while joining and reported once, rather than a line per row: a slot
+// with no clean name beside it is a gap in the sheet, and a teacher quietly
+// losing a subject should be visible without burying the rest of the log.
+var facultySubjectsMissingName = 0;
+
 /**
  * name (lowercased) -> [subject, ...], from both teacher sheets.
  *
- * Column offsets are the ones Code.gs already declares for the assignment
- * screens: name in A, subject in C, data from row 3. Read here rather than
- * re-derived so the two cannot drift apart.
+ * COLUMN B, NOT COLUMN C. Column C is the per-teacher subject SLOT — "English1",
+ * "English2" — which Assign Subjects uses to tell two English teachers apart.
+ * Column B is the clean name, "English", and that is what a person reads. Print
+ * column C on a public page and the school's website says a teacher teaches
+ * "English1".
+ *
+ * It also makes the join tidier: a teacher holding English1 AND English2 is
+ * teaching English once, and dedupes to one entry rather than two near-identical
+ * ones.
+ *
+ * Both offsets are the constants Code.gs already declares — HST_SUBJECT_NAME_COL
+ * for B and HST_NAME_COL for A — read rather than re-typed so the two cannot
+ * drift apart.
  */
 function facultySubjectsByTeacher_() {
   var out = {};
+  facultySubjectsMissingName = 0;
   var ss = SpreadsheetApp.getActiveSpreadsheet();
   ['HS_Teachers', 'HSS_Teachers'].forEach(function (sheetName) {
     var sheet = ss.getSheetByName(sheetName);
@@ -101,11 +121,22 @@ function facultySubjectsByTeacher_() {
     var data = sheet.getDataRange().getValues();
     for (var r = HST_FIRST_DATA_ROW - 1; r < data.length; r++) {
       var who = String(data[r][HST_NAME_COL] == null ? '' : data[r][HST_NAME_COL]).trim();
-      var subject = String(data[r][HST_SUBJECT_COL] == null ? '' : data[r][HST_SUBJECT_COL]).trim();
-      if (!who || !subject) continue;
+      if (!who) continue;
+      var subject = String(
+        data[r][HST_SUBJECT_NAME_COL] == null ? '' : data[r][HST_SUBJECT_NAME_COL]).trim();
+      if (!subject) {
+        // A row assigned to a teacher whose clean name in B was never filled in.
+        // Skipped rather than guessed at from the slot: "English1" is not a
+        // subject anybody teaches.
+        if (String(data[r][HST_SUBJECT_COL] == null ? '' : data[r][HST_SUBJECT_COL]).trim()) {
+          facultySubjectsMissingName++;
+        }
+        continue;
+      }
       var key = who.toLowerCase();
       if (!out[key]) out[key] = [];
-      // A teacher can hold the same subject in both sections; print it once.
+      // A teacher can hold the same subject in both sections, or in two slots of
+      // one section; print it once.
       if (out[key].indexOf(subject) === -1) out[key].push(subject);
     }
   });
@@ -177,6 +208,11 @@ function publishFaculty() {
   if (skipped.length) {
     log.push('\nNot published (' + skipped.length + '):');
     skipped.forEach(function (s) { log.push('   ' + s); });
+  }
+  if (facultySubjectsMissingName) {
+    log.push('\n' + facultySubjectsMissingName + ' assignment row(s) have a subject slot ' +
+             'in column C but no clean name in column B, so that subject is not shown. ' +
+             'Fill column B in HS_Teachers / HSS_Teachers to include it.');
   }
   log.push('\n' + json);
 
