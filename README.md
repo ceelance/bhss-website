@@ -98,6 +98,42 @@ visitor without JavaScript sees no box rather than one that swallows what they
 type — and the paged list behind it works either way. If the school ever has
 thousands of posts, the embedded index is the thing to revisit.
 
+## Faculty
+
+`/faculty/` is generated from `content/faculty.json`, which the portal writes from
+the staff records the results system already holds — the same route
+`content/posts.json` takes. Nobody retypes the list each year.
+
+**Publishing is deliberate, not automatic.** A new teacher must not appear on the
+public website the moment somebody gives them a login; it is an action in the
+admin panel. And only what a school prints in a prospectus is carried here — name,
+title, subject, photograph. Never an email address, never a phone number.
+
+```json
+{
+  "generated_at": "2026-09-05T00:00:00Z",
+  "count": 2,
+  "staff": [
+    { "name": "...", "title": "Principal", "group": "Principal",
+      "photo": "img/staff/whoever.webp" },
+    { "name": "...", "title": "Teacher", "subject": "Mathematics",
+      "group": "High School" }
+  ]
+}
+```
+
+`name` is the only required field. `photo` may be omitted — the card shows the
+person's initials, so a half-photographed list looks deliberate rather than
+broken. **`group` is decided by the portal, not inferred here**, because
+`super_admin` describes what someone may do in the software, not what they do at
+the school. Groups appear in the order set by `STAFF_GROUP_ORDER` in the build
+(Principal, Vice Principal, High School, Higher Secondary, Office and support);
+any other group still appears, after those, so a new one shows up rather than
+vanishing because that list is out of date. A group of one or two gets a wider
+card, so the Principal is not marooned in an empty row.
+
+Photographs go in `img/staff/` — see the README there.
+
 ## Deploying
 
 Automatic on push to `main`. Five repository secrets are required:

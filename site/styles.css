@@ -332,6 +332,77 @@ main { padding-top: clamp(1.75rem, 3.5vw, 2.75rem); padding-bottom: clamp(3rem, 
   .notice-list span { font-size: .92rem; }
 }
 
+/* ---------------------------------------------------------------- faculty */
+
+.staff-group + .staff-group { margin-top: 2.6rem; }
+/* The section heading is ruled off, so a long list still reads as School, then
+   Higher Secondary, then Office, rather than one wall of faces. */
+.staff-group h2 {
+  margin: 0 0 1.2rem; padding-bottom: .5rem;
+  border-bottom: 2px solid var(--brand-100);
+  font-size: clamp(1.35rem, 3vw, 1.75rem);
+}
+.staff-grid {
+  list-style: none; margin: 0; padding: 0;
+  display: grid; gap: 1.2rem;
+  grid-template-columns: repeat(auto-fill, minmax(165px, 1fr));
+}
+.staff-card {
+  border: 1px solid var(--line); border-radius: var(--radius);
+  overflow: hidden; background: var(--paper);
+  transition: box-shadow .15s ease, border-color .15s ease;
+}
+/* Lifts on hover like a card, but does NOT rise: these are not links, and a card
+   that moves under the cursor promises somewhere to go. */
+.staff-card:hover { box-shadow: 0 6px 18px rgba(49, 46, 129, .09); border-color: var(--brand-200); }
+
+/* Square, because a square survives whatever the office actually uploads — a
+   phone portrait, a cropped group photo, a scan — where a tall frame would cut
+   heads off. */
+.staff-face {
+  aspect-ratio: 1 / 1;
+  background: linear-gradient(135deg, var(--brand-100), var(--brand-50));
+  display: flex; align-items: center; justify-content: center;
+}
+.staff-face img { width: 100%; height: 100%; object-fit: cover; display: block; }
+/* Someone with no photograph yet is ordinary, not an error, so the gap is given
+   its own mark rather than a broken image or a stock face belonging to nobody. */
+.staff-initials {
+  font-family: 'DM Serif Display', Georgia, serif;
+  font-size: 2.1rem; color: var(--brand-500); opacity: .55; letter-spacing: .04em;
+}
+.staff-body { padding: .8rem .9rem 1rem; }
+.staff-card h3 {
+  margin: 0 0 .2rem; font-size: 1rem; line-height: 1.3;
+  font-family: 'DM Sans', system-ui, sans-serif; font-weight: 700;
+  color: var(--ink);
+}
+.staff-title {
+  margin: 0; font-size: .72rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .05em; color: var(--brand-600);
+}
+.staff-subject { margin: .3rem 0 0; font-size: .87rem; color: var(--ink-soft); line-height: 1.4; }
+
+/* One or two people — the Principal, the Vice Principal — turned on their side so
+   the card fills its line instead of sitting marooned in an empty row. */
+.staff-grid.is-lead { grid-template-columns: repeat(auto-fit, minmax(270px, 370px)); }
+.staff-grid.is-lead .staff-card { display: flex; align-items: stretch; }
+.staff-grid.is-lead .staff-face { flex: 0 0 118px; aspect-ratio: auto; }
+.staff-grid.is-lead .staff-body { display: flex; flex-direction: column; justify-content: center; }
+.staff-grid.is-lead h3 { font-size: 1.08rem; }
+
+@media (max-width: 420px) {
+  /* Two across rather than one: a column of large faces makes a short staff list
+     feel like a very long page. */
+  .staff-grid { grid-template-columns: repeat(2, 1fr); gap: .8rem; }
+  .staff-body { padding: .6rem .7rem .8rem; }
+  .staff-initials { font-size: 1.7rem; }
+  /* The lead cards stay on their side here — a phone has the width for a small
+     face beside a name, and it keeps the Principal from taking a whole screen. */
+  .staff-grid.is-lead { grid-template-columns: 1fr; }
+  .staff-grid.is-lead .staff-face { flex-basis: 96px; }
+}
+
 /* ------------------------------------------------------- search and paging */
 
 /* Shipped with `hidden` on the form and revealed by the script, so the box only

@@ -237,6 +237,115 @@ function primaryTag(post) { return postTags(post)[0]; }
 const noticePosts = posts.filter((p) => postTags(p).includes('Notices'));
 const newsPosts = posts.filter((p) => !postTags(p).includes('Notices'));
 
+// ---------------------------------------------------------------- the staff
+
+/**
+ * The faculty, written by the portal exactly as posts.json is.
+ *
+ * The school's results system already knows every teacher's name and subject, so
+ * this is generated from it rather than typed and re-typed each year — but it is
+ * NOT automatic. A new teacher must not appear on the public website the moment
+ * somebody gives them a login; publishing is a separate, deliberate action in the
+ * admin panel.
+ *
+ * Only what a school prints in a prospectus is carried here — name, title,
+ * subject, photograph. Never an email address, never a phone number. The portal
+ * holds those and has a sign-in in front of them; this page is read by anyone.
+ */
+let staff = [];
+const facultyPath = join(ROOT, 'content', 'faculty.json');
+if (existsSync(facultyPath)) {
+  try {
+    const parsed = JSON.parse(readFileSync(facultyPath, 'utf8'));
+    staff = Array.isArray(parsed) ? parsed : (parsed.staff || []);
+  } catch (err) {
+    console.error('content/faculty.json is not valid JSON:', err.message);
+    process.exit(1);
+  }
+}
+staff = staff.filter((s) => s && String(s.name || '').trim());
+
+/**
+ * The order the sections are shown in.
+ *
+ * The PORTAL decides which group a person is in — the website does not infer it
+ * from an app role, because "super_admin" describes what someone may do in the
+ * software, not what they do at the school. Anything the portal sends that is not
+ * named here still appears, after these, in the order it first arrives: a new
+ * group should show up rather than vanish because this list is out of date.
+ */
+const STAFF_GROUP_ORDER = ['Principal', 'Vice Principal', 'High School',
+                           'Higher Secondary', 'Office and support'];
+
+function staffGroups() {
+  const seen = new Map();
+  for (const person of staff) {
+    const group = String(person.group || '').trim() || 'Staff';
+    if (!seen.has(group)) seen.set(group, []);
+    seen.get(group).push(person);
+  }
+  const rank = (g) => {
+    const i = STAFF_GROUP_ORDER.indexOf(g);
+    return i === -1 ? STAFF_GROUP_ORDER.length : i;
+  };
+  return [...seen.entries()].sort((a, b) => rank(a[0]) - rank(b[0]));
+}
+
+/**
+ * Initials, for a card with no photograph.
+ *
+ * A staff list where some people have a picture and some do not is the normal
+ * case, not a fault — so the gap gets a tile of its own rather than a broken
+ * image or, worse, a stock face belonging to nobody.
+ */
+function initialsOf(name) {
+  const words = String(name).replace(/\([^)]*\)/g, ' ').trim().split(/\s+/)
+    .filter((w) => /[a-z]/i.test(w));
+  if (!words.length) return '?';
+  const first = words[0][0];
+  const last = words.length > 1 ? words[words.length - 1][0] : '';
+  return (first + last).toUpperCase();
+}
+
+function staffCard(person, prefix) {
+  const name = String(person.name).trim();
+  const photo = String(person.photo || '').trim();
+  const face = photo
+    ? `<img src="${escapeHtml(prefix + '/' + photo)}" alt="" loading="lazy" width="400" height="400">`
+    : `<span class="staff-initials" aria-hidden="true">${escapeHtml(initialsOf(name))}</span>`;
+  const title = String(person.title || '').trim();
+  const subject = String(person.subject || '').trim();
+  return `
+        <li class="staff-card">
+          <div class="staff-face">${face}</div>
+          <div class="staff-body">
+            <h3>${escapeHtml(name)}</h3>
+            ${title ? `<p class="staff-title">${escapeHtml(title)}</p>` : ''}
+            ${subject ? `<p class="staff-subject">${escapeHtml(subject)}</p>` : ''}
+          </div>
+        </li>`;
+}
+
+function facultyHtml(prefix) {
+  const groups = staffGroups();
+  if (!groups.length) {
+    return `<p class="empty">The staff list has not been published yet.</p>`;
+  }
+  return groups.map(([group, people]) => {
+    // A group of one or two — the Principal, usually — laid out in the same grid
+    // as thirty teachers leaves a lone card marooned in an empty row, which reads
+    // as a mistake rather than as the top of the school. Those get a wider card
+    // that fills its line on purpose.
+    const lead = people.length <= 2 ? ' is-lead' : '';
+    return `
+    <section class="staff-group">
+      <h2>${escapeHtml(group)}</h2>
+      <ul class="staff-grid${lead}">${people.map((p) => staffCard(p, prefix)).join('')}
+      </ul>
+    </section>`;
+  }).join('\n');
+}
+
 // ---------------------------------------------------------------- navigation
 
 // News is generated rather than written as a page file, so it has no entry in
@@ -445,6 +554,9 @@ for (const page of pages) {
       latest.length
         ? `<ul class="notice-list">${latest.map((p) => noticeItem(p, prefix)).join('')}\n      </ul>`
         : '<p class="empty">There are no notices at the moment.</p>');
+  }
+  if (content.includes('<!--FACULTY-->')) {
+    content = content.split('<!--FACULTY-->').join(facultyHtml(prefix));
   }
   renderShell({
     out: page.out,
