@@ -29,7 +29,14 @@
 
 * { box-sizing: border-box; }
 
-html { -webkit-text-size-adjust: 100%; }
+html {
+  -webkit-text-size-adjust: 100%;
+  /* The header is sticky, so anything the browser scrolls to the top of the
+     viewport arrives UNDERNEATH it — the skip link's target included, which would
+     land a keyboard user on a heading they cannot see. This is the header's
+     height plus the room a jump should come to rest in. */
+  scroll-padding-top: 6.5rem;
+}
 
 body {
   margin: 0;
@@ -144,7 +151,8 @@ img { max-width: 100%; height: auto; }
   background: linear-gradient(135deg, var(--brand-700), var(--brand-900) 70%);
   color: #fff; border-radius: var(--radius);
   padding: clamp(1.8rem, 5vw, 3.2rem);
-  margin: 1.5rem 0 2.5rem;
+  /* No top margin: `main` now opens the page for every page alike. */
+  margin: 0 0 2.5rem;
   position: relative; overflow: hidden;
 }
 .hero::after {
@@ -165,7 +173,12 @@ img { max-width: 100%; height: auto; }
 .btn-ghost { background: rgba(255,255,255,.14); color: #fff; }
 .btn-ghost:hover { background: rgba(255,255,255,.24); color: #fff; }
 
-main { padding-bottom: 3.5rem; }
+/* Every page opens here. Without the top padding an <h1> sits flush against the
+   sticky bar — the home page only escaped it because the hero carried a margin of
+   its own, which is why this belongs on `main` rather than being repeated.
+   The bottom is the ONLY gap before the footer: .site-footer deliberately has no
+   top margin, so this one value controls the whole space and cannot double up. */
+main { padding-top: clamp(1.75rem, 3.5vw, 2.75rem); padding-bottom: clamp(3rem, 6vw, 5rem); }
 
 /* ---------------------------------------------------------------- cards */
 
@@ -205,7 +218,11 @@ main { padding-bottom: 3.5rem; }
 
 /* ---------------------------------------------------------------- content */
 
-.lead { font-size: 1.15rem; color: var(--ink-soft); max-width: 62ch; }
+/* Set larger than the body, so it wants TIGHTER leading, not the same: 1.65 at
+   this size opens gaps the eye has to jump. The margin is what separates the
+   opening sentence from the first section under it. */
+.lead { font-size: 1.15rem; line-height: 1.55; color: var(--ink-soft);
+        max-width: 62ch; margin-bottom: 1.75rem; }
 
 .panels { display: grid; gap: 1.4rem; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
 .panel { background: var(--ground); border: 1px solid var(--line);
@@ -257,7 +274,9 @@ th { background: var(--brand-50); font-weight: 700; }
 
 .site-footer {
   background: var(--brand-900); color: var(--brand-100);
-  padding: 2.5rem 0 1.5rem; margin-top: 3rem; font-size: .92rem;
+  /* No margin-top — `main`'s padding-bottom owns the gap above, so the two
+     cannot add up into a band of empty page nobody chose. */
+  padding: 2.5rem 0 1.5rem; font-size: .92rem;
 }
 .footer-inner { display: grid; gap: 1.8rem;
                 grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
