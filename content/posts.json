@@ -1,23 +1,7 @@
 {
-  "generated_at": "2026-09-05T22:07:17.850Z",
-  "count": 37,
+  "generated_at": "2026-09-05T22:09:07.202Z",
+  "count": 36,
   "posts": [
-    {
-      "slug": "test4",
-      "title": "Test4",
-      "summary": "Test4",
-      "body_md": "Tested",
-      "category": "News, Notices",
-      "categories": [
-        "News",
-        "Notices"
-      ],
-      "published_at": "2026-09-05",
-      "author": "",
-      "thumb": "",
-      "thumb_fit": "cover",
-      "images": []
-    },
     {
       "slug": "test-post",
       "title": "Test post",
