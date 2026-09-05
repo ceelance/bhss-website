@@ -311,8 +311,13 @@ function staffGroups() {
  * case, not a fault — so the gap gets a tile of its own rather than a broken
  * image or, worse, a stock face belonging to nobody.
  */
-const HONORIFICS = ['sir', 'madam', 'mdm', 'mr', 'mrs', 'ms', 'dr', 'rev',
-                    'upa', 'pu', 'pi'];
+// MISS BELONGS HERE. Leaving it out was not a small omission: 27 of the 64 staff
+// are "Miss <name>", so 42% of the page showed the M of Miss as a first initial
+// — "Miss Ramliani" as MR rather than R. Every form of address the school
+// actually uses has to be in this list, or the tile quietly libels the person's
+// name. Add to it whenever a new one turns up.
+const HONORIFICS = ['sir', 'madam', 'mdm', 'miss', 'mr', 'mrs', 'ms', 'dr',
+                    'rev', 'upa', 'pu', 'pi'];
 function initialsOf(name) {
   let words = String(name).replace(/\([^)]*\)/g, ' ').trim().split(/\s+/)
     .filter((w) => /[a-z]/i.test(w));
