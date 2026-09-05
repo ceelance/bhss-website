@@ -118,31 +118,47 @@
   </div>
 </footer>
 
-<!-- Closing the About menu when you click away from it.
-     <details> has no such behaviour of its own: opened by a click it stays open
-     until the same summary is clicked again, so the menu followed you around the
-     page. Every other menu on the web closes, so this one reading as stuck is a
-     fair complaint.
-     AN ENHANCEMENT, NOT THE MENU. Without this script the menu still opens,
-     closes and answers the keyboard exactly as before — navigation has never
-     needed JavaScript and still does not. This only saves the second click. -->
+<!-- Closing the menus when you look elsewhere.
+     Neither the About panel nor the mobile drawer does this on its own: <details>
+     stays open until the same summary is clicked again, and a checkbox stays
+     checked until something unchecks it — so both followed you around the page.
+     Every other menu on the web closes, so both reading as stuck was fair.
+     AN ENHANCEMENT, NOT THE MENUS. Without this script both still open, close and
+     answer the keyboard exactly as before; navigation has never needed JavaScript
+     and still does not. This only saves the second tap. -->
 <script>
 (function () {
-  function shut(except) {
+  function shutGroups(except) {
     var open = document.querySelectorAll('.nav-group[open]');
     for (var i = 0; i < open.length; i++) {
       if (!except || !open[i].contains(except)) open[i].open = false;
     }
   }
+  // The drawer closes on a tap OUTSIDE THE WHOLE HEADER, not outside the nav:
+  // the hamburger is its own toggle and lives in the header too, so treating it
+  // as "outside" would uncheck the box the same tap had just ticked.
+  function shutDrawer(except) {
+    var box = document.getElementById('nav-toggle');
+    if (!box || !box.checked) return;
+    var header = document.querySelector('.site-header');
+    if (!except || (header && !header.contains(except))) box.checked = false;
+  }
   // Pointerdown rather than click: it fires before the page moves under a
   // navigation, so the menu is already shut when you come back.
-  document.addEventListener('pointerdown', function (e) { shut(e.target); });
-  document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape' || e.key === 'Esc') shut(null);
+  document.addEventListener('pointerdown', function (e) {
+    shutGroups(e.target);
+    shutDrawer(e.target);
   });
-  // Focus leaving the menu by keyboard closes it too, so a tab-through does not
-  // leave a panel hanging open behind the rest of the bar.
-  document.addEventListener('focusin', function (e) { shut(e.target); });
+  document.addEventListener('keydown', function (e) {
+    if (e.key !== 'Escape' && e.key !== 'Esc') return;
+    shutGroups(null);
+    shutDrawer(null);
+  });
+  // Focus leaving the About panel by keyboard closes it too, so a tab-through
+  // does not leave it hanging open behind the rest of the bar. The drawer is
+  // left alone here: tabbing INTO it moves focus through the header, and closing
+  // on that would shut the menu a keyboard user had just opened.
+  document.addEventListener('focusin', function (e) { shutGroups(e.target); });
 })();
 </script>
 
