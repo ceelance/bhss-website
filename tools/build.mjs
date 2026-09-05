@@ -174,10 +174,38 @@ posts.sort((a, b) => String(b.published_at || '').localeCompare(String(a.publish
 /**
  * A post's tags.
  *
- * Must match WPOST_CATEGORIES in the portal's WebsitePosts.gs, or a post could
- * carry a tag the admin form cannot offer and an edit would silently change it.
+ * These five are the ones this build KNOWS: they are spelled here so a post
+ * arrives with the canonical capitalisation whatever case the sheet holds, and
+ * `Notices` in particular is load-bearing — it decides which posts are notices.
+ * They mirror WPOST_CATEGORIES in the portal's WebsitePosts.gs.
+ *
+ * A NAME NOT ON THIS LIST IS ACCEPTED, not dropped. The admin panel can add a
+ * category on the spot, and this file is next door in another repo — if an
+ * unknown name were discarded, adding "Sports" in the panel would appear to work
+ * and then quietly file every one of those posts under News, with nothing said.
+ * Made-up names are still refused (see `normaliseTag`), so a typo cannot become
+ * a public label; it is reported instead.
  */
 const CATEGORIES = ['News', 'Events', 'Notices', 'Achievements', 'Admissions'];
+
+/** A category is a label on a card, so it is held to the shape of one. */
+const TAG_MAX_LEN = 24;
+const TAG_SHAPE = /^[A-Za-z][A-Za-z0-9 &'’-]*$/;
+
+/** Reported at the end of the build; see the summary at the bottom of this file. */
+const tagWarnings = [];
+
+function normaliseTag(raw) {
+  const t = String(raw == null ? '' : raw).trim().replace(/\s+/g, ' ');
+  if (!t) return null;
+  const known = CATEGORIES.find((c) => c.toLowerCase() === t.toLowerCase());
+  if (known) return known;
+  if (t.length > TAG_MAX_LEN || !TAG_SHAPE.test(t)) {
+    tagWarnings.push(`dropped an unusable tag: ${JSON.stringify(t.slice(0, 40))}`);
+    return null;
+  }
+  return t;
+}
 
 /**
  * THREE, and the FIRST ONE IS PRIMARY.
@@ -202,10 +230,9 @@ const MAX_TAGS = 3;
  * the same cell both work here already. Accepting both means the website and the
  * portal do not have to change on the same afternoon.
  *
- * Unknown names are dropped rather than invented, and a post left with none is
- * News — the section a reader expects when nobody has said otherwise.
+ * A post left with no usable tag at all is News — the section a reader expects
+ * when nobody has said otherwise.
  */
-const tagWarnings = [];
 // Cached per post, because this is asked once per index, once per card and again
 // per page — without which a post over the cap is reported five times over.
 const tagCache = new WeakMap();
@@ -217,7 +244,7 @@ function postTags(post) {
             : String(post.category || '').split(/[,;|\n]/);
   const out = [];
   for (const item of raw) {
-    const name = CATEGORIES.find((c) => c.toLowerCase() === String(item).trim().toLowerCase());
+    const name = normaliseTag(item);
     if (name && !out.includes(name)) out.push(name);
   }
   if (out.length > MAX_TAGS) {
@@ -578,11 +605,96 @@ function noticeItem(post, prefix) {
         </li>`;
 }
 
+/**
+ * The running band of RECENT notices across the top of the home page.
+ *
+ * Different from the notice board below it, which is the five newest whatever
+ * their age: this is only what is still current, so an empty band means there is
+ * genuinely nothing on at the moment rather than that nothing has been posted in
+ * a year.
+ *
+ * WHY IT ALSO EXPIRES IN THE BROWSER. The cutoff is worked out at BUILD time, and
+ * the site is only rebuilt when somebody publishes — so a quiet fortnight would
+ * leave a three-week-old notice scrolling across the home page as though it were
+ * this morning's. The few lines of script at the end of this function drop the
+ * ones whose week is up on the way in, and remove the whole band if that empties
+ * it. It is an enhancement in the same sense as the menu script: without it the
+ * band still renders, still links and still scrolls, it is just as fresh as the
+ * last deploy.
+ */
+const TICKER_DAYS = 7;
+const TICKER_MAX = 8;
+
+function noticeTickerHtml(prefix) {
+  const cutoff = new Date(Date.now() - TICKER_DAYS * 86400000).toISOString().slice(0, 10);
+  const fresh = noticePosts
+    .filter((p) => String(p.published_at || '') >= cutoff)
+    .slice(0, TICKER_MAX);
+  if (!fresh.length) return '';
+
+  const item = (p, clone) => {
+    // The day this one stops being current, for the script below.
+    const until = new Date(new Date(p.published_at + 'T12:00:00').getTime() +
+                           TICKER_DAYS * 86400000).toISOString().slice(0, 10);
+    return `
+          <li data-until="${until}"${clone ? ' aria-hidden="true"' : ''}>
+            <a href="${prefix}/news/${encodeURIComponent(p.slug)}/"${clone ? ' tabindex="-1"' : ''}>
+              <time datetime="${escapeHtml(p.published_at || '')}">${humanDate(p.published_at)}</time>
+              <span>${escapeHtml(p.title)}</span>
+            </a>
+          </li>`;
+  };
+
+  // The list is laid out TWICE and the track slides exactly half its width, which
+  // is what makes the loop seamless — at the moment it snaps back, the copy is
+  // sitting precisely where the original was. The copy is hidden from screen
+  // readers and taken out of the tab order, or every notice would be announced
+  // and tabbed through twice.
+  const once = fresh.map((p) => item(p, false)).join('');
+  const twice = fresh.map((p) => item(p, true)).join('');
+
+  // Constant speed regardless of how many notices there are: a band of one would
+  // otherwise crawl and a band of eight would race. Roughly 70px a second over an
+  // estimate of the rendered width, which does not have to be exact — it only
+  // sets the pace.
+  const width = fresh.reduce((n, p) => n + String(p.title).length * 8.5 + 150, 0);
+  const seconds = Math.max(18, Math.round(width / 70));
+
+  return `<div class="ticker" id="notice-ticker" role="region" aria-label="Recent notices">
+      <p class="ticker-label">Notices</p>
+      <div class="ticker-viewport">
+        <ul class="ticker-track" style="--ticker-seconds:${seconds}s">${once}${twice}
+        </ul>
+      </div>
+    </div>
+    <script>
+    (function () {
+      var band = document.getElementById('notice-ticker');
+      if (!band) return;
+      // Local midnight as yyyy-MM-dd. Compared as strings, which is exactly
+      // right for ISO dates and needs no date parsing at all.
+      var d = new Date();
+      var today = d.getFullYear() + '-' +
+                  String(d.getMonth() + 1).padStart(2, '0') + '-' +
+                  String(d.getDate()).padStart(2, '0');
+      var items = band.querySelectorAll('[data-until]');
+      var kept = 0;
+      for (var i = 0; i < items.length; i++) {
+        if (items[i].getAttribute('data-until') < today) items[i].remove();
+        else kept++;
+      }
+      // Every notice expired: the band would otherwise sit there empty.
+      if (!kept) band.remove();
+    })();
+    </script>`;
+}
+
 // --- the static pages
 //
-// A page may include <!--LATEST_POSTS--> or <!--LATEST_NOTICES--> to have the
-// newest of each dropped in. A tiny convention rather than a template language,
-// and it keeps the home page in step with both indexes automatically.
+// A page may include <!--LATEST_POSTS-->, <!--LATEST_NOTICES--> or
+// <!--NOTICE_TICKER--> to have the newest of each dropped in. A tiny convention
+// rather than a template language, and it keeps the home page in step with both
+// indexes automatically.
 //
 // Two news cards rather than three: the third column of that row is the notice
 // board now. Five notices fit beside two cards because they are lines, not cards.
@@ -604,6 +716,9 @@ for (const page of pages) {
       latest.length
         ? `<ul class="notice-list">${latest.map((p) => noticeItem(p, prefix)).join('')}\n      </ul>`
         : '<p class="empty">There are no notices at the moment.</p>');
+  }
+  if (content.includes('<!--NOTICE_TICKER-->')) {
+    content = content.split('<!--NOTICE_TICKER-->').join(noticeTickerHtml(prefix));
   }
   if (content.includes('<!--FACULTY-->')) {
     content = content.split('<!--FACULTY-->').join(facultyHtml(prefix));

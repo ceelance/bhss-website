@@ -199,6 +199,67 @@ img { max-width: 100%; height: auto; }
 
 /* ---------------------------------------------------------------- hero */
 
+/* ------------------------------------------------- the notice ticker (home) */
+/*
+   A running band of the week's notices. It carries nothing that is not also on
+   the notice board below it and on /notices/ — it is a nudge, never the only
+   way to reach something, which is what makes an animated strip acceptable at
+   all on a school's front page.
+
+   It PAUSES on hover and on keyboard focus, and it does not move at all for a
+   reader who has asked their system for less motion: there it becomes an
+   ordinary strip you can swipe or scroll. */
+.ticker {
+  display: flex; align-items: stretch;
+  background: var(--brand-50); border: 1px solid var(--brand-200);
+  border-radius: var(--radius); overflow: hidden;
+  margin: 0 0 1.6rem;
+}
+.ticker-label {
+  flex: none; display: flex; align-items: center; margin: 0;
+  background: var(--brand-600); color: #fff;
+  font-size: .72rem; font-weight: 700; letter-spacing: .07em; text-transform: uppercase;
+  padding: .55rem .9rem;
+}
+.ticker-viewport { flex: 1 1 auto; min-width: 0; overflow: hidden; }
+.ticker-track {
+  display: flex; align-items: center; list-style: none; margin: 0; padding: 0;
+  width: max-content;
+  animation: ticker-scroll var(--ticker-seconds, 40s) linear infinite;
+}
+/* Stop it while it is being read or tabbed through — a moving link is a link
+   you cannot click. */
+.ticker:hover .ticker-track,
+.ticker:focus-within .ticker-track { animation-play-state: paused; }
+.ticker-track > li { flex: none; }
+.ticker-track > li + li { border-left: 1px solid var(--brand-200); }
+.ticker-track a {
+  display: inline-flex; align-items: baseline; gap: .55rem;
+  padding: .6rem 1.15rem; white-space: nowrap; text-decoration: none;
+  color: var(--ink); font-size: .92rem;
+}
+.ticker-track a:hover, .ticker-track a:focus-visible {
+  color: var(--brand-700); text-decoration: underline;
+}
+.ticker-track time { font-size: .76rem; color: var(--ink-faint); font-variant-numeric: tabular-nums; }
+@keyframes ticker-scroll {
+  from { transform: translateX(0); }
+  /* Exactly half: the second copy is standing where the first began, so the
+     reset is invisible. */
+  to   { transform: translateX(-50%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ticker-track { animation: none; width: auto; }
+  /* The duplicate exists only to make the loop seamless; with no loop it is
+     just every notice printed twice. */
+  .ticker-track > li[aria-hidden="true"] { display: none; }
+  .ticker-viewport { overflow-x: auto; }
+}
+@media (max-width: 640px) {
+  .ticker-label { font-size: .66rem; padding: .5rem .65rem; }
+  .ticker-track a { font-size: .87rem; padding: .55rem .9rem; }
+}
+
 .hero {
   background: linear-gradient(135deg, var(--brand-700), var(--brand-900) 70%);
   color: #fff; border-radius: var(--radius);
