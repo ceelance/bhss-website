@@ -1,7 +1,19 @@
 {
-  "generated_at": "2026-09-05T10:57:17.733Z",
-  "count": 35,
+  "generated_at": "2026-09-05T21:15:59.044Z",
+  "count": 36,
   "posts": [
+    {
+      "slug": "test-post",
+      "title": "Test post",
+      "summary": "Test post",
+      "body_md": "This is a test post with \n\n![**Sarlamkai**](img/posts/test-post-20260906-024440.webp) in it. Let me see how it looks.",
+      "category": "News",
+      "published_at": "2026-09-05",
+      "author": "",
+      "thumb": "",
+      "thumb_fit": "cover",
+      "images": []
+    },
     {
       "slug": "pre-matric-hs-scholarship-notice",
       "title": "PRE MATRIC (HS) SCHOLARSHIP NOTICE",
