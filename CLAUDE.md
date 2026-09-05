@@ -49,6 +49,11 @@ new deployment version is published. It cannot be tested from this repo.
 - **`HONORIFICS` drives the initials on a photo-less card.** A missing entry put
   wrong initials on 27 of 64 staff live. It is duplicated in
   `tools/staff-photos.py` — change both.
+- **`tools/markdown.mjs` is duplicated in the portal** as `js/md-preview.js`, so
+  the Create Website Post form can show what a post will look like. This file is
+  the authority; a difference makes the office's preview lie. The portal's
+  `tools/test-md-preview.mjs` diffs the two over every real post and fails on
+  drift — run it from there after changing this renderer.
 - CSS is cache-busted by content hash (`styles.css?v=<sha256[:8]>`), which is the
   only reason a 7-day cache on it is safe.
 - Python here is a Windows binary: it needs `D:\...` paths, not Git Bash
