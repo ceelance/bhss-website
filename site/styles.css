@@ -121,7 +121,11 @@ img { max-width: 100%; height: auto; }
   margin: 5px 0;
 }
 
-@media (max-width: 820px) {
+/* 900px, not 820: the menu gained a Portal item and the row now measures 143px of
+   brand + 680px of links, which needs an 879px viewport once .wrap has taken its
+   40px. Below that the last item was being clipped rather than wrapping, because
+   the nav is a single flex line. */
+@media (max-width: 900px) {
   .nav-button { display: block; }
   .site-nav {
     display: none; position: absolute; left: 0; right: 0; top: 100%;

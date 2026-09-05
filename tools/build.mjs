@@ -148,15 +148,25 @@ posts.sort((a, b) => String(b.published_at || '').localeCompare(String(a.publish
 // News is generated rather than written as a page file, so it has no entry in
 // site/pages to carry its nav label — it gets a synthetic one here. Without this
 // the section people visit most would be missing from the menu.
-const NEWS_NAV = { url: 'news/', meta: { nav: 'News', order: 6 } };
+const NEWS_NAV = { url: 'news/', meta: { nav: 'News', order: 7 } };
 
-const navPages = [...pages.filter((p) => p.meta.nav), NEWS_NAV]
+// The portal is a separate application on its own subdomain, so it has no page
+// file here either — but it is the reason most people come, and burying it in the
+// footer made them hunt. An absolute URL in the menu, sitting where the office
+// asked for it: after Faculty, before Admissions.
+const PORTAL_NAV = { url: 'https://portal.baptisthss.in/', meta: { nav: 'Portal', order: 5 } };
+
+const navPages = [...pages.filter((p) => p.meta.nav), NEWS_NAV, PORTAL_NAV]
   .sort((a, b) => Number(a.meta.order || 99) - Number(b.meta.order || 99));
 
 function navHtml(prefix, currentUrl) {
   return navPages.map((p) => {
-    const here = p.url === currentUrl;
-    return `<a href="${prefix}/${p.url}"${here ? ' aria-current="page"' : ''}>${escapeHtml(p.meta.nav)}</a>`;
+    // An entry may point off the site, in which case it is already a whole URL
+    // and must not be rebased — and no page here can ever be "current" for it.
+    const offsite = /^https?:/i.test(p.url);
+    const here = !offsite && p.url === currentUrl;
+    const href = offsite ? p.url : `${prefix}/${p.url}`;
+    return `<a href="${href}"${here ? ' aria-current="page"' : ''}>${escapeHtml(p.meta.nav)}</a>`;
   }).join('\n        ');
 }
 
