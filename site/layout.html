@@ -53,8 +53,10 @@
 
     <!-- A checkbox drives the mobile menu, so navigation needs no JavaScript.
          Fewer moving parts, and it works before anything has finished loading.
-         The search box on the news and notice indexes is the one script the site
-         serves, and it reveals itself — nothing here depends on it. -->
+         Two scripts ship: the search box on the news and notice indexes, which
+         reveals itself, and the one at the foot of this file that shuts the About
+         menu when you click away. Neither is load-bearing — without both, every
+         link, the drawer and the menu still work. -->
     <input type="checkbox" id="nav-toggle" class="nav-toggle" hidden>
     <label for="nav-toggle" class="nav-button" aria-label="Menu">
       <span></span><span></span><span></span>
@@ -115,6 +117,34 @@
     </a>
   </div>
 </footer>
+
+<!-- Closing the About menu when you click away from it.
+     <details> has no such behaviour of its own: opened by a click it stays open
+     until the same summary is clicked again, so the menu followed you around the
+     page. Every other menu on the web closes, so this one reading as stuck is a
+     fair complaint.
+     AN ENHANCEMENT, NOT THE MENU. Without this script the menu still opens,
+     closes and answers the keyboard exactly as before — navigation has never
+     needed JavaScript and still does not. This only saves the second click. -->
+<script>
+(function () {
+  function shut(except) {
+    var open = document.querySelectorAll('.nav-group[open]');
+    for (var i = 0; i < open.length; i++) {
+      if (!except || !open[i].contains(except)) open[i].open = false;
+    }
+  }
+  // Pointerdown rather than click: it fires before the page moves under a
+  // navigation, so the menu is already shut when you come back.
+  document.addEventListener('pointerdown', function (e) { shut(e.target); });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' || e.key === 'Esc') shut(null);
+  });
+  // Focus leaving the menu by keyboard closes it too, so a tab-through does not
+  // leave a panel hanging open behind the rest of the bar.
+  document.addEventListener('focusin', function (e) { shut(e.target); });
+})();
+</script>
 
 </body>
 </html>
