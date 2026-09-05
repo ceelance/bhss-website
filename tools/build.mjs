@@ -219,6 +219,9 @@ function normaliseTag(raw) {
  *
  * The card and the post header print ONE label, so something has to decide which.
  * The first tag does, which is why order is not incidental.
+ *
+ * Mirrored as WPOST_MAX_CATEGORIES in the portal's WebsitePosts.gs, where the
+ * admin form enforces the same three and stores them in the order chosen.
  */
 const MAX_TAGS = 3;
 
