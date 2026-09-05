@@ -143,7 +143,15 @@ function facultySubjectsByTeacher_() {
   return out;
 }
 
-function publishFaculty() {
+/**
+ * Build the payload. Reads, never writes — so it is safe to call for a preview.
+ *
+ * Split out of publishFaculty so the SAME list can be produced three ways: by an
+ * admin pressing a button, automatically after something changes, and by hand in
+ * the editor. Three code paths building the list separately would drift, and the
+ * one nobody looks at would be the one that got it wrong.
+ */
+function facultyBuild_() {
   var users = getSheetObjects('Users');
   var subjects = facultySubjectsByTeacher_();
 
@@ -194,7 +202,73 @@ function publishFaculty() {
     count: staff.length,
     staff: staff
   };
-  var json = JSON.stringify(payload, null, 2);
+  return {
+    json: JSON.stringify(payload, null, 2),
+    staff: staff, skipped: skipped, noGroup: noGroup, rows: users.length
+  };
+}
+
+/**
+ * Build and commit, returning a result instead of logging one.
+ *
+ * THE PROGRAMMATIC PATH — no dry run. The dry run exists for the editor, where a
+ * person is about to publish a list nobody has seen; a button pressed by an admin
+ * who has just edited one row, or a republish after a teacher accepts a
+ * photograph, is not that situation. The empty-page guard below still applies,
+ * because THAT one protects against a renamed column rather than against
+ * inexperience.
+ *
+ * Never throws: callers are doing something else (saving a user, storing a
+ * photograph) and a website that cannot be reached must not fail their action.
+ */
+function facultyPublishNow_(reason) {
+  try {
+    var built = facultyBuild_();
+
+    if (!built.staff.length && built.skipped.length && !PUBLISH_FACULTY_ALLOW_EMPTY) {
+      return { ok: false, count: 0, skipped: built.skipped.length,
+               error: 'Refused: this would empty the faculty page while ' +
+                      built.skipped.length + ' named row(s) sit in Users unpublished.' };
+    }
+    var cfg = websiteConfigError_();
+    if (cfg) return { ok: false, count: built.staff.length, error: cfg };
+
+    var res = websitePutFile_(
+      FACULTY_CONTENT_PATH,
+      Utilities.base64Encode(built.json, Utilities.Charset.UTF_8),
+      'Publish ' + built.staff.length + ' staff' + (reason ? ' (' + reason + ')' : '')
+    );
+    return res.ok
+      ? { ok: true, count: built.staff.length, skipped: built.skipped.length }
+      : { ok: false, count: built.staff.length, error: res.error };
+  } catch (err) {
+    return { ok: false, count: 0,
+             error: String(err && err.message ? err.message : err) };
+  }
+}
+
+/**
+ * Republish quietly, for a caller whose real job is something else.
+ *
+ * Swallows everything. A teacher accepting a photograph, or an admin renaming
+ * somebody, must not see a GitHub error — their action succeeded, and the site
+ * catching up is a separate concern that the Refresh button can retry.
+ */
+function facultyRepublishQuietly_(reason) {
+  try { facultyPublishNow_(reason); } catch (err) { /* deliberately silent */ }
+}
+
+/**
+ * The editor entry point. Prints everything and honours the dry run.
+ *
+ * Kept for the case it was written for: publishing a list nobody has looked at,
+ * where reading the log before committing is the whole point.
+ */
+function publishFaculty() {
+  var built = facultyBuild_();
+  var staff = built.staff, skipped = built.skipped, noGroup = built.noGroup;
+  var json = built.json;
+  var users = { length: built.rows };
 
   var log = [];
   log.push(PUBLISH_FACULTY_DRY_RUN
