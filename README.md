@@ -55,6 +55,7 @@ site/styles.css         all the CSS
 site/.htaccess          canonical redirects, the old-URL map, caching
 content/posts.json      WRITTEN BY THE PORTAL — do not edit by hand
 assets/                 crest, favicon, default share image
+assets/defaults/        stand-in pictures for a post with none of its own
 img/posts/              post pictures, uploaded by the portal
 tools/build.mjs         the generator
 tools/markdown.mjs      the post-body renderer
@@ -89,8 +90,10 @@ back onto the live WordPress site.
 - **The school's own words** for About, Academics, Admissions and Contact. The
   pages carry marked placeholders; those are for the office to replace, not for a
   website builder to invent.
-- **`assets/og-default.png`** — 1200 × 675, shown when a post has no picture of
-  its own and used as the site's share image.
+- **Five to ten pictures in `assets/defaults/`** — 1200 × 675 photographs of the
+  school, shown on posts that have no picture of their own. There are 21 such
+  posts, and until the folder is filled they all show the same
+  `assets/og-default.jpg`. See the README in that folder.
 - **A proper favicon** — currently the full crest, which is heavier than it needs
   to be at 32px.
 - **The WordPress migration** — the export, the images, and the 301 map in

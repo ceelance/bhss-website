@@ -321,7 +321,15 @@ def main():
 
         md, image_urls = to_markdown(body_html)
 
-        # Featured image first, then anything used in the body.
+        # The featured image, or NOTHING.
+        #
+        # It used to fall back to the first image in the body, which was wrong in
+        # both directions: it dropped the theme's placeholder (correctly) and then
+        # immediately invented a replacement, and the first image in a notice is a
+        # scan of a letter that a 16:9 centre crop cuts the text out of. 19 of 35
+        # posts showed the theme's default in WordPress and are meant to keep
+        # showing a default here — the build serves one from assets/defaults/ when
+        # `thumb` is empty, so empty is the faithful answer, not a gap to fill.
         thumb_url = ""
         fm = re.search(r"<wp:meta_key><!\[CDATA\[_thumbnail_id\]\]></wp:meta_key>\s*"
                        r"<wp:meta_value><!\[CDATA\[(\d+)\]\]></wp:meta_value>", it, re.S)
@@ -330,8 +338,6 @@ def main():
         if thumb_url and any(p in thumb_url.lower() for p in PLACEHOLDER_FEATURED):
             thumb_url = ""                      # the theme's house image, not this post's
             stats["placeholder featured image dropped"] += 1
-        if not thumb_url and image_urls:
-            thumb_url = image_urls[0]
 
         # --- images
         local = {}

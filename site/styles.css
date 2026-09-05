@@ -186,10 +186,9 @@ main { padding-bottom: 3.5rem; }
   background: linear-gradient(135deg, var(--brand-100), var(--brand-50));
   display: flex; align-items: center; justify-content: center;
 }
-.card-noimage {
-  font-family: 'DM Serif Display', Georgia, serif;
-  font-size: 1.9rem; color: var(--brand-200); letter-spacing: .08em;
-}
+/* The tint above shows only while the picture loads: a post without one of its
+   own now falls back to a photograph from assets/defaults/, so there is no such
+   thing as a card with no image. */
 .card-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
 /* "Show the whole picture" — for a poster or notice where a centre crop would
    cut the text in half. Set per post in the admin panel. */

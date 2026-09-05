@@ -168,6 +168,47 @@ mkdirSync(DIST, { recursive: true });
 // JPEG, not PNG: it is a photograph, and as a 256-colour PNG it weighed 418 KB.
 const DEFAULT_OG = '/assets/og-default.jpg';
 
+/**
+ * The stand-in pictures for a post that has none of its own.
+ *
+ * Every image dropped into assets/defaults/ joins the rotation — no code change,
+ * no list to keep in step. Sorted by name so the order does not depend on what
+ * the filesystem happens to return. With the folder absent or empty this is just
+ * og-default.jpg, which is what the site used before there was a rotation.
+ *
+ * They should be 1200x675: the card and the hero are both 16:9, and a picture cut
+ * to size here is never cropped by the browser.
+ */
+const DEFAULT_IMAGES = (() => {
+  const dir = join(ROOT, 'assets', 'defaults');
+  if (!existsSync(dir)) return [DEFAULT_OG];
+  const found = readdirSync(dir)
+    .filter((f) => /\.(jpe?g|png|webp)$/i.test(f))
+    .sort()
+    .map((f) => `/assets/defaults/${f}`);
+  return found.length ? found : [DEFAULT_OG];
+})();
+
+/**
+ * Which stand-in a post gets. Chosen by HASHING THE SLUG, not at random.
+ *
+ * A random pick would be re-rolled on every build: a notice already shared to
+ * WhatsApp would show a different photograph the next time anyone opened the
+ * link, and rsync would re-upload pages that had not actually changed. Hashing
+ * the slug spreads the set across the news grid — which is the point — while
+ * pinning each post to one picture for good.
+ *
+ * FNV-1a, which is eight lines and needs no dependency.
+ */
+function defaultImageFor(slug) {
+  let hash = 0x811c9dc5;
+  for (let i = 0; i < slug.length; i++) {
+    hash ^= slug.charCodeAt(i);
+    hash = Math.imul(hash, 0x01000193) >>> 0;
+  }
+  return DEFAULT_IMAGES[hash % DEFAULT_IMAGES.length];
+}
+
 function renderShell({ out, url, title, description, content, ogImage, ogType }) {
   const prefix = depthPrefix(out);
   // Fill the CONTENT first, then the layout. `fill` walks its keys in order and
@@ -197,12 +238,12 @@ function renderShell({ out, url, title, description, content, ogImage, ogType })
 function postCard(post, prefix) {
   const fit = post.thumb_fit === 'whole' ? ' class="whole"' : '';
   const summary = post.summary || excerpt(post.body_md, 140);
-  // A post with no picture gets a tinted panel, not an <img> pointing at a file
-  // that may not exist — a broken-image icon on every card reads as a fault,
-  // whereas an empty panel reads as a post that simply has no photograph.
-  const thumb = post.thumb
-    ? `<img src="${escapeHtml(prefix + '/' + post.thumb)}" alt=""${fit} loading="lazy" width="1200" height="675">`
-    : '<span class="card-noimage" aria-hidden="true">BHSS</span>';
+  // A post with no picture of its own falls back to a school photograph rather
+  // than to an empty panel, so the news grid reads as a wall of pictures. The
+  // stand-in is already 16:9, so it needs no `whole` treatment.
+  const src = post.thumb ? prefix + '/' + post.thumb
+                         : prefix + defaultImageFor(post.slug);
+  const thumb = `<img src="${escapeHtml(src)}" alt=""${post.thumb ? fit : ''} loading="lazy" width="1200" height="675">`;
   return `
       <a class="card" href="${prefix}/news/${encodeURIComponent(post.slug)}/">
         <div class="card-thumb">${thumb}</div>
@@ -245,15 +286,17 @@ for (const post of posts) {
   const prefix = depthPrefix(out);
   const body = renderMarkdown(post.body_md || '');
   const summary = post.summary || excerpt(post.body_md, 180);
-  const hero = post.thumb
-    ? `<img class="post-hero" src="${prefix}/${escapeHtml(post.thumb)}" alt="" width="1200" height="675">`
-    : '';
+  const heroSrc = post.thumb ? `${prefix}/${post.thumb}`
+                             : prefix + defaultImageFor(post.slug);
+  const hero = `<img class="post-hero" src="${escapeHtml(heroSrc)}" alt="" width="1200" height="675">`;
   renderShell({
     out,
     url: `news/${post.slug}/`,
     title: post.title,
     description: summary,
-    ogImage: post.thumb || '',
+    // The same stand-in the page shows, so the WhatsApp preview and the page a
+    // reader then lands on carry the same picture.
+    ogImage: post.thumb || defaultImageFor(post.slug),
     ogType: 'article',
     content: `
     <article class="post">
@@ -287,7 +330,14 @@ renderShell({
 // structure) — migrated off the old server so those links survive cutover.
 for (const dir of ['assets', 'img', 'files']) {
   const from = join(ROOT, dir);
-  if (existsSync(from)) cpSync(from, join(DIST, dir), { recursive: true });
+  // A README explaining a folder to whoever maintains it is not for the public —
+  // assets/defaults/README.md would otherwise be served off the live domain.
+  if (existsSync(from)) {
+    cpSync(from, join(DIST, dir), {
+      recursive: true,
+      filter: (src) => !/README\.md$/i.test(src)
+    });
+  }
 }
 cpSync(join(ROOT, 'site', 'styles.css'), join(DIST, 'styles.css'));
 if (existsSync(join(ROOT, 'site', '.htaccess'))) {
