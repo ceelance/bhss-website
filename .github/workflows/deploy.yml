@@ -17,18 +17,24 @@ concurrency:
 
 env:
   # ---------------------------------------------------------------------------
-  # WHERE THIS DEPLOYS. It goes to a PREVIEW FOLDER until cutover, because
-  # WordPress is still serving from public_html and must not be touched until the
-  # backup has been proven restorable.
+  # WHERE THIS DEPLOYS. This is the LIVE SITE. It deployed to public_html/preview
+  # until the cutover on 5 September 2026; WordPress was erased from public_html
+  # by the first run with these values, after wp-content/uploads was archived.
   #
-  # AT CUTOVER, change both lines together:
-  #     DEPLOY_PATH:   public_html
-  #     SITE_BASE_URL: https://baptisthss.in
-  #     IS_PREVIEW:    'false'
+  # These three belong together. SITE_BASE_URL is baked into canonical URLs,
+  # og:image and the sitemap, so changing DEPLOY_PATH alone would deploy the
+  # right files pointing at the wrong addresses. IS_PREVIEW governs whether
+  # .htaccess ships: it must be 'false' here, or the redirect map for every old
+  # WordPress URL is silently left behind.
+  #
+  # To go back to previewing:
+  #     DEPLOY_PATH:   public_html/preview
+  #     SITE_BASE_URL: https://baptisthss.in/preview
+  #     IS_PREVIEW:    'true'
   # ---------------------------------------------------------------------------
-  DEPLOY_PATH: public_html/preview
-  SITE_BASE_URL: https://baptisthss.in/preview
-  IS_PREVIEW: 'true'
+  DEPLOY_PATH: public_html
+  SITE_BASE_URL: https://baptisthss.in
+  IS_PREVIEW: 'false'
 
 jobs:
   deploy:

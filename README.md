@@ -154,51 +154,73 @@ Automatic on push to `main`. Five repository secrets are required:
 any server claiming to be Hostinger — the exact weakness that ruled out FTPS,
 whose certificate covers only Hostinger's own domains and never `baptisthss.in`.
 
-### Currently deploying to a PREVIEW folder
+### This deploys to the LIVE SITE
 
-`DEPLOY_PATH` in the workflow is `public_html/preview`, because WordPress is still
-live in `public_html`. At cutover, change `DEPLOY_PATH`, `SITE_BASE_URL` and
-`IS_PREVIEW` together — they are commented in the workflow.
+`DEPLOY_PATH` is `public_html`. **`rsync --delete` is pointed at it, so everything
+there that is not in `dist/` is erased.** That is what makes a withdrawn post
+actually disappear, and it is also why the path is guarded in the workflow before
+rsync ever runs.
 
-`.htaccess` is deliberately not deployed while previewing: it canonicalises every
-request to the apex, which from inside `/preview/` would bounce visitors straight
-back onto the live WordPress site. **A consequence worth stating plainly: it has
-therefore never been served, and goes live untested. A bad page is one bad page;
-a bad `.htaccess` is the whole site.** Cut over when someone can watch it.
+`DEPLOY_PATH`, `SITE_BASE_URL` and `IS_PREVIEW` are one setting in three lines and
+must always be changed together. `SITE_BASE_URL` is baked into canonical URLs,
+`og:image` and the sitemap; `IS_PREVIEW` decides whether `.htaccess` ships at all.
 
-## Cutting over
+## The cutover, 5 September 2026
 
-**`rsync --delete` is pointed at `public_html`, so everything there that is not in
-`dist/` is erased** — WordPress, and anything else living in that folder. `/preview`
-is inside it and goes too, which is deliberate: otherwise a duplicate of the site
-stays up competing with itself in search.
+WordPress was replaced here on 5 September 2026. Kept for the next person who
+wonders what happened to it, and because the reasoning still applies if the site
+is ever moved again.
 
-Before:
+`public_html` is a symlink to `domains/baptisthss.in/public_html`; rsync writes
+*through* it because the destination carries a trailing slash, so the symlink
+itself survives. Other domains on the account live in sibling folders under
+`domains/` and were never in reach.
 
-1. **Take a fresh backup of `public_html`, download it, and open it.** A backup
-   nobody has opened is a hope, not a backup.
-2. **List `public_html` over SSH** and confirm nothing but WordPress is in it.
-   Probing from outside cannot prove a folder is absent — only that it is not
-   served.
-3. Finish or unlist **Faculty**; it is the last page carrying placeholder text.
+What was checked first:
 
-The change itself is three lines in `.github/workflows/deploy.yml`, commented
-there: `DEPLOY_PATH: public_html`, `SITE_BASE_URL: https://baptisthss.in`,
-`IS_PREVIEW: 'false'`. Push, and watch the Action.
+1. **`wp-content/uploads` was archived** outside `public_html`. It held the
+   school's own photographs and PDFs — the one thing on that server that existed
+   nowhere else. WordPress itself is reinstallable software and was simply erased.
+2. **`public_html` was listed over SSH** and held nothing but WordPress and the
+   preview folder. Probing from outside cannot prove a folder is absent, only that
+   it is not served.
+3. The WordPress **database was left in place**, orphaned but intact.
 
-Immediately after: check the home page, one post, one old dated URL redirecting, a
-404, and `/sitemap.xml`. **Then purge the Hostinger CDN** — it caches for a week,
-and until it is purged the edge keeps serving WordPress, which looks exactly like
-a failed cutover.
+Two things the redirect map does *not* cover, both deliberate:
+
+- **Old post images.** The migration renamed them and converted them to WebP, so
+  `/wp-content/uploads/2024/08/img-2024...jpg` has no name to map to. Those URLs
+  404 and Google re-crawls them away.
+- **PDFs are covered**, by one rewrite rule rather than a list, because the
+  migration kept their filenames. The rule requires the target to exist, so a PDF
+  that was not carried over 404s directly instead of being sent to a second,
+  emptier 404.
+
+`.htaccess` had never once been served before this day — it is excluded from
+preview deploys, because canonicalising to the apex from inside `/preview/` would
+have thrown visitors back onto live WordPress. **It therefore went live untested.
+A bad page is one bad page; a bad `.htaccess` is the whole site.**
+
+After the first live deploy: home page, one post, one old dated URL redirecting, a
+404, `/sitemap.xml`, and both canonical redirects (`http://` → `https://`,
+`www.` → apex). **Then purge the Hostinger CDN** — the apex is an ALIAS to
+`baptisthss.in.cdn.hstgr.net` and it caches for a week; until it is purged the
+edge keeps serving WordPress, which looks exactly like a failed cutover.
 
 Then submit `https://baptisthss.in/sitemap.xml` in Search Console. The old
-`wp-sitemap.xml` will 404, which is correct.
+`wp-sitemap.xml` 404s, which is correct.
 
-Rolling back is restoring that backup. Nothing about DNS or hosting changes.
+Rolling back does not mean restoring WordPress: the whole site is in this repo, so
+recovery is a fix and a push. Nothing about DNS, hosting or email changed —
+`portal.baptisthss.in` and `photos.baptisthss.in` are GitHub Pages, and mail is
+Google Workspace. None of them were ever in the path of this deploy.
 
 ## Still to do
 
-- **Faculty**, generated from the staff records rather than typed by hand. It is
-  the one page still carrying "to be supplied by the office".
+- **Staff photographs** — `content/faculty.json` currently carries none, so every
+  card on `/faculty/` shows initials. Working as designed, but the whole page.
+- **Six staff names carry internal codes** — `Sir Davida HS`, `Sir Davida HSS` and
+  four more. Those suffixes tell duplicate logins apart in the Users sheet and are
+  not meant to be read by parents. Filling `full_name` for those six overrides it.
 - **A proper favicon** — currently the full crest, which is heavier than it needs
   to be at 32px.
