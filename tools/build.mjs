@@ -333,7 +333,7 @@ staff = staff.filter((s) => s && staffName(s));
  * different orders on two screens.
  */
 const STAFF_GROUP_ORDER = ['Principal', 'Vice Principal', 'High School',
-                           'HSS Language', 'Arts', 'Science', 'Commerce',
+                           'Arts', 'Science', 'Commerce', 'HSS Language',
                            'Higher Secondary', 'Office Staff',
                            'Office and support', 'Bus Staff'];
 
