@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-06T09:30:39.950Z",
+  "generated_at": "2026-09-06T09:31:34.803Z",
   "count": 67,
   "staff": [
     {
@@ -58,6 +58,7 @@
       "name": "Sir Israela",
       "group": "High School",
       "title": "Teacher",
+      "full_name": "Israel Lalmuanawma",
       "subject": "Maths"
     },
     {
