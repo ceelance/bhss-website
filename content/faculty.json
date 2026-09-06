@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-06T07:41:28.850Z",
+  "generated_at": "2026-09-06T07:41:53.421Z",
   "count": 67,
   "staff": [
     {
@@ -264,6 +264,7 @@
       "name": "Sir Marka",
       "group": "Science",
       "title": "Teacher",
+      "full_name": "Mark Laltanpuia",
       "subject": "Physics"
     },
     {
