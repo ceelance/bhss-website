@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-06T07:40:06.629Z",
+  "generated_at": "2026-09-06T07:41:05.287Z",
   "count": 67,
   "staff": [
     {
@@ -250,6 +250,7 @@
       "name": "Sir Hmachhuana",
       "group": "Science",
       "title": "Teacher",
+      "full_name": "Lalhmachhuana",
       "subject": "Physics"
     },
     {
