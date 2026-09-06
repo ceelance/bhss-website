@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-06T09:32:04.539Z",
+  "generated_at": "2026-09-06T09:32:50.323Z",
   "count": 67,
   "staff": [
     {
@@ -72,6 +72,7 @@
       "name": "Sir T-a",
       "group": "High School",
       "title": "Teacher",
+      "full_name": "T. Lalruatdika",
       "subject": "Science"
     },
     {
