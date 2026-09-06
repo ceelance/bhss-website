@@ -342,7 +342,11 @@ main { padding-top: clamp(1.75rem, 3.5vw, 2.75rem); padding-bottom: clamp(3rem, 
 .card-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
 /* "Show the whole picture" — for a poster or notice where a centre crop would
    cut the text in half. Set per post in the admin panel. */
-.card-thumb img.whole { object-fit: contain; background: #fff; }
+/* Matches the bars the portal paints INTO the file (wpostThumbCanvas). The
+   stored thumbnail is already exactly 1200x675, so this ground is normally
+   invisible — it shows only for a thumbnail saved before that was true, and
+   when it does it should not be a different colour from the one beside it. */
+.card-thumb img.whole { object-fit: contain; background: #000; }
 .card-body { padding: 1rem 1.1rem 1.2rem; }
 .card-meta { font-size: .78rem; text-transform: uppercase; letter-spacing: .04em;
              color: var(--brand-600); font-weight: 700; margin-bottom: .35rem; }
