@@ -25,6 +25,12 @@
 
   --wrap: 1080px;
   --radius: 14px;
+
+  /* THE STICKY HEADER'S HEIGHT. Named because two other things have to clear
+     it: the faculty page's department strip, which sticks directly beneath it,
+     and the anchor offset that stops a jump landing under both. It is the crest
+     (52px) plus .header-inner's .7rem top and bottom. */
+  --header-h: 74px;
 }
 
 * { box-sizing: border-box; }
@@ -119,6 +125,9 @@ img { max-width: 100%; height: auto; }
   font-size: 1.9rem; font-weight: 400; letter-spacing: .06em; line-height: 1;
 }
 @media (max-width: 420px) {
+  /* The crest shrinks here, so the header does — and the strip beneath it has
+     to follow, or it parks with a gap under the bar. */
+  :root { --header-h: 66px; }
   .brand img { width: 44px; height: 44px; padding: 4px; }
   .brand strong { font-size: 1.6rem; }
 }
@@ -423,7 +432,16 @@ main { padding-top: clamp(1.75rem, 3.5vw, 2.75rem); padding-bottom: clamp(3rem, 
    across a phone, and a strip that grows to two rows changes height as you
    scroll, which shoves the page around under your thumb. */
 .staff-jump {
-  position: sticky; top: 0; z-index: 20;
+  position: sticky;
+  /* NOT top: 0 — THE SITE HEADER IS STICKY TOO, and also at 0 with a higher
+     z-index, so a strip pinned to the top of the viewport parks itself
+     underneath the header and is never seen again. It has to come to rest just
+     below it, which is what --header-h measures.
+
+     Kept BELOW the header's z-index on purpose: where they meet, the header is
+     the one that should win. */
+  top: var(--header-h);
+  z-index: 20;
   margin: 0 0 1.8rem;
   background: var(--paper);
   border-bottom: 1px solid var(--line);
@@ -447,9 +465,12 @@ main { padding-top: clamp(1.75rem, 3.5vw, 2.75rem); padding-bottom: clamp(3rem, 
 .staff-jump a:hover, .staff-jump a:focus-visible {
   color: var(--brand-700); border-color: var(--brand-200); background: var(--brand-50);
 }
-/* The strip covers the top of the page, so an anchor would otherwise land with
-   its heading hidden underneath it. */
-.staff-group { scroll-margin-top: 4.2rem; }
+/* An anchor has to clear BOTH the header and the strip parked under it.
+   html carries scroll-padding-top: 6.5rem already, and the two ADD — the target's
+   scroll-margin box is placed inside the scroller's padding box — so this is the
+   remainder, not the whole distance. Header 74 + strip ~42 = 116px of chrome;
+   6.5rem is 104, and 1.5rem more clears it with a little room to breathe. */
+.staff-group { scroll-margin-top: 1.5rem; }
 .staff-group + .staff-group { margin-top: 2.6rem; }
 /* The section heading is ruled off, so a long list still reads as School, then
    Higher Secondary, then Office, rather than one wall of faces. */
