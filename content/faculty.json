@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-06T09:38:30.777Z",
+  "generated_at": "2026-09-06T09:39:00.515Z",
   "count": 67,
   "staff": [
     {
@@ -11,7 +11,8 @@
     {
       "name": "Sir Sensena",
       "group": "Office Staff",
-      "title": "Computer Operator"
+      "title": "Computer Operator",
+      "full_name": "Lalvenhima Renthlei"
     },
     {
       "name": "Madam Puii",
