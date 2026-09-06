@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-09-06T09:41:26.108Z",
-  "count": 67,
+  "generated_at": "2026-09-06T10:09:31.540Z",
+  "count": 68,
   "staff": [
     {
       "name": "Sir Zomuana",
@@ -88,6 +88,7 @@
       "name": "Sir Mka",
       "group": "High School",
       "title": "Teacher",
+      "full_name": "M.K. Thapa",
       "subject": "Hindi"
     },
     {
@@ -129,138 +130,161 @@
       "name": "Miss Nanovi",
       "group": "HSS Language",
       "title": "Teacher",
+      "full_name": "Lalramthianghlimi",
       "subject": "English"
     },
     {
       "name": "Sir VL Muana",
       "group": "HSS Language",
       "title": "Teacher",
+      "full_name": "K. Vanlalmuana",
       "subject": "English"
     },
     {
       "name": "Miss Muanpuii",
       "group": "HSS Language",
       "title": "Teacher",
+      "full_name": "Lalmuanpuii Ralte",
       "subject": "English"
     },
     {
       "name": "Sir Vohbika",
       "group": "HSS Language",
       "title": "Teacher",
+      "full_name": "Vanlalvohbika",
       "subject": "English"
     },
     {
       "name": "Sir Tlantea",
       "group": "HSS Language",
       "title": "Teacher",
+      "full_name": "Tlantununga Chawngthu",
       "subject": "Mizo"
     },
     {
       "name": "Miss Zti",
       "group": "HSS Language",
       "title": "Teacher",
+      "full_name": "Zothantluangi Khiangte",
       "subject": "Mizo"
     },
     {
       "name": "Sir Zohmaa",
       "group": "HSS Language",
       "title": "Teacher",
+      "full_name": "C. Zohmangaiha",
       "subject": "Mizo"
     },
     {
       "name": "Sir Hlimpuia",
       "group": "HSS Language",
       "title": "Teacher",
+      "full_name": "Lalhlimpuia",
       "subject": "Mizo"
     },
     {
       "name": "Sir Siana",
       "group": "Arts",
       "title": "Teacher",
+      "full_name": "Elisianmawia",
       "subject": "History"
     },
     {
       "name": "Sir Mathlenga",
       "group": "Arts",
       "title": "Teacher",
+      "full_name": "C. Lalthlengliana",
       "subject": "History"
     },
     {
       "name": "Miss Maziki",
       "group": "Arts",
       "title": "Teacher",
+      "full_name": "C. Thangzikpuii",
       "subject": "Geography"
     },
     {
       "name": "Sir Zawntea",
       "group": "Arts",
       "title": "Teacher",
+      "full_name": "Saizawna Sailo",
       "subject": "Geography"
     },
     {
       "name": "Miss Rinpuii",
       "group": "Arts",
       "title": "Teacher",
+      "full_name": "Lalrinpuii Rokhum",
       "subject": "Education"
     },
     {
       "name": "Miss Rita",
       "group": "Arts",
       "title": "Teacher",
+      "full_name": "Rita K. Lalhmingmawii",
       "subject": "Education"
     },
     {
       "name": "Miss Heleni",
       "group": "Arts",
       "title": "Teacher",
+      "full_name": "Helen Lalneihkimi",
       "subject": "Pol. Sc."
     },
     {
       "name": "Miss Nunhlimi",
       "group": "Arts",
       "title": "Teacher",
+      "full_name": "Lalnunhlimi",
       "subject": "Pol. Sc."
     },
     {
       "name": "Sir Marina",
       "group": "Arts",
       "title": "Teacher",
+      "full_name": "C. Lalrinawma",
       "subject": "Economics"
     },
     {
       "name": "Miss Sangtei Eco",
       "group": "Arts",
       "title": "Teacher",
+      "full_name": "R. Lalthansangi",
       "subject": "Economics"
     },
     {
       "name": "Sir Sawma",
       "group": "Arts",
       "title": "Teacher",
+      "full_name": "K. Malsawmtluanga",
       "subject": "Sociology"
     },
     {
       "name": "Miss Sangtei Socio",
       "group": "Arts",
       "title": "Teacher",
+      "full_name": "R. Lalthansangi",
       "subject": "Sociology"
     },
     {
       "name": "Miss Tetei",
       "group": "Commerce",
       "title": "Teacher",
+      "full_name": "Lalchhuanmawii",
       "subject": "Accountancy"
     },
     {
       "name": "Miss Noreeni",
       "group": "Commerce",
       "title": "Teacher",
+      "full_name": "Noreen Lalrindiki Sailo",
       "subject": "Business Studies"
     },
     {
       "name": "Sir VL Hluzuala",
       "group": "Commerce",
       "title": "Teacher",
+      "full_name": "V.L. Hluzuala",
       "subject": "Accountancy"
     },
     {
@@ -288,72 +312,84 @@
       "name": "Sir Davida HSS",
       "group": "Science",
       "title": "Teacher",
+      "full_name": "David Lalremruata Chongthu",
       "subject": "Chemistry"
     },
     {
       "name": "Miss Maheri",
       "group": "Science",
       "title": "Teacher",
+      "full_name": "P.C. Lalhertluangi",
       "subject": "Chemistry"
     },
     {
       "name": "Miss Tetei Sc",
       "group": "Science",
       "title": "Teacher",
+      "full_name": "Lalhunthari",
       "subject": "Chemistry"
     },
     {
       "name": "Sir Jona",
       "group": "Science",
       "title": "Teacher",
+      "full_name": "Jonathan Lalremruata",
       "subject": "Biology"
     },
     {
       "name": "Sir Hmangaiha",
       "group": "Science",
       "title": "Teacher",
+      "full_name": "Lalhmangaihzuala",
       "subject": "Biology"
     },
     {
       "name": "Miss Mathani",
       "group": "Science",
       "title": "Teacher",
+      "full_name": "Lalthantluangi Lianhna",
       "subject": "Biology"
     },
     {
       "name": "Sir Sammy",
       "group": "Science",
       "title": "Teacher",
+      "full_name": "Samuel Rosangzuala",
       "subject": "Biology"
     },
     {
       "name": "Miss Zuali",
       "group": "Science",
       "title": "Teacher",
+      "full_name": "R. Lalhmangaihzuali",
       "subject": "Mathematics"
     },
     {
       "name": "Sir Rka",
       "group": "Science",
       "title": "Teacher",
+      "full_name": "H.C. Lalrokima",
       "subject": "Mathematics"
     },
     {
       "name": "Miss Puipuii",
       "group": "Science",
       "title": "Teacher",
+      "full_name": "Lallianpuii Sailo",
       "subject": "Mathematics"
     },
     {
       "name": "Sir Zuala",
       "group": "Science",
       "title": "Teacher",
+      "full_name": "Lallianzuala Pautu",
       "subject": "Comp. Sc."
     },
     {
       "name": "Miss Kimkimi HSS",
       "group": "Commerce",
       "title": "Teacher",
+      "full_name": "Malsawmkimi",
       "subject": "Business Maths"
     },
     {
@@ -366,18 +402,21 @@
       "name": "Miss Dinpuii",
       "group": "HSS Language",
       "title": "Teacher",
+      "full_name": "C. Laldinpuii",
       "subject": "English"
     },
     {
       "name": "Miss Partei HSS",
       "group": "Commerce",
       "title": "Teacher",
+      "full_name": "Lalrampari",
       "subject": "Business Studies"
     },
     {
       "name": "Sir Siamtea",
       "group": "Science",
       "title": "Teacher",
+      "full_name": "C. Zairemsiama",
       "subject": "Comp. Sc.",
       "photo": "img/staff/sir-siamtea-aa81f7-20260906-020046.webp"
     },
@@ -385,6 +424,7 @@
       "name": "Sir Chhantea",
       "group": "Science",
       "title": "Teacher",
+      "full_name": "P.C. Lalchhanhima",
       "subject": "Lab Assistant"
     },
     {
@@ -403,12 +443,14 @@
       "name": "Madam Matlani",
       "group": "Science",
       "title": "Teacher",
+      "full_name": "T. Laltlanzauvi",
       "subject": "Lab Assistant"
     },
     {
       "name": "Sir Sangzuala",
       "group": "Science",
       "title": "Teacher",
+      "full_name": "Zosangzuala",
       "subject": "Lab Assistant"
     },
     {
@@ -420,7 +462,14 @@
     {
       "name": "Pu Valduha",
       "group": "Bus Staff",
-      "title": "Driver"
+      "title": "Driver",
+      "full_name": "R. Lalduhawma"
+    },
+    {
+      "name": "Miss Hlantei",
+      "group": "Office Staff",
+      "title": "IV Grade",
+      "full_name": "Vanlalhlani"
     }
   ]
 }
