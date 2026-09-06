@@ -44,6 +44,17 @@ body {
   color: var(--ink);
   background: var(--paper);
   line-height: 1.65;
+  /* A WORD TOO LONG FOR THE SCREEN BREAKS INSTEAD OF PUSHING THE PAGE SIDEWAYS.
+     Found on /news/bhss-result-view-link/, where the link text is the Play Store
+     address in full — 84 characters with nothing to break on — so the post ran
+     off the right edge of every phone. Inherited from here rather than patched
+     onto that one rule, because the office pastes addresses into posts, notice
+     titles and summaries alike, and each of those would have been the same bug
+     discovered separately.
+
+     `break-word` and not `anywhere`: ordinary prose wraps between words exactly
+     as before, and only a word that CANNOT fit on a line of its own is broken. */
+  overflow-wrap: break-word;
 }
 
 h1, h2, h3, h4 {
@@ -470,7 +481,10 @@ main { padding-top: clamp(1.75rem, 3.5vw, 2.75rem); padding-bottom: clamp(3rem, 
 .staff-grid.is-lead { grid-template-columns: repeat(auto-fit, minmax(270px, 370px)); }
 .staff-grid.is-lead .staff-card { display: flex; align-items: stretch; }
 .staff-grid.is-lead .staff-face { flex: 0 0 118px; aspect-ratio: auto; }
-.staff-grid.is-lead .staff-body { display: flex; flex-direction: column; justify-content: center; }
+/* min-width:0 because a flex item refuses to shrink below its longest
+   unbreakable word by default, and `overflow-wrap` alone does not change that —
+   so a long name here would still have widened the card. */
+.staff-grid.is-lead .staff-body { display: flex; flex-direction: column; justify-content: center; min-width: 0; }
 .staff-grid.is-lead h3 { font-size: 1.08rem; }
 
 @media (max-width: 420px) {
