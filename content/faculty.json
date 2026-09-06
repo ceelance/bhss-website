@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-06T09:28:38.743Z",
+  "generated_at": "2026-09-06T09:29:05.433Z",
   "count": 67,
   "staff": [
     {
@@ -37,6 +37,7 @@
       "name": "Miss Ramliani",
       "group": "High School",
       "title": "Teacher",
+      "full_name": "R. Lalramliani",
       "subject": "Science"
     },
     {
