@@ -328,12 +328,19 @@ staff = staff.filter((s) => s && staffName(s));
  * reason: it costs nothing and puts the group in its right place the day it is
  * first used.
  *
- * MIRRORED IN THE ANDROID APP (Tabs.GROUP_ORDER). Both read the same
- * faculty.json, so an order kept in only one of them shows the school in two
- * different orders on two screens.
+ * A RENAME IN THE PORTAL SILENTLY DEMOTES A GROUP. "Principal" became
+ * "Principals" in the staff sheet, and because the new spelling was on nobody's
+ * list the school's own Principals dropped to the BOTTOM of the faculty page and
+ * of the app — on both, at once, with nothing reporting it. Both spellings are
+ * kept here for that reason: a name nothing is filed under costs nothing, and
+ * removing one is how the bug comes back.
+ *
+ * THE APP NO LONGER KEEPS ITS OWN COPY OF THIS. app.json now carries the staff
+ * already grouped in this order, and the app simply follows it — so the next
+ * rename is a one-line change here rather than a change here AND a Play release.
  */
-const STAFF_GROUP_ORDER = ['Principal', 'High School', 'Arts', 'Science',
-                           'Commerce', 'HSS Language', 'Office Staff',
+const STAFF_GROUP_ORDER = ['Principals', 'Principal', 'High School', 'Arts',
+                           'Science', 'Commerce', 'HSS Language', 'Office Staff',
                            'Bus Staff'];
 
 function staffGroups() {
@@ -1073,7 +1080,14 @@ const appFeed = {
   // The faculty page's own list, minus nothing — it carries prospectus facts
   // only to begin with (name, title, subject, photograph), which is exactly
   // what may leave the building.
-  staff: staff.map((s) => ({
+  //
+  // ALREADY IN THE PAGE'S ORDER, group by group. It used to be sent in whatever
+  // order the sheet happened to be in, which left the app to sort it — so the
+  // app kept its own copy of STAFF_GROUP_ORDER, and the day the portal renamed
+  // "Principal" to "Principals" BOTH lists went stale and the Principals fell to
+  // the bottom of the website and the app together. Sending it ordered means
+  // there is one list, in one file, and a rename never needs a Play release.
+  staff: staffGroups().reduce((all, [, people]) => all.concat(people), []).map((s) => ({
     name: s.name || '',
     full_name: s.full_name || '',
     title: s.title || '',
