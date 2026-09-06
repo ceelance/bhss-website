@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-09-06T10:09:31.540Z",
-  "count": 68,
+  "generated_at": "2026-09-06T10:11:03.418Z",
+  "count": 69,
   "staff": [
     {
       "name": "Sir Zomuana",
@@ -470,6 +470,12 @@
       "group": "Office Staff",
       "title": "IV Grade",
       "full_name": "Vanlalhlani"
+    },
+    {
+      "name": "Sir Makima",
+      "group": "Office Staff",
+      "title": "LDC",
+      "full_name": "Lawmkima Colney"
     }
   ]
 }
