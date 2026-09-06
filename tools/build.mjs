@@ -332,10 +332,9 @@ staff = staff.filter((s) => s && staffName(s));
  * faculty.json, so an order kept in only one of them shows the school in two
  * different orders on two screens.
  */
-const STAFF_GROUP_ORDER = ['Principal', 'Vice Principal', 'High School',
-                           'Arts', 'Science', 'Commerce', 'HSS Language',
-                           'Higher Secondary', 'Office Staff',
-                           'Office and support', 'Bus Staff'];
+const STAFF_GROUP_ORDER = ['Principal', 'High School', 'Arts', 'Science',
+                           'Commerce', 'HSS Language', 'Office Staff',
+                           'Bus Staff'];
 
 function staffGroups() {
   const seen = new Map();
