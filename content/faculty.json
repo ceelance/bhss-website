@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-06T07:41:05.287Z",
+  "generated_at": "2026-09-06T07:41:28.850Z",
   "count": 67,
   "staff": [
     {
@@ -257,6 +257,7 @@
       "name": "Sir Muhindro",
       "group": "Science",
       "title": "Teacher",
+      "full_name": "L Muhindro Singh",
       "subject": "Physics"
     },
     {
