@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-06T09:21:57.864Z",
+  "generated_at": "2026-09-06T09:22:42.826Z",
   "count": 36,
   "posts": [
     {
@@ -198,22 +198,17 @@
       "title": "Class IX Selected List 2026-27",
       "summary": "",
       "body_md": "![](img/posts/01.webp)\n\n![](img/posts/02-rotated.webp)\n\n![](img/posts/03-rotated.webp)\n\n![](img/posts/04-rotated.webp)\n\n![](img/posts/05.webp)\n\n![](img/posts/06.webp)\n\n![](img/posts/ix-selected-qr-code-2026.webp)\n\nThe Utmost for the Highest",
-      "category": "Admissions",
+      "category": "Admissions, Notices",
       "categories": [
-        "Admissions"
+        "Admissions",
+        "Notices"
       ],
       "published_at": "2026-03-09",
       "author": "",
       "thumb": "",
       "thumb_fit": "cover",
       "images": [
-        "img/posts/01.webp",
-        "img/posts/02-rotated.webp",
-        "img/posts/03-rotated.webp",
-        "img/posts/04-rotated.webp",
-        "img/posts/05.webp",
-        "img/posts/06.webp",
-        "img/posts/ix-selected-qr-code-2026.webp"
+        "img/posts/01.webp"
       ]
     },
     {
