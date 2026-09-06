@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-06T07:38:05.000Z",
+  "generated_at": "2026-09-06T07:38:38.907Z",
   "count": 67,
   "staff": [
     {
@@ -370,7 +370,8 @@
     {
       "name": "Sir Thiana",
       "group": "Principals",
-      "title": "Vice Principal"
+      "title": "Vice Principal",
+      "full_name": "R. Vanlalthiana"
     },
     {
       "name": "Sir Joela",
