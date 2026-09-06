@@ -317,8 +317,25 @@ staff = staff.filter((s) => s && staffName(s));
  * named here still appears, after these, in the order it first arrives: a new
  * group should show up rather than vanish because this list is out of date.
  */
+/**
+ * The order the school reads itself in, and it is not alphabetical: the
+ * Principal, then the High School, then the Higher Secondary streams, then the
+ * people who keep the place running.
+ *
+ * A group NOT on this list still appears — at the end, in the order it was met —
+ * because a new department must never vanish from the public page just because
+ * nobody edited this array. `Bus Staff` is listed before it exists for the same
+ * reason: it costs nothing and puts the group in its right place the day it is
+ * first used.
+ *
+ * MIRRORED IN THE ANDROID APP (Tabs.GROUP_ORDER). Both read the same
+ * faculty.json, so an order kept in only one of them shows the school in two
+ * different orders on two screens.
+ */
 const STAFF_GROUP_ORDER = ['Principal', 'Vice Principal', 'High School',
-                           'Higher Secondary', 'Office and support'];
+                           'HSS Language', 'Arts', 'Science', 'Commerce',
+                           'Higher Secondary', 'Office Staff',
+                           'Office and support', 'Bus Staff'];
 
 function staffGroups() {
   const seen = new Map();
@@ -399,19 +416,42 @@ function staffCard(person, prefix) {
         </li>`;
 }
 
+/** A group name → the id its section carries, for the jump links above. */
+function groupSlug(group) {
+  return 'g-' + String(group).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+}
+
 function facultyHtml(prefix) {
   const groups = staffGroups();
   if (!groups.length) {
     return `<p class="empty">The staff list has not been published yet.</p>`;
   }
-  return groups.map(([group, people]) => {
+
+  // A STRIP OF JUMP LINKS, and it sticks to the top as you scroll.
+  //
+  // Sixty-seven people down a phone screen is a long way to travel to find the
+  // Commerce department, and the browser's own find-in-page is not something a
+  // parent will reach for. The strip scrolls sideways when the names outgrow the
+  // width rather than wrapping to two rows, so its height never changes and the
+  // page beneath it never jumps.
+  //
+  // Plain anchors: no JavaScript, and each one is a real address a person can
+  // send to somebody else.
+  const jump = `
+    <nav class="staff-jump" aria-label="Departments">
+      <div class="staff-jump-inner">${groups.map(([group]) =>
+        `<a href="#${groupSlug(group)}">${escapeHtml(group)}</a>`).join('')}
+      </div>
+    </nav>`;
+
+  return jump + '\n' + groups.map(([group, people]) => {
     // A group of one or two — the Principal, usually — laid out in the same grid
     // as thirty teachers leaves a lone card marooned in an empty row, which reads
     // as a mistake rather than as the top of the school. Those get a wider card
     // that fills its line on purpose.
     const lead = people.length <= 2 ? ' is-lead' : '';
     return `
-    <section class="staff-group">
+    <section class="staff-group" id="${groupSlug(group)}">
       <h2>${escapeHtml(group)}</h2>
       <ul class="staff-grid${lead}">${people.map((p) => staffCard(p, prefix)).join('')}
       </ul>

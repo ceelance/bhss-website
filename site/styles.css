@@ -418,6 +418,38 @@ main { padding-top: clamp(1.75rem, 3.5vw, 2.75rem); padding-bottom: clamp(3rem, 
 
 /* ---------------------------------------------------------------- faculty */
 
+/* The department jump strip, stuck to the top of the faculty page.
+   It scrolls SIDEWAYS rather than wrapping: seven department names will not fit
+   across a phone, and a strip that grows to two rows changes height as you
+   scroll, which shoves the page around under your thumb. */
+.staff-jump {
+  position: sticky; top: 0; z-index: 20;
+  margin: 0 0 1.8rem;
+  background: var(--paper);
+  border-bottom: 1px solid var(--line);
+  /* Aligned with the content rather than bled to the window edges: `.wrap` makes
+     its gutter out of WIDTH, not padding, so there is no padding to cancel and a
+     negative margin would misalign the strip on every screen but one. */
+}
+.staff-jump-inner {
+  display: flex; gap: .4rem; overflow-x: auto; padding: .6rem 0;
+  scrollbar-width: none;
+}
+.staff-jump-inner::-webkit-scrollbar { display: none; }
+.staff-jump a {
+  flex: none;
+  padding: .35rem .8rem;
+  border: 1px solid var(--line); border-radius: 999px;
+  font-size: .85rem; font-weight: 600; text-decoration: none;
+  color: var(--ink-soft); background: var(--paper);
+  white-space: nowrap;
+}
+.staff-jump a:hover, .staff-jump a:focus-visible {
+  color: var(--brand-700); border-color: var(--brand-200); background: var(--brand-50);
+}
+/* The strip covers the top of the page, so an anchor would otherwise land with
+   its heading hidden underneath it. */
+.staff-group { scroll-margin-top: 4.2rem; }
 .staff-group + .staff-group { margin-top: 2.6rem; }
 /* The section heading is ruled off, so a long list still reads as School, then
    Higher Secondary, then Office, rather than one wall of faces. */
