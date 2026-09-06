@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-06T09:34:26.616Z",
+  "generated_at": "2026-09-06T09:34:56.617Z",
   "count": 67,
   "staff": [
     {
@@ -106,6 +106,7 @@
       "name": "Sir Btea",
       "group": "High School",
       "title": "Teacher",
+      "full_name": "Ruby Remruatsanga",
       "subject": "Social Science"
     },
     {
