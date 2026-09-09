@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-09T11:29:54.411Z",
+  "generated_at": "2026-09-09T21:15:24.740Z",
   "count": 70,
   "staff": [
     {
@@ -342,7 +342,8 @@
       "group": "Science",
       "title": "Teacher",
       "full_name": "Lalhmangaihzuala",
-      "subject": "Biology"
+      "subject": "Biology",
+      "photo": "img/staff/sir-hmangaiha-d20b22-20260910-024521.webp"
     },
     {
       "name": "Miss Mathani",
