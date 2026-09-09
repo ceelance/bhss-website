@@ -319,14 +319,16 @@ staff = staff.filter((s) => s && staffName(s));
  */
 /**
  * The order the school reads itself in, and it is not alphabetical: the
- * Principal, then the High School, then the Higher Secondary streams, then the
- * people who keep the place running.
+ * Principals, then the Chaplain, then the High School, then the Higher Secondary
+ * streams, then the people who keep the place running.
  *
  * A group NOT on this list still appears — at the end, in the order it was met —
  * because a new department must never vanish from the public page just because
  * nobody edited this array. `Bus Staff` is listed before it exists for the same
  * reason: it costs nothing and puts the group in its right place the day it is
- * first used.
+ * first used. `Chaplains` is here on the same terms — the portal offers only the
+ * singular, but a plural typed into the sheet one day must not sink the group to
+ * the bottom of the page, which is exactly how the Principals were lost.
  *
  * A RENAME IN THE PORTAL SILENTLY DEMOTES A GROUP. "Principal" became
  * "Principals" in the staff sheet, and because the new spelling was on nobody's
@@ -339,9 +341,39 @@ staff = staff.filter((s) => s && staffName(s));
  * already grouped in this order, and the app simply follows it — so the next
  * rename is a one-line change here rather than a change here AND a Play release.
  */
-const STAFF_GROUP_ORDER = ['Principals', 'Principal', 'High School', 'Arts',
-                           'Science', 'Commerce', 'HSS Language', 'Office Staff',
-                           'Bus Staff'];
+const STAFF_GROUP_ORDER = ['Principals', 'Principal', 'Chaplain', 'Chaplains',
+                           'High School', 'Arts', 'Science', 'Commerce',
+                           'HSS Language', 'Office Staff', 'Bus Staff'];
+
+/**
+ * The groups in the school's order, and the people INSIDE each one A-Z.
+ *
+ * Two different orderings, deliberately. Between groups the school has an order
+ * of its own and alphabetising it would be absurd — the Principals do not come
+ * after Bus Staff. Inside a group there is no such order, and the sheet's own
+ * sequence is just the order rows were typed: a parent hunting for one teacher
+ * in a section of twenty had nothing to hunt WITH.
+ *
+ * IT SORTS ON THE PRINTED NAME, not on `name`. The card shows `full_name` when
+ * the office has typed one, so sorting the other field would produce a list that
+ * is provably sorted and visibly is not — the worst of both.
+ *
+ * AND ON THE NAME, NOT THE HONORIFIC. 27 of the 64 staff are "Miss <name>", so a
+ * plain string sort files nearly half the school under M and the rest under S
+ * for Sir — an index of how people are addressed, which is no index at all.
+ * `nameWords` is the same stripper the initials tile uses.
+ *
+ * `Intl.Collator` rather than `<`, so that case and the diacritics in Mizo names
+ * don't split the alphabet into three. Sorting is stable, so two people printed
+ * under identical names keep the sheet's order between them.
+ *
+ * THE APP GETS THIS FREE. app.json is built from this same function, so the
+ * order is decided once, here, for the faculty page and the Android app alike.
+ */
+const staffCollator = new Intl.Collator('en', { sensitivity: 'base', numeric: true });
+function staffSortKey(person) {
+  return nameWords(staffName(person)).join(' ');
+}
 
 function staffGroups() {
   const seen = new Map();
@@ -349,6 +381,9 @@ function staffGroups() {
     const group = String(person.group || '').trim() || 'Staff';
     if (!seen.has(group)) seen.set(group, []);
     seen.get(group).push(person);
+  }
+  for (const people of seen.values()) {
+    people.sort((a, b) => staffCollator.compare(staffSortKey(a), staffSortKey(b)));
   }
   const rank = (g) => {
     const i = STAFF_GROUP_ORDER.indexOf(g);
@@ -371,15 +406,29 @@ function staffGroups() {
 // name. Add to it whenever a new one turns up.
 const HONORIFICS = ['sir', 'madam', 'mdm', 'miss', 'mr', 'mrs', 'ms', 'dr',
                     'rev', 'upa', 'pu', 'pi'];
-function initialsOf(name) {
-  let words = String(name).replace(/\([^)]*\)/g, ' ').trim().split(/\s+/)
+
+/**
+ * The words of a name with the honorific taken off — "Sir Siamtea" -> Siamtea.
+ *
+ * Shared by the initials tile and the alphabetical sort, because they are the
+ * same question asked twice: which part of this string is the person's NAME. Two
+ * copies of the honorific rule would eventually answer it two ways, and each
+ * wrong answer is visible on the public page.
+ */
+function nameWords(name) {
+  const words = String(name).replace(/\([^)]*\)/g, ' ').trim().split(/\s+/)
     .filter((w) => /[a-z]/i.test(w));
   // "Sir Siamtea" is S, not SS, and "Upa C. Lalhmingmuana" is CL, not UL: an
   // honorific is how a person is addressed, not part of their name. Dropped only
   // when something is left to drop it from.
-  if (words.length > 1 && HONORIFICS.includes(words[0].toLowerCase().replace(/\./g, ''))) {
-    words = words.slice(1);
-  }
+  return (words.length > 1 &&
+          HONORIFICS.includes(words[0].toLowerCase().replace(/\./g, '')))
+    ? words.slice(1)
+    : words;
+}
+
+function initialsOf(name) {
+  const words = nameWords(name);
   if (!words.length) return '?';
   const first = words[0][0];
   const last = words.length > 1 ? words[words.length - 1][0] : '';
@@ -1081,12 +1130,13 @@ const appFeed = {
   // only to begin with (name, title, subject, photograph), which is exactly
   // what may leave the building.
   //
-  // ALREADY IN THE PAGE'S ORDER, group by group. It used to be sent in whatever
-  // order the sheet happened to be in, which left the app to sort it — so the
-  // app kept its own copy of STAFF_GROUP_ORDER, and the day the portal renamed
-  // "Principal" to "Principals" BOTH lists went stale and the Principals fell to
-  // the bottom of the website and the app together. Sending it ordered means
-  // there is one list, in one file, and a rename never needs a Play release.
+  // ALREADY IN THE PAGE'S ORDER — group by group, and A-Z within each group.
+  // It used to be sent in whatever order the sheet happened to be in, which left
+  // the app to sort it — so the app kept its own copy of STAFF_GROUP_ORDER, and
+  // the day the portal renamed "Principal" to "Principals" BOTH lists went stale
+  // and the Principals fell to the bottom of the website and the app together.
+  // Sending it ordered means there is one list, in one file, and a rename never
+  // needs a Play release.
   staff: staffGroups().reduce((all, [, people]) => all.concat(people), []).map((s) => ({
     name: s.name || '',
     full_name: s.full_name || '',

@@ -131,10 +131,15 @@ person's initials, so a half-photographed list looks deliberate rather than
 broken. **`group` is decided by the portal, not inferred here**, because
 `super_admin` describes what someone may do in the software, not what they do at
 the school. Groups appear in the order set by `STAFF_GROUP_ORDER` in the build
-(Principal, Vice Principal, High School, Higher Secondary, Office and support);
-any other group still appears, after those, so a new one shows up rather than
-vanishing because that list is out of date. A group of one or two gets a wider
-card, so the Principal is not marooned in an empty row.
+(Principals, Chaplain, High School, Arts, Science, Commerce, HSS Language,
+Office Staff, Bus Staff); any other group still appears, after those, so a new
+one shows up rather than vanishing because that list is out of date. **Within a
+group people are listed alphabetically by the name printed on their card**, with
+the honorific ignored — "Miss Ramliani" files under R, or nearly half the school
+would file under M. A group of one or two gets a wider card, so the Principal is
+not marooned in an empty row.
+The portal's own dropdown of these lives in `js/pages.js` as `PUBLIC_GROUPS`,
+and its `tools/test-faculty-groups.js` fails if the two ever disagree.
 
 ### Photographs
 
