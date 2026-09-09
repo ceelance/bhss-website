@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-09-09T05:19:11.457Z",
-  "count": 69,
+  "generated_at": "2026-09-09T05:42:11.928Z",
+  "count": 70,
   "staff": [
     {
       "name": "Sir Zomuana",
@@ -477,6 +477,13 @@
       "group": "Office Staff",
       "title": "LDC",
       "full_name": "Lawmkima Colney"
+    },
+    {
+      "name": "Sir Valtea",
+      "group": "Chaplain",
+      "title": "Counsellor",
+      "full_name": "Rev. Samuel Lalremsanga",
+      "subject": "Chaplain"
     }
   ]
 }
