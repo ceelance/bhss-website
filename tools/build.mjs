@@ -450,7 +450,7 @@ function staffNick(person) {
   return String(person.name || '').trim();
 }
 
-function staffCard(person, prefix) {
+function staffCard(person, prefix, group) {
   const name = staffName(person);
   const nick = staffNick(person);
   const photo = String(person.photo || '').trim();
@@ -459,8 +459,23 @@ function staffCard(person, prefix) {
     : `<span class="staff-initials" aria-hidden="true">${escapeHtml(initialsOf(name))}</span>`;
   const title = String(person.title || '').trim();
   const subject = String(person.subject || '').trim();
+  // WHAT THE SEARCH MATCHES ON, precomputed here rather than scraped from the
+  // card's text at run time. Both names are in it because a parent knows the
+  // formal one and a student knows the staffroom one, and they are frequently
+  // nothing like each other; the subject is in it because "who teaches physics"
+  // is the other question this page is asked. Lowercased once at build time, so
+  // the filter is a substring test per keystroke and nothing more.
+  //
+  // THE GROUP IS IN IT TOO, and leaving it out was a bug worth keeping a note
+  // about: a search for "commerce" matched nobody — no card carries the word,
+  // only the section heading above it does — and because a running search hides
+  // the department strip, typing the name of a department made the one control
+  // that could have answered disappear and replaced it with "nobody matches
+  // that". Searching the visible page has to include what is visibly written
+  // on it.
+  const needle = [name, nick, title, subject, group || ''].join(' ').toLowerCase();
   return `
-        <li class="staff-card">
+        <li class="staff-card" data-s="${escapeHtml(needle)}">
           <div class="staff-face">${face}</div>
           <div class="staff-body">
             <h3>${escapeHtml(name)}</h3>
@@ -499,7 +514,27 @@ function facultyHtml(prefix) {
       </div>
     </nav>`;
 
-  return jump + '\n' + groups.map(([group, people]) => {
+  // A SEARCH BOX, ABOVE THE JUMP STRIP.
+  //
+  // The strip answers "take me to Commerce"; this answers "where is Miss
+  // Ramliani", which is the question a parent actually arrives with and the one
+  // the strip cannot help with at all — sixty-nine people across nine
+  // departments, and you have to know the department to use the shortcut.
+  //
+  // `hidden` in the markup and revealed by the script, the same contract the
+  // posts search keeps: a box that cannot filter anything must not be on the
+  // page at all. Everything it filters is already in the HTML, so there is no
+  // index to ship and nothing to fetch — it hides cards rather than drawing new
+  // ones, which is also what keeps the photographs from being re-requested.
+  const search = `
+    <form class="staff-search" role="search" hidden>
+      <label for="staff-q">Search the faculty</label>
+      <input id="staff-q" type="search" autocomplete="off" spellcheck="false"
+             placeholder="Type a name or a subject&hellip;">
+      <p class="staff-search-empty" id="staff-none" hidden>Nobody matches that.</p>
+    </form>`;
+
+  const sections = groups.map(([group, people]) => {
     // A group of one or two — the Principal, usually — laid out in the same grid
     // as thirty teachers leaves a lone card marooned in an empty row, which reads
     // as a mistake rather than as the top of the school. Those get a wider card
@@ -508,11 +543,70 @@ function facultyHtml(prefix) {
     return `
     <section class="staff-group" id="${groupSlug(group)}">
       <h2>${escapeHtml(group)}</h2>
-      <ul class="staff-grid${lead}">${people.map((p) => staffCard(p, prefix)).join('')}
+      <ul class="staff-grid${lead}">${people.map((p) => staffCard(p, prefix, group)).join('')}
       </ul>
     </section>`;
   }).join('\n');
+
+  // The script goes LAST, after the sections it reads. An inline script runs at
+  // parse time, so the same code placed up beside the box would query a document
+  // that has no cards in it yet and wire nothing, silently.
+  return search + '\n' + jump + '\n' + sections + '\n' + FACULTY_SCRIPT;
 }
+
+/**
+ * The faculty filter. Inline, like the posts search, and for the same reason:
+ * the deploy workflow holds an SSH key to the whole hosting account, so nothing
+ * is pulled in from anywhere to run on this page.
+ *
+ * It FILTERS WHAT IS ALREADY THERE — every card is in the HTML, so a search
+ * hides the ones that do not match rather than building new ones. No index to
+ * ship, no photographs re-requested, and the page works exactly as before with
+ * the box empty.
+ *
+ * A GROUP WHOSE CARDS ALL VANISH IS HIDDEN TOO, heading and all, or a search for
+ * one teacher leaves nine department titles standing over nothing. The jump
+ * strip goes with it while a search is running: its links would scroll to
+ * headings that are no longer on the page.
+ */
+const FACULTY_SCRIPT = `
+    <script>
+    (function () {
+      var form = document.querySelector('.staff-search');
+      var input = document.getElementById('staff-q');
+      var none = document.getElementById('staff-none');
+      var jump = document.querySelector('.staff-jump');
+      var groups = [].slice.call(document.querySelectorAll('.staff-group'));
+      if (!form || !input || !groups.length) return;
+
+      // Revealed only now, so the box exists only where it can work.
+      form.hidden = false;
+      form.addEventListener('submit', function (e) { e.preventDefault(); });
+
+      function draw() {
+        var q = input.value.trim().toLowerCase();
+        var shown = 0;
+        for (var i = 0; i < groups.length; i++) {
+          var cards = groups[i].querySelectorAll('.staff-card');
+          var live = 0;
+          for (var j = 0; j < cards.length; j++) {
+            var hit = !q || (cards[j].getAttribute('data-s') || '').indexOf(q) !== -1;
+            cards[j].hidden = !hit;
+            if (hit) live++;
+          }
+          groups[i].hidden = live === 0;
+          shown += live;
+        }
+        if (jump) jump.hidden = !!q;
+        if (none) none.hidden = !q || shown > 0;
+      }
+
+      input.addEventListener('input', draw);
+      // A browser restoring a typed value on Back would otherwise show every
+      // card under a box that still has words in it.
+      draw();
+    })();
+    </script>`;
 
 // ---------------------------------------------------------------- navigation
 

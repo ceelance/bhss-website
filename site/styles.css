@@ -560,23 +560,39 @@ main { padding-top: clamp(1.75rem, 3.5vw, 2.75rem); padding-bottom: clamp(3rem, 
 
 /* Shipped with `hidden` on the form and revealed by the script, so the box only
    exists where it can work. Nothing else on the page depends on it. */
-.search { margin: 0 0 1.6rem; max-width: 30rem; }
-.search label {
+/* The faculty box shares every rule here rather than growing a second look.
+   It is the same control doing the same job on the same site, and the moment
+   the two are styled apart one of them starts drifting. */
+.search, .staff-search { margin: 0 0 1.6rem; max-width: 30rem; }
+.search label, .staff-search label {
   display: block; font-size: .8rem; font-weight: 700;
   text-transform: uppercase; letter-spacing: .04em;
   color: var(--brand-600); margin-bottom: .35rem;
 }
-.search input {
+.search input, .staff-search input {
   width: 100%; font: inherit; color: var(--ink);
   padding: .6rem .85rem;
   border: 1px solid var(--line); border-radius: 10px;
   background: var(--ground);
   transition: border-color .15s ease, box-shadow .15s ease, background .15s ease;
 }
-.search input:focus {
+.search input:focus, .staff-search input:focus {
   outline: none; background: var(--paper);
   border-color: var(--brand-500);
   box-shadow: 0 0 0 3px var(--brand-100);
+}
+.staff-search-empty {
+  margin: .7rem 0 0; font-size: .9rem; color: var(--ink-faint);
+}
+/* HIDING A FILTERED CARD NEEDS !important, WHICH IS NOT LAZINESS HERE.
+   `[hidden]` only carries the user agent's `display: none`, and any real rule
+   beats it — `.staff-grid.is-lead .staff-card` sets `display: flex`, so without
+   this the Principals and the Chaplain, the two groups that get the wide
+   layout, would be the exact cards a search could not hide. Stated for the
+   group as well, since it is a block-level section by default today but need
+   not stay one. */
+.staff-card[hidden], .staff-group[hidden], .staff-jump[hidden] {
+  display: none !important;
 }
 .search-count {
   font-size: .8rem; font-weight: 700; text-transform: uppercase;
