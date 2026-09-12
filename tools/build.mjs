@@ -454,8 +454,18 @@ function staffCard(person, prefix, group) {
   const name = staffName(person);
   const nick = staffNick(person);
   const photo = String(person.photo || '').trim();
+  // A PHOTOGRAPH IS A BUTTON; AN INITIALS TILE IS NOT. The card is ~165px wide,
+  // which is enough to know a face is there and not always enough to know whose
+  // it is — so tapping one opens it large. The tile has nothing to enlarge, and
+  // giving it the same affordance would promise a picture that does not exist.
+  // `alt` carries the name here, where the image is something a reader acts on;
+  // on the card it stayed empty because the name is printed directly beneath it
+  // and a screen reader would have said it twice.
   const face = photo
-    ? `<img src="${escapeHtml(prefix + '/' + photo)}" alt="" loading="lazy" width="400" height="400">`
+    ? `<img src="${escapeHtml(prefix + '/' + photo)}" alt="${escapeHtml(name)}"
+             loading="lazy" width="400" height="400"
+             class="staff-photo" data-full="${escapeHtml(prefix + '/' + photo)}"
+             role="button" tabindex="0">`
     : `<span class="staff-initials" aria-hidden="true">${escapeHtml(initialsOf(name))}</span>`;
   const title = String(person.title || '').trim();
   const subject = String(person.subject || '').trim();
@@ -548,10 +558,22 @@ function facultyHtml(prefix) {
     </section>`;
   }).join('\n');
 
+  // The viewer, empty until something is put in it. One overlay for the whole
+  // page rather than one per card: sixty-nine hidden copies of the same markup
+  // would be sixty-nine nodes doing nothing, and the browser would have to lay
+  // every one of them out.
+  const lightbox = `
+    <div class="staff-lightbox" id="staff-lightbox" hidden>
+      <button type="button" class="staff-lightbox-close" id="staff-lightbox-close"
+              aria-label="Close">&times;</button>
+      <img id="staff-lightbox-img" alt="">
+      <p class="staff-lightbox-name" id="staff-lightbox-name"></p>
+    </div>`;
+
   // The script goes LAST, after the sections it reads. An inline script runs at
   // parse time, so the same code placed up beside the box would query a document
   // that has no cards in it yet and wire nothing, silently.
-  return search + '\n' + jump + '\n' + sections + '\n' + FACULTY_SCRIPT;
+  return search + '\n' + jump + '\n' + sections + '\n' + lightbox + '\n' + FACULTY_SCRIPT;
 }
 
 /**
@@ -605,6 +627,79 @@ const FACULTY_SCRIPT = `
       // A browser restoring a typed value on Back would otherwise show every
       // card under a box that still has words in it.
       draw();
+    })();
+
+    /* The photograph viewer.
+     *
+     * A card is about 165px wide, which tells a reader a face is there and not
+     * reliably whose it is. Tapping one opens it as large as the screen allows.
+     *
+     * IT ZOOMS BY TOGGLE, NOT BY PINCH-ONLY. Pinch works where the browser
+     * offers it, but the overlay is inside a page whose viewport may disallow
+     * user scaling, and a photograph you cannot enlarge is the thing being
+     * complained about — so a tap on the image switches between fit-to-screen
+     * and 2x, and at 2x the overflow scrolls so the rest of the face is
+     * reachable. The source is 400x400, so 2x is a real upscale; it is still
+     * the difference between guessing and recognising.
+     *
+     * The overlay takes over BACK on a phone, via history.pushState, because
+     * the first thing anyone does to dismiss a full-screen image is press Back
+     * — and without this that would leave the faculty page altogether. */
+    (function () {
+      var box = document.getElementById('staff-lightbox');
+      var img = document.getElementById('staff-lightbox-img');
+      var nameEl = document.getElementById('staff-lightbox-name');
+      var closeBtn = document.getElementById('staff-lightbox-close');
+      if (!box || !img) return;
+      var pushed = false;
+
+      function open(src, label) {
+        img.src = src;
+        img.alt = label || '';
+        if (nameEl) nameEl.textContent = label || '';
+        box.classList.remove('is-zoomed');
+        box.hidden = false;
+        document.documentElement.style.overflow = 'hidden';
+        try { history.pushState({ bhssPhoto: 1 }, ''); pushed = true; } catch (e) { pushed = false; }
+        if (closeBtn) closeBtn.focus();
+      }
+
+      function shut(fromPop) {
+        if (box.hidden) return;
+        box.hidden = true;
+        // Dropped so a closed viewer is not holding a decoded bitmap, and so
+        // reopening always shows the picture arriving rather than the last one.
+        img.removeAttribute('src');
+        document.documentElement.style.overflow = '';
+        if (pushed && !fromPop) { pushed = false; try { history.back(); } catch (e) {} }
+        else { pushed = false; }
+      }
+
+      document.addEventListener('click', function (e) {
+        var t = e.target;
+        if (t && t.classList && t.classList.contains('staff-photo')) {
+          open(t.getAttribute('data-full') || t.src, t.getAttribute('alt'));
+        }
+      });
+      // The cards are reachable by keyboard, so the viewer has to be too.
+      document.addEventListener('keydown', function (e) {
+        var t = document.activeElement;
+        if ((e.key === 'Enter' || e.key === ' ') && t && t.classList &&
+            t.classList.contains('staff-photo')) {
+          e.preventDefault();
+          open(t.getAttribute('data-full') || t.src, t.getAttribute('alt'));
+        } else if (e.key === 'Escape') {
+          shut(false);
+        }
+      });
+      img.addEventListener('click', function (e) {
+        e.stopPropagation();      // or the backdrop handler below would shut it
+        box.classList.toggle('is-zoomed');
+      });
+      if (closeBtn) closeBtn.addEventListener('click', function () { shut(false); });
+      // Anywhere off the picture closes it, which is what people try first.
+      box.addEventListener('click', function () { shut(false); });
+      window.addEventListener('popstate', function () { shut(true); });
     })();
     </script>`;
 

@@ -594,6 +594,59 @@ main { padding-top: clamp(1.75rem, 3.5vw, 2.75rem); padding-bottom: clamp(3rem, 
 .staff-card[hidden], .staff-group[hidden], .staff-jump[hidden] {
   display: none !important;
 }
+
+/* ---- the photograph viewer ---- */
+/* A card is ~165px wide, which says a face is there without always saying whose.
+   Tapping one opens it as large as the screen allows. */
+.staff-photo { cursor: zoom-in; }
+.staff-lightbox {
+  position: fixed; inset: 0; z-index: 100;
+  background: rgba(17, 16, 34, .93);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: .8rem; padding: 1rem;
+  /* The picture can outgrow the screen at 2x, and then it has to be reachable. */
+  overflow: auto;
+  overscroll-behavior: contain;
+}
+.staff-lightbox[hidden] { display: none !important; }
+.staff-lightbox img {
+  /* Fits the screen with room for the name beneath. `height: auto` keeps a
+     non-square photograph honest — these are squared on upload, but the page
+     must not distort one that is not. */
+  max-width: min(92vw, 560px);
+  max-height: 76vh;
+  width: auto; height: auto;
+  border-radius: 12px;
+  background: var(--paper);
+  cursor: zoom-in;
+  transition: max-width .18s ease, max-height .18s ease;
+}
+/* 2x, and the flexbox centring is dropped to `flex-start` by the overflow rules
+   above so the top of the head is not cropped out of reach. */
+.staff-lightbox.is-zoomed { justify-content: flex-start; }
+.staff-lightbox.is-zoomed img {
+  max-width: none; max-height: none;
+  width: min(184vw, 1120px);
+  cursor: zoom-out;
+}
+.staff-lightbox-name {
+  margin: 0; color: #fff; font-weight: 600; text-align: center;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, .5);
+}
+.staff-lightbox-close {
+  position: fixed; top: .6rem; right: .9rem;
+  width: 2.4rem; height: 2.4rem; line-height: 1;
+  font-size: 1.7rem; color: #fff;
+  background: rgba(0, 0, 0, .35); border: 0; border-radius: 50%;
+  cursor: pointer;
+}
+.staff-lightbox-close:hover, .staff-lightbox-close:focus-visible {
+  background: rgba(0, 0, 0, .6);
+}
+@media (prefers-reduced-motion: reduce) {
+  .staff-lightbox img { transition: none; }
+}
 .search-count {
   font-size: .8rem; font-weight: 700; text-transform: uppercase;
   letter-spacing: .04em; color: var(--ink-faint); margin-bottom: .2rem;
