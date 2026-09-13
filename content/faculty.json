@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-13T12:18:28.391Z",
+  "generated_at": "2026-09-13T15:12:05.858Z",
   "count": 70,
   "staff": [
     {
@@ -294,7 +294,8 @@
       "group": "Science",
       "title": "Teacher",
       "full_name": "Lalhmachhuana",
-      "subject": "Physics"
+      "subject": "Physics",
+      "photo": "img/staff/sir-hmachhuana-bc25bc-20260913-204203.webp"
     },
     {
       "name": "Sir Muhindro",
