@@ -1,7 +1,22 @@
 {
-  "generated_at": "2026-09-14T11:39:54.027Z",
-  "count": 38,
+  "generated_at": "2026-09-15T12:24:27.549Z",
+  "count": 39,
   "posts": [
+    {
+      "slug": "test-2",
+      "title": "Test",
+      "summary": "Test",
+      "body_md": "Test",
+      "category": "News",
+      "categories": [
+        "News"
+      ],
+      "published_at": "2026-09-15",
+      "author": "",
+      "thumb": "",
+      "thumb_fit": "whole",
+      "images": []
+    },
     {
       "slug": "annual-school-sports-2026",
       "title": "Annual School Sports 2026",
