@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-15T08:53:26.540Z",
+  "generated_at": "2026-09-16T01:50:03.511Z",
   "count": 70,
   "staff": [
     {
@@ -34,7 +34,8 @@
       "group": "High School",
       "title": "Teacher",
       "full_name": "K. Beiseia",
-      "subject": "Maths"
+      "subject": "Maths",
+      "photo": "img/staff/sir-beia-8fadaf-20260916-072001.png"
     },
     {
       "name": "Miss Ramliani",
