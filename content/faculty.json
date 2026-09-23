@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-16T01:50:03.511Z",
+  "generated_at": "2026-09-23T15:22:59.545Z",
   "count": 70,
   "staff": [
     {
@@ -27,7 +27,8 @@
       "group": "High School",
       "title": "Teacher",
       "full_name": "Z.D. Lalnunmawia",
-      "subject": "Science"
+      "subject": "Science",
+      "photo": "img/staff/sir-manunmawia-ce1536-20260923-205256.jpg"
     },
     {
       "name": "Sir Beia",
