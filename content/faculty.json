@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-25T05:28:57.303Z",
+  "generated_at": "2026-09-25T05:58:02.938Z",
   "count": 70,
   "staff": [
     {
@@ -222,7 +222,8 @@
       "group": "Arts",
       "title": "Teacher",
       "full_name": "Lalrinpuii Rokhum",
-      "subject": "Education"
+      "subject": "Education",
+      "photo": "img/staff/miss-rinpuii-430f85-20260925-112800.webp"
     },
     {
       "name": "Miss Rita",
