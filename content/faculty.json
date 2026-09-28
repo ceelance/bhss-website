@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-28T06:15:16.120Z",
+  "generated_at": "2026-09-28T08:35:34.882Z",
   "count": 70,
   "staff": [
     {
@@ -78,7 +78,8 @@
       "group": "High School",
       "title": "Teacher",
       "full_name": "T. Lalruatdika",
-      "subject": "Science"
+      "subject": "Science",
+      "photo": "img/staff/sir-t-a-718346-20260928-140531.jpg"
     },
     {
       "name": "Sir Arema",
