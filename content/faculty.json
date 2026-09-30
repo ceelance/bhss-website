@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-29T02:33:59.636Z",
+  "generated_at": "2026-09-30T12:10:15.389Z",
   "count": 70,
   "staff": [
     {
@@ -186,7 +186,8 @@
       "group": "HSS Language",
       "title": "Teacher",
       "full_name": "Lalhlimpuia",
-      "subject": "Mizo"
+      "subject": "Mizo",
+      "photo": "img/staff/sir-hlimpuia-b10c7d-20260930-174012.jpg"
     },
     {
       "name": "Sir Siana",
