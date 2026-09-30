@@ -1,7 +1,23 @@
 {
-  "generated_at": "2026-09-19T05:16:34.930Z",
-  "count": 39,
+  "generated_at": "2026-09-30T03:24:48.503Z",
+  "count": 40,
   "posts": [
+    {
+      "slug": "extended-tribal-scholarship",
+      "title": "Extended - Tribal Scholarship",
+      "summary": "Extended - Tribal Scholarship application last date",
+      "body_md": "Tribal Scholarship application last date has been extended till 17th October 2026.",
+      "category": "News, Notices",
+      "categories": [
+        "News",
+        "Notices"
+      ],
+      "published_at": "2026-09-30",
+      "author": "",
+      "thumb": "",
+      "thumb_fit": "whole",
+      "images": []
+    },
     {
       "slug": "annual-school-sports-closed",
       "title": "Annual School Sports Closed",
