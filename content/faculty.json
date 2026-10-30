@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-30T11:29:12.880Z",
+  "generated_at": "2026-10-30T16:37:01.504Z",
   "count": 70,
   "staff": [
     {
@@ -142,7 +142,8 @@
       "group": "HSS Language",
       "title": "Teacher",
       "full_name": "K. Vanlalmuana",
-      "subject": "English"
+      "subject": "English",
+      "photo": "img/staff/sir-vl-muana-d53b78-20261030-220657.webp"
     },
     {
       "name": "Miss Muanpuii",
