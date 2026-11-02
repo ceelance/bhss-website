@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-31T03:31:31.445Z",
+  "generated_at": "2026-11-02T08:27:10.065Z",
   "count": 70,
   "staff": [
     {
@@ -373,7 +373,8 @@
       "group": "Science",
       "title": "Teacher",
       "full_name": "Samuel Rosangzuala",
-      "subject": "Biology"
+      "subject": "Biology",
+      "photo": "img/staff/sir-sammy-c54014-20261102-135707.jpg"
     },
     {
       "name": "Miss Zuali",
