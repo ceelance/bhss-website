@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-03T08:19:43.697Z",
+  "generated_at": "2026-11-03T08:20:28.352Z",
   "count": 70,
   "staff": [
     {
@@ -406,7 +406,8 @@
       "group": "Science",
       "title": "Teacher",
       "full_name": "Lallianzuala Pautu",
-      "subject": "Comp. Sc."
+      "subject": "Comp. Sc.",
+      "photo": "img/staff/sir-zuala-2fd5f4-20261103-135025.png"
     },
     {
       "name": "Miss Kimkimi HSS",
