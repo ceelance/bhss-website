@@ -780,3 +780,22 @@ th { background: var(--brand-50); font-weight: 700; }
   * { transition: none !important; }
   .card:hover { transform: none; }
 }
+
+/* ---- views and likes (filled in by the script in layout.html) ---------------
+   Hidden until the Worker answers, so nothing here ever shows a count it could
+   not read. */
+.card-stats { margin: .4rem 0 0; font-size: .8rem; color: var(--ink-faint); }
+.post-stats {
+  display: flex; align-items: center; gap: .75rem; flex-wrap: wrap;
+  margin: .25rem 0 1rem; font-size: .9rem; color: var(--ink-faint);
+}
+.post-like {
+  display: inline-flex; align-items: center; gap: .35rem;
+  font: inherit; font-weight: 600; color: var(--ink-soft);
+  background: #fff; border: 1px solid #cbd5e1; border-radius: 999px;
+  padding: .3rem .85rem; cursor: pointer;
+}
+.post-like:hover { border-color: #f43f5e; color: #be123c; }
+.post-like.liked { background: #fff1f2; border-color: #fda4af; color: #be123c; }
+.post-like-heart { color: #cbd5e1; font-size: 1.05em; line-height: 1; }
+.post-like.liked .post-like-heart, .post-like:hover .post-like-heart { color: #e11d48; }

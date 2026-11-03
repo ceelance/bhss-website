@@ -891,6 +891,7 @@ function postCard(post, prefix) {
           <p class="card-meta">${escapeHtml(primaryTag(post))} · ${humanDate(post.published_at)}</p>
           <h3>${escapeHtml(post.title)}</h3>
           <p class="card-summary">${escapeHtml(summary)}</p>
+          <p class="card-stats" data-stats-slug="${escapeHtml(post.slug)}" hidden></p>
         </div>
       </a>`;
 }
@@ -1061,6 +1062,15 @@ for (const post of posts) {
     <article class="post">
       <p class="post-meta">${postTags(post).map(escapeHtml).join(' &middot; ')} &middot; ${humanDate(post.published_at)}</p>
       <h1>${escapeHtml(post.title)}</h1>
+      <!-- Filled in by the views-and-likes script in layout.html; hidden until
+           the Worker answers, so it never claims a count it could not read. -->
+      <p class="post-stats" data-slug="${escapeHtml(post.slug)}" hidden>
+        <span class="post-views"></span>
+        <button type="button" class="post-like" aria-pressed="false" aria-label="Like this post">
+          <span class="post-like-heart" aria-hidden="true">♥</span> Like
+          <span class="post-like-n"></span>
+        </button>
+      </p>
       ${hero}
       <div class="post-body">
 ${body}

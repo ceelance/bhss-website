@@ -162,5 +162,103 @@
 })();
 </script>
 
+<!-- VIEWS AND LIKES on a post page and on the news cards, counted by the
+     portal's Cloudflare Worker (poststats / postview / postlike, stored in D1).
+     AN ENHANCEMENT like the script above: if the Worker is unreachable or not set
+     up, it answers nothing and nothing is shown — the counts are hidden until
+     they arrive, so a page never shows "0 views" it could not vouch for.
+     Anonymous: the browser makes up a random id and the Worker stores only its
+     hash. A view is counted once a day per browser; a like once per browser,
+     and it can be taken back. -->
+<script>
+(function () {
+  var API = 'https://bhss-result-worker.bhss.workers.dev/';
+  var post = document.querySelector('.post-stats[data-slug]');
+  var cards = document.querySelectorAll('[data-stats-slug]');
+  if (!post && !cards.length) return;
+  if (!window.fetch || !window.crypto || !crypto.getRandomValues) return;
+
+  function store(k, v) { try { if (v === undefined) return localStorage.getItem(k); localStorage.setItem(k, v); } catch (e) { return null; } return v; }
+  function reader() {
+    var id = store('bhss_reader');
+    if (!id) {
+      var a = new Uint8Array(16); crypto.getRandomValues(a);
+      id = ''; for (var i = 0; i < a.length; i++) id += ('0' + a[i].toString(16)).slice(-2);
+      store('bhss_reader', id);
+    }
+    return id;
+  }
+  var me = reader();
+  // text/plain keeps this a "simple" request: no CORS preflight round trip.
+  function call(body) {
+    return fetch(API, { method: 'POST', headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify(body) })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (j) { return j && j.success ? j.data : null; })
+      .catch(function () { return null; });
+  }
+  function n(x) {
+    x = +x || 0;
+    if (x < 1000) return String(x);
+    return (x < 10000 ? (x / 1000).toFixed(1).replace(/\.0$/, '') : Math.round(x / 1000)) + 'k';
+  }
+  function today() { var d = new Date(); return d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate(); }
+
+  if (cards.length) {
+    var slugs = [];
+    for (var i = 0; i < cards.length; i++) slugs.push(cards[i].getAttribute('data-stats-slug'));
+    call({ action: 'poststats', slugs: slugs, liker: me }).then(function (d) {
+      if (!d || !d.stats) return;
+      for (var j = 0; j < cards.length; j++) {
+        var s = d.stats[cards[j].getAttribute('data-stats-slug')];
+        if (!s || (!s.views && !s.likes)) continue;
+        cards[j].textContent = n(s.views) + (s.views === 1 ? ' view' : ' views') +
+          (s.likes ? ' · ♥ ' + n(s.likes) : '');
+        cards[j].hidden = false;
+      }
+    });
+  }
+
+  if (post) {
+    var slug = post.getAttribute('data-slug');
+    var views = post.querySelector('.post-views');
+    var btn = post.querySelector('.post-like');
+    var count = post.querySelector('.post-like-n');
+    var state = null;
+    function paint(s) {
+      if (!s) return;
+      state = s;
+      views.textContent = n(s.views) + (s.views === 1 ? ' view' : ' views');
+      btn.setAttribute('aria-pressed', s.liked ? 'true' : 'false');
+      btn.classList.toggle('liked', !!s.liked);
+      count.textContent = s.likes ? n(s.likes) : '';
+      btn.setAttribute('aria-label', (s.liked ? 'Unlike' : 'Like') + ' this post');
+      post.hidden = false;
+    }
+    // Asked to COUNT only the first time today; after that it just reads.
+    var seenKey = 'bhss_seen_' + slug;
+    var first = store(seenKey) !== today();
+    call(first ? { action: 'postview', slug: slug, viewer: me, liker: me }
+               : { action: 'poststats', slugs: [slug], liker: me })
+      .then(function (d) {
+        if (first && d) store(seenKey, today());
+        paint(first ? d : (d && d.stats && d.stats[slug]));
+      });
+    var busy = false;
+    btn.addEventListener('click', function () {
+      if (busy || !state) return;
+      busy = true;
+      var want = !state.liked;
+      // Shown at once; corrected by the answer (or put back if there is none).
+      var before = state;
+      paint({ views: state.views, likes: Math.max(0, state.likes + (want ? 1 : -1)), liked: want });
+      call({ action: 'postlike', slug: slug, liker: me, like: want }).then(function (d) {
+        paint(d || before);
+        busy = false;
+      });
+    });
+  }
+})();
+</script>
+
 </body>
 </html>
