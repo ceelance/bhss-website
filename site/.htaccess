@@ -176,6 +176,12 @@ ErrorDocument 404 /404.html
 <IfModule mod_headers.c>
   Header set X-Content-Type-Options "nosniff"
   Header set Referrer-Policy "strict-origin-when-cross-origin"
+  # The portal's #/notices page reads this file from another origin
+  # (portal.baptisthss.in). Public data — every entry is already a page here —
+  # so any origin may read it. ONLY this file: nothing else needs it.
+  <FilesMatch "^notices\.json$">
+    Header set Access-Control-Allow-Origin "*"
+  </FilesMatch>
 </IfModule>
 
 # Directory listings are off: a folder with no index should reveal nothing.

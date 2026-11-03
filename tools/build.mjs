@@ -1381,6 +1381,27 @@ const appFeed = {
 };
 writePage('app.json', JSON.stringify(appFeed));
 
+/**
+ * notices.json — EVERY Notices post, for the portal's #/notices page.
+ *
+ * Separate from app.json because that one stops at the newest 40 posts of every
+ * kind, so older notices would silently drop off a page whose job is to list
+ * them. Derived like app.json — nothing here is not already on a page — and
+ * readable from portal.baptisthss.in because .htaccess gives this one file a
+ * CORS header.
+ */
+writePage('notices.json', JSON.stringify({
+  generated_at: new Date().toISOString(),
+  notices: noticePosts.map((p) => ({
+    slug: p.slug,
+    title: p.title,
+    summary: p.summary || excerpt(p.body_md, 180),
+    published_at: p.published_at || '',
+    date: humanDate(p.published_at),
+    url: `${BASE_URL}/news/${p.slug}/`
+  }))
+}));
+
 console.log(`Built ${pages.length} pages + ${posts.length} posts ` +
             `(${newsPosts.length} news, ${noticePosts.length} notices) -> dist/`);
 console.log(`Base URL: ${BASE_URL}`);
