@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-03T07:25:25.254Z",
+  "generated_at": "2026-11-03T07:31:45.096Z",
   "count": 70,
   "staff": [
     {
@@ -352,7 +352,8 @@
       "group": "Science",
       "title": "Teacher",
       "full_name": "Jonathan Lalremruata",
-      "subject": "Biology"
+      "subject": "Biology",
+      "photo": "img/staff/sir-jona-510836-20261103-130142.png"
     },
     {
       "name": "Sir Hmaa",
