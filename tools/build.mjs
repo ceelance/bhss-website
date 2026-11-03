@@ -450,6 +450,23 @@ function staffNick(person) {
   return String(person.name || '').trim();
 }
 
+/**
+ * The small copy of a staff photograph, if the portal stored one.
+ *
+ * Since Nov 2026 the portal stores each photo LARGE (up to 1080 square, so a tap
+ * and a zoom stay sharp enough to recognise a face) plus `<name>-thumb.<ext>` at
+ * 480 for the card. The thumbnail's address is derived, never listed in
+ * faculty.json, so this checks the file is really in the repo and falls back to
+ * the photo itself — every photo uploaded before the change has no thumbnail.
+ */
+function staffPhotoThumb(photo) {
+  const p = String(photo || '');
+  const dot = p.lastIndexOf('.');
+  if (dot <= p.lastIndexOf('/')) return p;
+  const thumb = p.slice(0, dot) + '-thumb' + p.slice(dot);
+  return existsSync(join(ROOT, thumb)) ? thumb : p;
+}
+
 function staffCard(person, prefix, group) {
   const name = staffName(person);
   const nick = staffNick(person);
@@ -461,8 +478,11 @@ function staffCard(person, prefix, group) {
   // `alt` carries the name here, where the image is something a reader acts on;
   // on the card it stayed empty because the name is printed directly beneath it
   // and a screen reader would have said it twice.
+  // The card loads the SMALL copy and a tap opens the large one (see
+  // staffPhotoThumb). A photo from before the portal stored two sizes has no
+  // small copy and is used for both, exactly as before.
   const face = photo
-    ? `<img src="${escapeHtml(prefix + '/' + photo)}" alt="${escapeHtml(name)}"
+    ? `<img src="${escapeHtml(prefix + '/' + staffPhotoThumb(photo))}" alt="${escapeHtml(name)}"
              loading="lazy" width="400" height="400"
              class="staff-photo" data-full="${escapeHtml(prefix + '/' + photo)}"
              role="button" tabindex="0">`
@@ -1332,7 +1352,12 @@ const appFeed = {
     title: s.title || '',
     subject: s.subject || '',
     group: s.group || '',
-    photo: s.photo ? `${BASE_URL}/${s.photo}` : ''
+    // `photo` is what a LIST row loads, so it is the small copy where one exists
+    // — an app build from before this reads only `photo`, for its rows and its
+    // viewer alike, and seventy large faces would be megabytes on mobile data.
+    // `photo_full` is what a tap opens; newer builds read it for the viewer.
+    photo: s.photo ? `${BASE_URL}/${staffPhotoThumb(s.photo)}` : '',
+    photo_full: s.photo ? `${BASE_URL}/${s.photo}` : ''
   })),
   links: {
     website: `${BASE_URL}/`,
