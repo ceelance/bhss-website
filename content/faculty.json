@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-03T04:36:57.338Z",
+  "generated_at": "2026-11-03T04:59:26.509Z",
   "count": 70,
   "staff": [
     {
@@ -278,7 +278,8 @@
       "group": "Arts",
       "title": "Teacher",
       "full_name": "R. Lalthansangi",
-      "subject": "Sociology"
+      "subject": "Sociology",
+      "photo": "img/staff/miss-sangtei-socio-1e0855-20261103-102923.webp"
     },
     {
       "name": "Miss Tetei",
