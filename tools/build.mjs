@@ -375,6 +375,22 @@ function staffSortKey(person) {
   return nameWords(staffName(person)).join(' ');
 }
 
+/**
+ * THE ONE EXCEPTION TO A-Z: rank comes before the alphabet where the title IS a
+ * rank. The Principal is listed before the Vice Principal whatever their names
+ * — alphabetising them would put the Vice Principal first whenever their name
+ * happens to come earlier. Keyed on the TITLE, not the group, so it survives the
+ * group being renamed (see STAFF_GROUP_ORDER's Principals/Principal history).
+ * Matched loosely ("Vice-Principal", "vice principal"); every other title ranks
+ * equal, so everyone else stays A-Z exactly as before.
+ */
+const STAFF_TITLE_ORDER = ['principal', 'vice principal'];
+function staffTitleRank(person) {
+  const t = String(person.title || '').toLowerCase().replace(/[^a-z]+/g, ' ').trim();
+  const i = STAFF_TITLE_ORDER.indexOf(t);
+  return i === -1 ? STAFF_TITLE_ORDER.length : i;
+}
+
 function staffGroups() {
   const seen = new Map();
   for (const person of staff) {
@@ -383,7 +399,8 @@ function staffGroups() {
     seen.get(group).push(person);
   }
   for (const people of seen.values()) {
-    people.sort((a, b) => staffCollator.compare(staffSortKey(a), staffSortKey(b)));
+    people.sort((a, b) => (staffTitleRank(a) - staffTitleRank(b)) ||
+      staffCollator.compare(staffSortKey(a), staffSortKey(b)));
   }
   const rank = (g) => {
     const i = STAFF_GROUP_ORDER.indexOf(g);
