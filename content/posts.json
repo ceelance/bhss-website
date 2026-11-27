@@ -1,7 +1,25 @@
 {
-  "generated_at": "2026-11-20T17:29:37.237Z",
-  "count": 45,
+  "generated_at": "2026-11-27T14:37:45.889Z",
+  "count": 46,
   "posts": [
+    {
+      "slug": "advance-christmas",
+      "title": "Advance Christmas",
+      "summary": "Advance Christmas was celebrated on 27th. Nov. 2026",
+      "body_md": "Advance Christmas celebration was held on 27th. Nov. 2026 (Friday) at Tucker Hall. \n**Programme sheet:-**\n![Programme](img/posts/advance-christmas-20261127-200447.webp)\n\n[Click here to view photos](https://photos.app.goo.gl/MeYK4NyK6nDfobQi8)\nJoy to the world!",
+      "category": "News, Events",
+      "categories": [
+        "News",
+        "Events"
+      ],
+      "published_at": "2026-11-27",
+      "author": "",
+      "thumb": "img/posts/advance-christmas-20261127-200736-thumb.webp",
+      "thumb_fit": "whole",
+      "images": [
+        "img/posts/advance-christmas-20261127-200736.webp"
+      ]
+    },
     {
       "slug": "1st-position-in-painting-competition",
       "title": "1st Position in Painting Competition",
